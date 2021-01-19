@@ -6,6 +6,8 @@ v1.0 by holger
 
 coding: UTF-8
 
+有关实现细节详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
+
 ### 使用前注意
 
 - Python先安装selenium3.x (pip install selenium)
