@@ -1,4 +1,6 @@
 # coding = utf-8
+# author: holger version: 1.1
+# license: AGPL-3.0
 
 import bot
 

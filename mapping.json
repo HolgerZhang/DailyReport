@@ -1,0 +1,82 @@
+{
+  "_version": 1.1,
+  "_author": "holger",
+  "_licence": "AGPL-3.0",
+  "url": "http://dk.suda.edu.cn/default/work/suda/jkxxtb/jkxxcj.jsp",
+  "now_positions_mapping": {
+    "在校": "radio_xrywz5",
+    "在苏州": "radio_xrywz7",
+    "江苏省内其他地区": "radio_xrywz9",
+    "在其他地区": "radio_xrywz25"
+  },
+  "attribute": {
+    "login": {
+      "user_id": {
+        "find_by": "name",
+        "value": "username"
+      },
+      "password": {
+        "find_by": "name",
+        "value": "password"
+      }
+    },
+    "input": {
+      "temperature_morning": {
+        "find_by": "id",
+        "value": "input_swtw"
+      },
+      "temperature_afternoon": {
+        "find_by": "id",
+        "value": "input_xwtw"
+      },
+      "detail_address": {
+        "find_by": "id",
+        "value": "input_jtdz"
+      }
+    },
+    "click": {
+      "uncheck": {
+        "find_by": "class",
+        "value": "icheckbox_square-green checked"
+      },
+      "health_status_normal": {
+        "find_by": "id",
+        "value": "checkbox_jkzk35"
+      },
+      "now_positions": {
+        "find_by": "id",
+        "value": null
+      },
+      "province": {
+        "find_by": "id",
+        "value": "select2-select_jtdzshen-container"
+      },
+      "city": {
+        "find_by": "id",
+        "value": "select2-select_jtdzshi-container"
+      },
+      "medical_observation_no": {
+        "find_by": "id",
+        "value": "radio_sfyxglz29"
+      },
+      "observation_finished_yes": {
+        "find_by": "id",
+        "value": "radio_yjcyxgl31"
+      }
+    },
+    "button": {
+      "login": {
+        "find_by": "class",
+        "value": "login-btn"
+      },
+      "report_post": {
+        "find_by": "id",
+        "value": "tpost"
+      },
+      "report_confirm": {
+        "find_by": "class",
+        "value": "layui-layer-btn0"
+      }
+    }
+  }
+}
