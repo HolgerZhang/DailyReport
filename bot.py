@@ -98,7 +98,7 @@ class DailyReport:
         self.__click(**click['city'])  # 选择地级市
         self.__click('fuzzy', self.city)
         self.__click(**click['medical_observation_no'])  # 是否医学观察中：否
-        self.__click(**click['observation_finished_yes'])  # 已经结束观察：是
+        # self.__click(**click['observation_finished_yes'])  # 已经结束观察：是
         sleep(1)
         # 填写文字信息
         input_ = DailyReport.__attribute['input']
