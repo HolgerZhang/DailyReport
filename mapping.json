@@ -1,13 +1,13 @@
 {
-  "_version": 1.1,
+  "_version": 1.21,
   "_author": "holger",
   "_licence": "AGPL-3.0",
   "url": "http://dk.suda.edu.cn/default/work/suda/jkxxtb/jkxxcj.jsp",
   "now_positions_mapping": {
-    "在校": "radio_xrywz5",
-    "在苏州": "radio_xrywz7",
-    "江苏省内其他地区": "radio_xrywz9",
-    "在其他地区": "radio_xrywz25"
+    "在校": "-1",
+    "在苏州": "-2",
+    "江苏省内其他地区": "-5",
+    "在其他地区": "-38"
   },
   "attribute": {
     "login": {
@@ -41,11 +41,11 @@
       },
       "health_status_normal": {
         "find_by": "id",
-        "value": "checkbox_jkzk35"
+        "value": "checkbox_jkzk33"
       },
       "now_positions": {
         "find_by": "id",
-        "value": null
+        "value": "select2-select_xrywz-container"
       },
       "province": {
         "find_by": "id",
@@ -55,13 +55,37 @@
         "find_by": "id",
         "value": "select2-select_jtdzshi-container"
       },
+      "qu": {
+        "find_by": "id",
+        "value": "select2-select_jtdzqu-container"
+      },
       "medical_observation_no": {
         "find_by": "id",
-        "value": "radio_sfyxglz29"
+        "value": "radio_sfyxglz7"
+      },
+      "actions_trajectory_no": {
+        "find_by": "id",
+        "value": "radio_sfywc11"
+      },
+      "infected_exposed_no": {
+        "find_by": "id",
+        "value": "radio_sfygrzjcg15"
+      },
+      "infected_crossed_no": {
+        "find_by": "id",
+        "value": "radio_sfyxcgjjc19"
+      },
+      "history_risk_areas_no": {
+        "find_by": "id",
+        "value": "radio_sfyzgfxljs23"
+      },
+      "risk_areas_person_exposed_no": {
+        "find_by": "id",
+        "value": "radio_sfyzgfxryjc27"
       },
       "observation_finished_yes": {
         "find_by": "id",
-        "value": "radio_yjcyxgl31"
+        "value": "radio_yjcyxgl29"
       }
     },
     "button": {
