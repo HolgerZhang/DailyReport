@@ -2,6 +2,7 @@
 # author: holger version: 1.3
 # license: AGPL-3.0
 
+import sys
 import bot
 import scheduler
 import api
@@ -16,7 +17,8 @@ def 更新():
 
 
 def 作业():
-    更新()
+    if sys.argv[-1] != '--miss-feature':
+        更新()
     print("打卡时间:", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     打卡机器人 = bot.DailyReport()
     if 打卡机器人.需要登录():
