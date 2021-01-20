@@ -1,0 +1,8 @@
+# coding = utf-8
+# author: holger version: 1.2
+# license: AGPL-3.0
+
+VERSION = 1.2
+MAPPING_MIN_VERSION_REQUIRED = 1.1
+USER_MIN_VERSION_REQUIRED = 1.1
+SCHEDULER_MIN_VERSION_REQUIRED = 1.2

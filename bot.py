@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 1.1
+# author: holger version: 1.2
 # license: AGPL-3.0
 
 import json
@@ -8,11 +8,16 @@ from selenium.common.exceptions import NoSuchElementException
 from time import sleep
 from random import randint
 
+from version import VERSION, MAPPING_MIN_VERSION_REQUIRED, USER_MIN_VERSION_REQUIRED
+
 # Load
 with open('mapping.json', 'r', encoding='utf-8') as __mapping_file:
     _mapping = json.load(__mapping_file)
+    assert MAPPING_MIN_VERSION_REQUIRED <= _mapping['_version'] <= VERSION
 with open('user.json', 'r', encoding='utf-8') as __user_file:
-    _user = json.load(__user_file)['information']
+    __user = json.load(__user_file)
+    assert USER_MIN_VERSION_REQUIRED <= __user['_version'] <= VERSION
+    _user = __user['information']
 
 
 class DailyReport:
