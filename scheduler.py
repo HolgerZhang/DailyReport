@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 1.21
+# author: holger version: 1.3
 # license: AGPL-3.0
 
 # pip install apscheduler
@@ -7,13 +7,18 @@
 import json
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from version import VERSION, SCHEDULER_MIN_VERSION_REQUIRED
+import version
 
-# Load
-with open('scheduler.json', 'r', encoding='utf-8') as __scheduler_file:
-    __scheduler = json.load(__scheduler_file)
-    assert SCHEDULER_MIN_VERSION_REQUIRED <= __scheduler['_version'] <= VERSION
-    __scheduler = __scheduler["scheduler"]
+__scheduler = {}
+
+
+def load():
+    """ 加载数据 """
+    global __scheduler
+    with open('scheduler.json', 'r', encoding='utf-8') as __scheduler_file:
+        __scheduler = json.load(__scheduler_file)
+        assert version.check_version(version.SCHEDULER_MIN_VERSION_REQUIRED, __scheduler['_version']) <= 0
+        __scheduler = __scheduler["scheduler"]
 
 
 def schedule(job):

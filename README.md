@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v1.21 by holger
+v1.3 by holger
 
 coding: UTF-8
 
@@ -22,7 +22,7 @@ coding: UTF-8
 
 ### 使用
 
-从 main.py 运行，不要修改 mapping.json 文件。运行前先根据注释（`_notes`）配置 user.json 中的个人信息。
+从 main.py 运行。首次运行以及更新后会提示根据注释（`_notes`）配置 user.json 中的个人信息。
 
 > Linux后台执行方法：`nohup python3 -u main.py >DailyReport.log 2>&1 &`
 > 
@@ -36,13 +36,16 @@ coding: UTF-8
 >   ~~~
 > - 运行vbs文件即可。
 
-使用方法：
+使用方法：【**从v1.3开始，main.py中需要显式加载配置文件和检查更新（如示例代码）**】
 
 1. 单次执行
 
 ~~~python
 import bot
+import api
 
+api.检查更新()  # v1.3开始需要联网加载数据
+bot.load()  # v1.3开始需要显式加载配置
 打卡机器人 = bot.DailyReport()
 if 打卡机器人.需要登录():
     打卡机器人.登录()
@@ -51,19 +54,27 @@ if 打卡机器人.需要登录():
 
 2. 定时执行（默认）
 
-运行前先根据注释（`_notes`）配置 scheduler.json 中的定时信息（默认每天9：30）。
+首次运行以及更新后会提示根据注释（`_notes`）配置 scheduler.json 中的定时信息。
 
 ~~~python
 import bot
+import api
 import scheduler
 
+def 更新():
+    api.检查更新()  # v1.3开始需要联网加载数据
+    bot.load()  # v1.3开始需要显式加载配置
+    scheduler.load()
+
 def 作业():
+    更新()
     打卡机器人 = bot.DailyReport()
     if 打卡机器人.需要登录():
         打卡机器人.登录()
     打卡机器人.打卡()
 
 if __name__ == '__main__':
+    更新()
     scheduler.调度(作业)
 ~~~
 
@@ -73,8 +84,18 @@ if __name__ == '__main__':
 - v1.1  具体页面中的属性使用json保存，与代码解耦，使后续升级和调整对代码的改动最小；使用json保存用户数据并添加注释；优化代码结构，减少代码冗余；增加输出执行过程，帮助用户运行出错时检查问题。
 - v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
 - v1.21 由于网站更新，更新mapping（务必升级）
+- v1.3  新增json配置文件联网更新和软件版本检查（于每次打卡前检查），从这一版本起，不再在源码中附带配置json，首次运行时提示用户更新，**原有配置文件不受影响，无需删除**。
+
+### API
+
+- 根地址：[https://api.holgerbest.top/DailyReport/](https://api.holgerbest.top/DailyReport/)
+- `mapping.json`（元素选择配置）：[mapping.json](https://api.holgerbest.top/DailyReport/mapping.json)
+- `user.json`（用户信息配置，首次使用需填写）：[user.json](https://api.holgerbest.top/DailyReport/user.json)
+- `scheduler.json`（定时任务配置，首次使用需填写）：[scheduler.json](https://api.holgerbest.top/DailyReport/scheduler.json)
+- 版本号API：[https://api.holgerbest.top/DailyReport/version/](https://api.holgerbest.top/DailyReport/version/)
+- 提示信息API：[https://api.holgerbest.top/msgbox.html?msg=Text](https://api.holgerbest.top/msgbox.html?msg=Text)
 
 ### TODO List
 
-- [ ] json配置文件热更新，且不影响原有配置。（ [更新api](https://api.holgerbest.top/DailyReport) ）
+- [x] json配置文件热更新。*v1.3版本实现*
 - [ ] 监听json文件变化，变化后自动更新bot。
