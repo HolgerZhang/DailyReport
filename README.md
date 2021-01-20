@@ -24,7 +24,17 @@ coding: UTF-8
 
 从 main.py 运行，不要修改 mapping.json 文件。运行前先根据注释（`_notes`）配置 user.json 中的个人信息。
 
-> Linux后台执行方法：`nohup python3 -u main.py >DailyReport.log 2>&1 &` 
+> Linux后台执行方法：`nohup python3 -u main.py >DailyReport.log 2>&1 &`
+> 
+> Windows后台执行方法（无黑框）：
+> - 在项目根目录下新建bat文件，内容为： `python.exe main.py >DailyReport.log `
+> - 在任意目录下新建vbs文件，内容为：
+>   ~~~vbs
+>   DIM objShell
+>   set objShell=wscript.createObject("wscript.shell")
+>   iReturn=objShell.Run("cmd.exe /C \path\to\bat_file.bat", 0, TRUE)
+>   ~~~
+> - 运行vbs文件即可。
 
 使用方法：
 
@@ -63,3 +73,8 @@ if __name__ == '__main__':
 - v1.1  具体页面中的属性使用json保存，与代码解耦，使后续升级和调整对代码的改动最小；使用json保存用户数据并添加注释；优化代码结构，减少代码冗余；增加输出执行过程，帮助用户运行出错时检查问题。
 - v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
 - v1.21 由于网站更新，更新mapping（务必升级）
+
+### TODO List
+
+- json配置文件热更新，且不影响原有配置。
+- 监听json文件变化，变化后自动更新bot。
