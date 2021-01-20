@@ -12,7 +12,7 @@ coding: UTF-8
 
 - python3 环境依赖：
   - selenium3.x (pip install selenium)
-  - APScheduler (pip install apscheduler) 
+  - APScheduler (pip install apscheduler) 【v1.2新增依赖】
 - 下载Chrome驱动程序：[https://chromedriver.storage.googleapis.com/index.html?path=87.0.4280.88/](https://chromedriver.storage.googleapis.com/index.html?path=87.0.4280.88/)
 - 手动创建一个存放浏览器驱动的目录，如：`C:\ChromeDriver` , 将下载的浏览器驱动文件（解压后）chromedriver丢到该目录下。
 - 添加环境变量：此电脑–>属性–>系统设置–>高级–>环境变量–>系统变量–>Path，将 `C:\ChromeDriver` 目录添加到Path的值中。
