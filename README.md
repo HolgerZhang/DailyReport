@@ -76,5 +76,5 @@ if __name__ == '__main__':
 
 ### TODO List
 
-- json配置文件热更新，且不影响原有配置。
-- 监听json文件变化，变化后自动更新bot。
+- [ ] json配置文件热更新，且不影响原有配置。（ [更新api](https://api.holgerbest.top/DailyReport) ）
+- [ ] 监听json文件变化，变化后自动更新bot。
