@@ -2,6 +2,7 @@
   "_version": 1.2,
   "_author": "holger",
   "_licence": "AGPL-3.0",
+  "status": "success",
   "_notes": {
     "about": "以下为scheduler各字段的注释，请完善scheduler中2个字段，数字格式等同于Linux中cron配置(具体百度)",
     "hour": {
