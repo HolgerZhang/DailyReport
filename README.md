@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v1.2 by holger
+v1.21 by holger
 
 coding: UTF-8
 
@@ -60,3 +60,4 @@ if __name__ == '__main__':
 - v1.0  第一代，实现基本功能。
 - v1.1  具体页面中的属性使用json保存，与代码解耦，使后续升级和调整对代码的改动最小；使用json保存用户数据并添加注释；优化代码结构，减少代码冗余；增加输出执行过程，帮助用户运行出错时检查问题。
 - v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
+- v1.21 由于网站更新，更新mapping（务必升级）

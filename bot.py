@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 1.2
+# author: holger version: 1.21
 # license: AGPL-3.0
 
 import json
@@ -27,9 +27,10 @@ class DailyReport:
     def __init__(self):
         self.user_id = _user['user_id'].strip()
         self.passwd = _user['password'].strip()
-        self.__now_position = DailyReport.__now_positions[_user['now_position'].strip()]
+        self.now_position = _user['now_position'].strip()
         self.province = _user['province'].strip()
         self.city = _user['city'].strip()
+        self.qu = _user['qu'].strip()
         self.detail = _user['detail_address'].strip()
         self.__browser = webdriver.Chrome()
         self.__browser.get(_mapping['url'])
@@ -96,13 +97,22 @@ class DailyReport:
         self.__uncheck()  # 取消勾选
         # 勾选选项
         click = DailyReport.__attribute['click']
-        self.__click(**click['health_status_normal'])  # 健康状况：正常
-        self.__click(click['now_positions']['find_by'], self.__now_position)  # 人员位置
+        self.__click(**click['health_status_normal'])  # 个人健康状况：正常
+        self.__click(**click['now_positions'])  # 现人员位置选择
+        self.__click('fuzzy', DailyReport.__now_positions[self.now_position])
+        # 具体地址
         self.__click(**click['province'])  # 选择省份
         self.__click('fuzzy', self.province)
         self.__click(**click['city'])  # 选择地级市
         self.__click('fuzzy', self.city)
-        self.__click(**click['medical_observation_no'])  # 是否医学观察中：否
+        self.__click(**click['qu'])  # 选择区
+        self.__click('fuzzy', self.qu)
+        self.__click(**click['medical_observation_no'])  # 医学观察中：否
+        self.__click(**click['actions_trajectory_no'])  # 当日行动轨迹是否有外出：否
+        self.__click(**click['infected_exposed_no'])  # 是否与新冠确诊病例/无症状感染者接触过：否
+        self.__click(**click['infected_crossed_no'])  # 是否与新冠确诊病例/无症状感染者有行程轨迹交叉：否
+        self.__click(**click['history_risk_areas_no'])  # 是否有中高风险地区旅居史（包括途径中高风险地区）：否
+        self.__click(**click['risk_areas_person_exposed_no'])  # 是否与中高风险地区人员接触：否
         # self.__click(**click['observation_finished_yes'])  # 已经结束观察：是
         sleep(1)
         # 填写文字信息
@@ -124,3 +134,11 @@ class DailyReport:
     需要登录 = need_login
     登录 = login
     打卡 = report
+
+
+if __name__ == '__main__':
+    print("For test only")
+    打卡机器人 = DailyReport()
+    if 打卡机器人.需要登录():
+        打卡机器人.登录()
+    打卡机器人.打卡()

@@ -1,5 +1,5 @@
 {
-  "_version": 1.1,
+  "_version": 1.21,
   "_author": "holger",
   "_licence": "AGPL-3.0",
   "_notes": {
@@ -11,7 +11,7 @@
       "accepted": [
         "在校",
         "在苏州",
-        "江苏省内其他地区",
+        "江苏省其他地区",
         "在其他地区"
       ]
     },
@@ -21,6 +21,10 @@
     },
     "city": {
       "about": "具体地址-地级市",
+      "accepted": "地级市名称，可以省略最后的'市'字"
+    },
+    "qu": {
+      "about": "具体地址-区",
       "accepted": "地级市名称，可以省略最后的'市'字"
     },
     "detail_address": {
@@ -34,6 +38,7 @@
     "now_position": "",
     "province": "",
     "city": "",
+    "qu": "",
     "detail_address": ""
   }
 }
