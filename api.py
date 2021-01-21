@@ -1,8 +1,10 @@
 # coding = utf-8
-# author: holger version: 1.3
+# author: holger version: 1.35
 # license: AGPL-3.0
 
 import os
+from datetime import datetime
+
 import requests
 import json
 import webbrowser
@@ -118,3 +120,18 @@ def update():
 
 
 检查更新 = update
+
+
+def check(need_check: bool, call_func):
+    """ 检查更新装饰器 """
+
+    def wrapper(func):
+        def inner_wrapper():
+            if need_check:
+                print("{}时间:".format(call_func.__name__), datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                call_func()
+            return func()
+
+        return inner_wrapper
+
+    return wrapper

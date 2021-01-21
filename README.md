@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v1.3 by holger
+v1.35 by holger
 
 coding: UTF-8
 
@@ -22,7 +22,7 @@ coding: UTF-8
 
 ### 使用
 
-从 main.py 运行。首次运行以及更新后会提示根据注释（`_notes`）配置 user.json 中的个人信息。
+从 main.py 运行（**v1.35及以前版本**）。首次运行以及更新后会提示根据注释（`_notes`）配置 user.json 中的个人信息。
 
 > Linux后台执行方法：`nohup python3 -u main.py >DailyReport.log 2>&1 &`
 > 
@@ -85,6 +85,7 @@ if __name__ == '__main__':
 - v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
 - v1.21 由于网站更新，更新mapping（务必升级）
 - v1.3  新增json配置文件联网更新和软件版本检查（于每次打卡前检查；这一特性目前处于测试阶段，可以通过命令行添加 `--miss-feature` 参数来阻止每次打卡前的更新检查，但是首次运行时的更新检查不可取消），从这一版本起，不再在源码中附带配置json，首次运行时提示用户更新，**原有配置文件不受影响，无需删除**。
+- v1.35 (stable) 修复bug，新增接口。【模块化升级，从1.3升级只需覆盖main.py, api.py】（此后版本均保持对该版本兼容性）
 
 ### API
 
@@ -113,4 +114,4 @@ if __name__ == '__main__':
 ### TODO List
 
 - [x] json配置文件热更新。*v1.3版本实现*
-- [ ] 监听json文件变化，变化后自动更新bot。
+- [ ] 监听json文件变化，变化后自动更新bot。（预计v1.4发布）
