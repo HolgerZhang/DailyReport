@@ -97,7 +97,7 @@ def update_config():
         with open(file_name, 'w', encoding='utf-8') as file:
             file.write(json.dumps(data, indent=2, ensure_ascii=False))
     if len(need_adjust) != 0:
-        __msg_box("DailyReport: {}配置需要更新<br />请打开相应的json文件，按照_notes提示更新配置文件<br />更新后请重启程序。"
+        __msg_box("DailyReport: {}配置需要更新<br />请打开相应的json文件，按照_notes提示更新配置文件<br />若从main.py启动更新后需重启程序。"
                   .format(', '.join(need_adjust)))
         raise RuntimeWarning("配置需要更新")
     else:

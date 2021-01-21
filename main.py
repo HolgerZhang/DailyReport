@@ -2,6 +2,8 @@
 # author: holger version: 1.35
 # license: AGPL-3.0
 
+# use `--miss-feature` to disable file auto update feature
+
 import sys
 import bot
 import scheduler
