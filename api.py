@@ -3,6 +3,7 @@
 # license: AGPL-3.0
 
 import os
+import time
 from datetime import datetime
 
 import requests
@@ -97,9 +98,10 @@ def update_config():
         with open(file_name, 'w', encoding='utf-8') as file:
             file.write(json.dumps(data, indent=2, ensure_ascii=False))
     if len(need_adjust) != 0:
-        __msg_box("DailyReport: {}配置需要更新<br />请打开相应的json文件，按照_notes提示更新配置文件<br />若从main.py启动更新后需重启程序。"
-                  .format(', '.join(need_adjust)))
-        raise RuntimeWarning("配置需要更新")
+        __msg_box("DailyReport: {}配置需要更新<br />请打开相应的json文件，按照_notes提示更新配置文件<br />"
+                  "若从main.py启动更新后需重启程序；若5分钟没有修改则程序可能会异常退出。".format(', '.join(need_adjust)))
+        time.sleep(5 * 60)
+        # raise RuntimeWarning("配置需要更新")
     else:
         print("config up to date")
 
