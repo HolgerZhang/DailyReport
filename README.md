@@ -22,7 +22,9 @@ coding: UTF-8
 
 ### 使用
 
-从 main.py 运行（**v1.35及以前版本**）。首次运行以及更新后会提示根据注释（`_notes`）配置 user.json 中的个人信息。
+- 单次运行：从 once.py 运行（**v1.35及以前版本**）。
+- 定时执行：从 main.py 运行（**v1.35及以前版本**）。首次运行以及更新后会提示根据注释（`_notes`）配置 user.json 中的个人信息。
+- 定时执行，配置文件变更自动更新：从 start.py 运行（**v1.4及以后版本，尚未提供**）。
 
 > Linux后台执行方法：`nohup python3 -u main.py >DailyReport.log 2>&1 &`
 > 
