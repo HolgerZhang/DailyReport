@@ -27,10 +27,10 @@ coding: UTF-8
 - 定时执行，配置文件变更自动更新：从 start.py 运行（**v1.4及以后版本默认启动方式**）。首次运行以及更新后会提示根据注释（`_notes`）配置 user.json 中的个人信息。
 - 可以通过命令行添加 `--miss-feature` 参数来阻止每次打卡前的更新检查（v1.3）和定时检查json配置并更新（v1.4）这两种特性，但是首次运行时的更新检查不可取消。
 
-> Linux后台执行方法：`nohup python3 -u main.py >DailyReport.log 2>&1 &`
+> Linux后台执行方法：`nohup python3 -u start.py >DailyReport.log 2>&1 &`
 > 
 > Windows后台执行方法（无黑框）：
-> - 在项目根目录下新建bat文件，内容为： `python.exe main.py >DailyReport.log `
+> - 在项目根目录下新建bat文件，内容为： `python.exe -u start.py >DailyReport.log `
 > - 在任意目录下新建vbs文件，内容为：
 >   ~~~vbs
 >   DIM objShell
@@ -39,7 +39,7 @@ coding: UTF-8
 >   ~~~
 > - 运行vbs文件即可。
 
-使用方法：【**从v1.3开始，main.py中需要显式加载配置文件和检查更新（如示例代码）**】
+使用方法：【**从v1.3开始，需要显式加载配置文件和检查更新（如示例代码）**】
 
 1. 单次执行（从once.py启动）
 
@@ -109,8 +109,9 @@ if __name__ == '__main__':
 - v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
 - v1.21 由于网站更新，更新mapping（务必升级）
 - v1.3  新增json配置文件联网更新和软件版本检查（于每次打卡前检查；这一特性目前处于测试阶段，可以通过命令行添加 `--miss-feature` 参数来阻止每次打卡前的更新检查，但是首次运行时的更新检查不可取消），从这一版本起，不再在源码中附带配置json，首次运行时提示用户更新，**原有配置文件不受影响，无需删除**。
-- v1.35 (stable) 修复bug，新增接口。【模块化升级，新增once.py，从1.3升级需覆盖main.py, api.py】（此后版本均保持对该版本兼容性）
+- v1.35 修复bug，新增接口。【模块化升级，新增once.py，从1.3升级需覆盖main.py, api.py】（此后版本均保持对该版本兼容性）
 - v1.4  (stable) 新增定时检测json文件变化，变化后自动更新bot。【模块化升级，新增monitor.py start.py，从1.3升级需覆盖main.py, api.py version.json api.py；从1.35升级需覆盖version.json api.py 】
+- v1.41 (stable) 修复文件监测时I/O过于频繁和输出日志过长的问题。【模块化升级，从1.4升级需覆盖version.json, monitor.py】如不需要实时监测配置文件变化功能只需手动修改 version.json 屏蔽升级提醒：`"VERSION": 1.4  ->  1.41`
 
 ### API
 
@@ -120,21 +121,6 @@ if __name__ == '__main__':
 - `scheduler.json`（定时任务配置，首次使用需填写）：[scheduler.json](https://api.holgerbest.top/DailyReport/scheduler.json)
 - 版本号API：[https://api.holgerbest.top/DailyReport/version/](https://api.holgerbest.top/DailyReport/version/)
 - 提示信息API：[https://api.holgerbest.top/msgbox.html?msg=Text](https://api.holgerbest.top/msgbox.html?msg=Text)
-
-**配置文件更新算法【Beta】** （`def __merge(old_data: dict, new_data: dict) -> (dict, bool)`）
-
-> 该算法有待于完善的测试，且运行效率不高。
-
-- 合并old_data，new_data两配置数据（dict类型）
-- 配置数据的键类型为str，值类型为str、dict、list、float中的一种。
-- 要求：old_data中所有的键值对都会保存，除非：
-  - 对于new_data和old_data中共有的键：
-    - 若值为dict类型，合并方法相同（即递归合并）；
-    - 若值为float类型，不相等则覆盖old_data中对应数据；
-    - 若值为str、list类型，则new_data中不为空且不相等的数据覆盖原数据。
-  - 对于new_data中新增加的键，直接将键值对添加到合并结果。
-- 要求不改变old_data，new_data两配置数据，而是生成一个新的dict作为第一个返回值。
-- 如果发生了覆盖和新增，要求第二个返回值返回True，否则返回False。
 
 ### TODO List
 
