@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v1.4 by holger
+v1.41 by holger
 
 coding: UTF-8
 
