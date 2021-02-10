@@ -64,6 +64,22 @@ coding: UTF-8
 - scheduler 配置不受影响，可直接替换；
 - user 配置建议仅保留information中的个人信息，替换到新版本 user 配置文件的相应位置。
 
+### Q&A
+
+- 运行 setup 报错：找不到库 requests
+  - 解决办法：预先手动安装 requests：`pip install requests`
+- 运行失败后弹窗：捕获异常，log 文件显示异常信息为：NoSuchElementException
+  - 解决办法：检查 user 信息是否有误
+- 运行失败后弹窗：捕获未知异常；或捕获异常，log 文件显示异常信息不为 NoSuchElementException
+  - 解决办法：请带上提示异常时的日志文件（5分钟以内的部分）联系作者，注意在日志中抹去敏感信息（如学号、密码、家庭住址等）
+- 我想要立刻执行一次打卡
+  - 解决办法：运行 run.py 添加 `--once` 参数
+- 我想要手动填写体温数据
+  - 解决办法：打开 `data/mapping.json` ，定位到第 275 和 283 行，将 `random_float()` 分别改为上午体温和下午体温，注意保留前面的美元符号 `$` ，如图：
+    ![QAImg](https://i.loli.net/2021/02/11/zeBPacFSHqlQTjw.png)
+    确保配置文件为最新，打开 run.py，注释第 28 行 `api.update()` 后，运行 run.py 并添加 `--once` 参数即可。
+    不再希望手动填写体温数据，只需取消第 28 行 `api.update()` 的注释即可。
+    
 ### API v2.0
 
 - 根地址：[https://api.holgerbest.top/DailyReport/v2/](https://api.holgerbest.top/DailyReport/v2/)
