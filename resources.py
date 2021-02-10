@@ -9,7 +9,7 @@ CONFIG_UP_TO_DATE = '配置已是最新'
 ERR_WRONG_VER_F2 = "Error: 版本号有误，请手动下载{}替换，详见： {}"
 PROGRAM_SETUP = '程序初始化'
 RUN_F1 = "执行 {}"
-SRC_NEED_UPDATE = "软件需要更新<br />请访问：https://github.com/HolgerZhang/DailyReport <br />更新后请重启程序。"
+SRC_NEED_UPDATE = "软件需要更新<br />请访问：https://github.com/HolgerZhang/DailyReport/tree/v2/ <br />更新后请重启程序。"
 SRC_UP_TO_DATE = '程序版本已是最新'
 START_INTRODUCTION = '<p><strong>程序初始化完成.</strong></p>' \
                      '<p>运行 `python3 run.py` 开始打卡</p>' \
