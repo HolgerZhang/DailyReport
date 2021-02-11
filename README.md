@@ -29,9 +29,10 @@ coding: UTF-8
 ### 使用
 
 1. 阅读《免责声明》，接受方可继续。
-1. 运行 `python3 steup.py` 下载并安装依赖
+1. 运行 `python3 setup.py` 下载并安装依赖
 2. 运行 `python3 run.py` 开始使用；运行 `python3 run.pyw` 以不显示CMD窗口 (仅在 Windows 系统有效)
 
+- 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
 - 添加参数 `--no-update` 关闭自动检查更新特性
 - 添加参数 `--no-monitor` 关闭文件变更自动加载特性
 - 添加参数 `--once` 以单次运行程序
