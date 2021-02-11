@@ -75,11 +75,12 @@ coding: UTF-8
 - 我想要立刻执行一次打卡
   - 解决办法：运行 run.py 添加 `--once` 参数
 - 我想要手动填写体温数据
-  - 解决办法：打开 `data/mapping.json` ，定位到第 275 和 283 行，将 `random_float()` 分别改为上午体温和下午体温，注意保留前面的美元符号 `$` ，如图：
+  - 解决办法：打开 `data/mapping.json` ，定位到第 275 和 283 行，将 `random_float()` 分别改为用单引号包裹的上午体温和下午体温，注意保留前面的美元符号 `$` ，如 `"$'36.3'"`，如图：
     ![QAImg](https://i.loli.net/2021/02/11/zeBPacFSHqlQTjw.png)
     确保配置文件为最新，打开 run.py，注释第 28 行 `api.update()` 后，运行 run.py 并添加 `--once` 参数即可。
     不再希望手动填写体温数据，只需取消第 28 行 `api.update()` 的注释即可。
-    
+  - 说明：在 bot_core 解析 json 的能力得到增强后，将提供更为简洁的方法。
+
 ### API v2.0
 
 - 根地址：[https://api.holgerbest.top/DailyReport/v2/](https://api.holgerbest.top/DailyReport/v2/)
