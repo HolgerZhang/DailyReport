@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: resource.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-BotCore
+-->
+<resource>
+    <!-- 格式： <NAME>value</NAME>
+               NAME 应唯一且不为 API，String，Res，resource，xml 中任意一个，不以 xml 开头
+     -->
+    <API>
+        <MSG_BOX_PATH>https://api.holgerbest.top/msgbox.html?msg=</MSG_BOX_PATH>
+        <DEMO_API>http://default.holgerbest.top/</DEMO_API>
+        <LINUX_CHROME_DRIVER>https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip</LINUX_CHROME_DRIVER>
+        <WIN32_CHROME_DRIVER>https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_win32.zip</WIN32_CHROME_DRIVER>
+        <MACOS_CHROME_DRIVER>https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_mac64.zip</MACOS_CHROME_DRIVER>
+    </API>
+    <String>
+        <CATCH_EXCEPT_F3>Bot 捕获异常：{} (在执行用户编号为{}时捕获)；调用栈：{}</CATCH_EXCEPT_F3>
+        <CATCH_WARNING_F3>Bot 警告：{} (在执行用户编号为 {} 时)；调用栈：{}</CATCH_WARNING_F3>
+        <CATCH_INNER_ERROR_F3>Bot 内部错误：{} (在执行用户编号为 {} 时)；调用栈：{}</CATCH_INNER_ERROR_F3>
+        <CHECK_F2>检查 &quot;{}&quot;(预期)==&quot;{}&quot;(实际)</CHECK_F2>
+        <CIRCUIT_FUNC_FINISHED_F2>自定义方法 &quot;{}&quot; 结束，用户编号为{}</CIRCUIT_FUNC_FINISHED_F2>
+        <CIRCUIT_FUNC_RUNNING_F2>自定义方法 &quot;{}&quot; 正在运行，用户编号为{}</CIRCUIT_FUNC_RUNNING_F2>
+        <CIRCUIT_FUNC_SETUP_F3>自定义方法 &quot;{}&quot; 建立成功，返回值类型: {}, 捕获异常声明: {}</CIRCUIT_FUNC_SETUP_F3>
+        <CLICK_F1>点击 {}</CLICK_F1>
+        <DEFAULT_MAP_NAME>default</DEFAULT_MAP_NAME>
+        <ERR_ARGV_NEED_ELEM>错误的符号类型，应为元素类型</ERR_ARGV_NEED_ELEM>
+        <ERR_ARGV_NEED_STR>错误的符号类型，应为字符串类型</ERR_ARGV_NEED_STR>
+        <ERR_ARGV_NEED_INT>参数不为整数</ERR_ARGV_NEED_INT>
+        <ERR_INCOMPLETE_MAP_CFG>不完整的 Mapping 数据</ERR_INCOMPLETE_MAP_CFG>
+        <ERR_INCOMPLETE_USER_CFG>不完整的 User 数据</ERR_INCOMPLETE_USER_CFG>
+        <ERR_INVALID_STRING_F1>{} 不是合法的字符串</ERR_INVALID_STRING_F1>
+        <ERR_NOT_LOAD_MAPPING>加载 Mapping.xml 前使用 Mapping 数据</ERR_NOT_LOAD_MAPPING>
+        <ERR_NO_USER>无 User 数据</ERR_NO_USER>
+        <ERR_USER_NOT_FOUND_F1>找不到编号为 {} 的用户配置</ERR_USER_NOT_FOUND_F1>
+        <ERR_NOT_START_BOT>实例化(start)浏览器前使用 web bot</ERR_NOT_START_BOT>
+        <ERR_NOT_CLOSE_BOT>打开新的浏览器前没有关闭旧的浏览器</ERR_NOT_CLOSE_BOT>
+        <ERR_UNSUPPORTED_PLATFORM>不支持的平台环境</ERR_UNSUPPORTED_PLATFORM>
+        <ERR_UNSUPPORTED_TARGET>不支持的查找方式</ERR_UNSUPPORTED_TARGET>
+        <ERR_UNSUPPORTED_EXP_F1>不支持的异常声明 &#39;{}&#39;</ERR_UNSUPPORTED_EXP_F1>
+        <ERR_WEBSITE_UPDATE>网页发生更新，请联系 Mapping 提供方更新数据</ERR_WEBSITE_UPDATE>
+        <ERR_STAT_ARGC_F1>{} 语句参数数量不符合要求</ERR_STAT_ARGC_F1>
+        <ERR_STAT_ERROR_F1>错误的语法：未识别(或被禁止)的语法 &quot;{}&quot;</ERR_STAT_ERROR_F1>
+        <ERR_STAT_MISS_AS_F1>{} 语句存在语法错误：缺少&quot;AS&quot;</ERR_STAT_MISS_AS_F1>
+        <ERR_SYMBOL_NOT_FOUND_F1>未定义符号 &quot;{}&quot;</ERR_SYMBOL_NOT_FOUND_F1>
+        <ERR_SYMBOL_NAME_ERROR_F1>不合法的符号名 &quot;{}&quot;</ERR_SYMBOL_NAME_ERROR_F1>
+        <EXCEPT_TRACEBACK>异常堆栈信息：</EXCEPT_TRACEBACK>
+        <FILE_CHANGED_F1>{} 发生变化，正在应用更改</FILE_CHANGED_F1>
+        <FILL_F2>填写 {}，值为 &quot;{}&quot;</FILL_F2>
+        <FIND_F2>查找 @{} = {}</FIND_F2>
+        <FIND_XPATH_F1>查找 @xpath={}</FIND_XPATH_F1>
+        <LOAD_MAPPING_USER>加载文件: map.xml, configuration.xml-UserList</LOAD_MAPPING_USER>
+        <LOAD_SCHEDULER>加载文件: configuration.xml-Scheduler</LOAD_SCHEDULER>
+        <RETURN_STR_SAVE_F2>{} 函数返回字符串：{}</RETURN_STR_SAVE_F2>
+        <SCHEDULER_TAG>计划任务:</SCHEDULER_TAG>
+        <SEARCH_ID_CONTAINS_F1>模糊查找 @id 包含 {}</SEARCH_ID_CONTAINS_F1>
+        <SEARCH_ID_XPATH_F1>//*[contains(@id,&#39;{}&#39;)]</SEARCH_ID_XPATH_F1>
+        <START_JOB>START</START_JOB>
+        <FINISH_JOB>FINISH</FINISH_JOB>
+
+    </String>
+    <Res>
+    </Res>
+</resource>

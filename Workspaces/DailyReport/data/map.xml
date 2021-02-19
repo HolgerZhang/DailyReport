@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: map.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-DataFile
+-->
+<map>
+    <version>3.0</version>
+    <MapList>
+        <Mapping name="report">
+            <Url>http://dk.suda.edu.cn/default/work/suda/jkxxtb/jkxxcj.jsp</Url>
+            <ElementsList>
+                <Element name="login_user_id" check="false">
+                    <target>name</target>
+                    <value>username</value>
+                    <text></text>
+                </Element>
+                <Element name="login_password" check="false">
+                    <target>name</target>
+                    <value>password</value>
+                    <text></text>
+                </Element>
+                <Element name="in_temperature_morning" check="false">
+                    <target>id</target>
+                    <value>input_swtw</value>
+                    <text></text>
+                </Element>
+                <Element name="in_temperature_afternoon" check="false">
+                    <target>id</target>
+                    <value>input_xwtw</value>
+                    <text></text>
+                </Element>
+                <Element name="in_detail_address" check="false">
+                    <target>id</target>
+                    <value>input_jtdz</value>
+                    <text></text>
+                </Element>
+                <Element name="cl_health_status_normal" check="true">
+                    <target>id</target>
+                    <value>checkbox_jkzk33</value>
+                    <text>正常</text>
+                </Element>
+                <Element name="cl_now_positions" check="true">
+                    <target>id</target>
+                    <value>select2-select_xrywz-container</value>
+                    <text>请选择</text>
+                </Element>
+                <Element name="cl_province" check="false">
+                    <target>id</target>
+                    <value>select2-select_jtdzshen-container</value>
+                    <text></text>
+                </Element>
+                <Element name="cl_city" check="false">
+                    <target>id</target>
+                    <value>select2-select_jtdzshi-container</value>
+                    <text></text>
+                </Element>
+                <Element name="cl_district" check="false">
+                    <target>id</target>
+                    <value>select2-select_jtdzqu-container</value>
+                    <text></text>
+                </Element>
+                <Element name="cl_medical_observation_no" check="true">
+                    <target>id</target>
+                    <value>radio_sfyxglz7</value>
+                    <text>否</text>
+                </Element>
+                <Element name="cl_actions_trajectory_no" check="true">
+                    <target>id</target>
+                    <value>radio_sfywc11</value>
+                    <text>否</text>
+                </Element>
+                <Element name="cl_infected_exposed_no" check="true">
+                    <target>id</target>
+                    <value>radio_sfygrzjcg15</value>
+                    <text>否</text>
+                </Element>
+                <Element name="cl_infected_crossed_no" check="true">
+                    <target>id</target>
+                    <value>radio_sfyxcgjjc19</value>
+                    <text>否</text>
+                </Element>
+                <Element name="cl_history_risk_areas_no" check="true">
+                    <target>id</target>
+                    <value>radio_sfyzgfxljs23</value>
+                    <text>否</text>
+                </Element>
+                <Element name="cl_risk_areas_person_exposed_no" check="true">
+                    <target>id</target>
+                    <value>radio_sfyzgfxryjc27</value>
+                    <text>否</text>
+                </Element>
+                <Element name="cl_observation_finished_yes" check="true">
+                    <target>id</target>
+                    <value>radio_yjcyxgl29</value>
+                    <text>是</text>
+                </Element>
+                <Element name="btn_login" check="true">
+                    <target>class</target>
+                    <value>login-btn</value>
+                    <text>登录</text>
+                </Element>
+                <Element name="btn_report_post" check="true">
+                    <target>id</target>
+                    <value>tpost</value>
+                    <text>提交</text>
+                </Element>
+                <Element name="btn_report_confirm" check="false">
+                    <target>class</target>
+                    <value>layui-layer-btn0</value>
+                    <text></text>
+                </Element>
+            </ElementsList>
+            <FunctionsList>
+                <Function name="LoginAccount" return="void" exception="throw"><![CDATA[
+                    USE userId AS $user_id
+                    FILL login_user_id $user_id
+                    USE password AS $passwd
+                    FILL login_password $passwd
+                    CLICK btn_login
+                    SLEEP 1
+                ]]></Function>
+                <Function name="ClickNormal" return="void" exception="log"><![CDATA[
+                    CLICK cl_health_status_normal
+                    CLICK cl_medical_observation_no
+                    CLICK cl_actions_trajectory_no
+                    CLICK cl_infected_exposed_no
+                    CLICK cl_infected_crossed_no
+                    CLICK cl_history_risk_areas_no
+                    CLICK cl_risk_areas_person_exposed_no
+                    SLEEP 1
+                ]]></Function>
+                <Function name="ClickFuzzy" return="void" exception="throw"><![CDATA[
+                    CLICK cl_now_positions
+                    USE position AS $now_pos_tag
+                    SEARCH $now_pos_tag AS $cl_now_pos_obj
+                    CLICK $cl_now_pos_obj
+
+                    CLICK cl_province
+                    USE province AS $province_tag
+                    SEARCH $province_tag AS $cl_province_obj
+                    CLICK $cl_province_obj
+
+                    CLICK cl_city
+                    USE city AS $city_tag
+                    SEARCH $city_tag AS $cl_city_obj
+                    CLICK $cl_city_obj
+
+                    CLICK cl_district
+                    USE district AS $district_tag
+                    SEARCH $district_tag AS $cl_district_obj
+                    CLICK $cl_district_obj
+
+                    SLEEP 1
+                ]]></Function>
+                <Function name="FillBlank" return="void" exception="log"><![CDATA[
+                    FILL in_temperature_morning `'%.1f' % (35.5 + 0.1 * __import__('random').randint(1, 10))`
+                    FILL in_temperature_afternoon `'%.1f' % (35.5 + 0.1 * __import__('random').randint(1, 10))`
+                    USE detailAddress AS $detail_address
+                    FILL in_detail_address $detail_address
+                    SLEEP 1
+                ]]></Function>
+                <Function name="Post" return="void" exception="escape"><![CDATA[
+                    CLICK btn_report_post
+                    CLICK btn_report_confirm
+                    CLICK btn_report_confirm
+                    SLEEP 1
+                ]]></Function>
+            </FunctionsList>
+            <Action><![CDATA[LoginAccount ClickNormal ClickFuzzy FillBlank Post]]></Action>
+        </Mapping>
+    </MapList>
+</map>

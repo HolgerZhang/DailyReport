@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: configuration.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-DataFile
+-->
+<Configuration>
+    <version>3.0</version>
+    <UserList>
+        <User id="1">
+            <userId></userId>  <!--10位学号，数字-->
+            <password></password> <!--统一身份认证密码-->
+            <position></position>  <!--现人员位置，可选：在校:-1 在苏州:-2 江苏省其他地区:-5 在其他地区:-38 -->
+            <province></province>  <!--具体地址-省份，可以省略最后的'省'字-->
+            <city></city>  <!--具体地址-地级市，可以省略最后的'市'字-->
+            <district></district>  <!--具体地址-区，可以省略最后的'区/县'字-->
+            <detailAddress></detailAddress>  <!--具体地址-详细地址-->
+        </User>
+    </UserList>
+    <Scheduler>
+        <hour>9</hour>
+        <minute>30</minute>
+        <second>0</second>
+    </Scheduler>
+</Configuration>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: configuration.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-DataFile
+-->
+<Configuration>
+    <version>3.0</version>
+    <UserList>
+        <User id="100">
+            <name>Demo User</name>
+            <detail>Simple Information</detail>
+        </User>
+    </UserList>
+    <Scheduler>
+        <hour>9-11,13,15,20</hour>
+        <minute>35</minute>
+        <second>0</second>
+    </Scheduler>
+</Configuration>

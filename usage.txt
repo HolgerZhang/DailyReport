@@ -1,0 +1,51 @@
+WebBot V3.0 (stand-alone version)
+Our suggestion: Use 'make_workspace.py' and 'run_workspace.py' to use Bot in the workspace.
+
+
+# How to use WebBot manually?
+
+import bot
+
+my_bot = bot.WebBot()
+scheduler = bot.TaskScheduler()
+my_bot.load(map_name='MyMapping')  # map_name is the name property of Mapping Element in map.xml
+scheduler.load()
+my_bot.start()
+my_bot.run(user_id='100')  # user_id is the id property of User Element in configuration.xml
+my_bot.finish()
+
+
+# How to use WebBot automatically?
+
+import bot
+
+# define your own job
+# map_name is the name property of Mapping Element in map.xml
+# user_id is the id property of User Element in configuration.xml
+# define another function that runs before bot started if you want, and replace 'FunctionName' with its name
+@bot.job_maker(map_name='MyMapping', user_id='100', before=FunctionName)
+def my_job():
+    # declare something to run after bot finished.
+    ...
+
+# automatically run
+bot.run(my_job)
+
+
+# How to use WebBot default run mode?
+
+import bot
+
+# use default run mode:
+# use the first Mapping Element in map.xml, use all the User Element defined in configuration.xml
+bot.default.default_run()
+
+
+# How to run WebBot at once?
+
+import bot
+
+# bot only runs when script was running
+# map_name is the name property of Mapping Element in map.xml
+# user_id is the id property of User Element in configuration.xml
+bot.run_once(map_name='MyMapping', user_id='100')

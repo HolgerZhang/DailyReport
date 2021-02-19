@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: configuration_introduction.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-External
+-->
+<Configuration>
+    <version>3.0</version>
+    <UserList>
+        <!-- 可以添加多个用户数据，向 UserList 中新增格式相同的 User 元素即可，每个元素须有id属性 -->
+        <!-- 例如：
+        <User id="100">
+            <userId>10位学号，数字</userId>
+            <password>统一身份认证密码</password>
+            <position>现人员位置，可选：在校；在苏州；江苏省其他地区；在其他地区</position>
+            <province>具体地址-省份，可以省略最后的'省'字</province>
+            <city>具体地址-地级市，可以省略最后的'市'字</city>
+            <district>具体地址-区，可以省略最后的'区/县'字</district>
+            <detailAddress>具体地址-详细地址</detailAddress>
+        </User>
+        -->
+        <User id="100">
+        </User>
+    </UserList>
+    <Scheduler>
+        <!-- 字符串(范围：0-23)，单个或多个时间，逗号隔开或用'-'表示区间 (corn 格式) -->
+        <hour>9</hour>
+        <minute>30</minute>
+        <second>0</second>
+    </Scheduler>
+</Configuration>

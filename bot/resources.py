@@ -1,7 +1,11 @@
 # coding = utf-8
-# author: holger version: 2.0
-# license: AGPL-3.0
-# belong: DailyReport-BotCore
+"""
+file: bot/resources.py
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-BotCore
+"""
 
 import os
 import re
@@ -13,48 +17,54 @@ import zipfile
 
 import requests
 
-from bot_core import exec_log, resources
+from bot import exec_log
+from bot.xml_parser import Resources
 
 # 运行目录
-PROJECT_PATH = os.getcwd()
+RUNNING_PATH = os.getcwd()
+
+# 包数据目录
+PACKAGE_CFG_PATH = os.path.join(os.path.split(__file__)[0], 'BotCfg')
 
 # 文件夹
 DATA_FOLDER = 'data'
 CMP_FOLDER = '.cmp_dat'
 
 # 文件路径
-CHROMEDRIVER_ZIP_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'chromedriver.zip')
-CHROMEDRIVER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER,
+CHROMEDRIVER_ZIP_FILE = os.path.join(PACKAGE_CFG_PATH, 'chromedriver.zip')
+CHROMEDRIVER_FILE = os.path.join(PACKAGE_CFG_PATH,
                                  'chromedriver.exe' if sys.platform.lower().startswith('win32') else 'chromedriver')
-USER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'user.json')
-MAPPING_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mapping.json')
-SCHEDULER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'scheduler.json')
-VERSION_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'version.json')
-LOG_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'BotLog.log')
+CONFIGURATION_FILE = os.path.join(RUNNING_PATH, DATA_FOLDER, 'configuration.xml')
+MAP_FILE = os.path.join(RUNNING_PATH, DATA_FOLDER, 'map.xml')
+LOG_FILE = os.path.join(RUNNING_PATH, DATA_FOLDER, 'BotLog.log')
+TEXT_SAVE_FILE = os.path.join(RUNNING_PATH, DATA_FOLDER, 'TextSaved.txt')
 
 # 配置文件路径列表
-FILE = [SCHEDULER_FILE, USER_FILE, MAPPING_FILE]
+FILE = [CONFIGURATION_FILE, MAP_FILE]
 
-# 消息框路径
-MSG_BOX_PATH = "https://api.holgerbest.top/msgbox.html?msg="
+# 资源文件索引
+R = Resources(os.path.join(PACKAGE_CFG_PATH, 'resource.xml'))
 
 # 文件初始化
-if not os.path.isdir(CMP_FOLDER):
-    os.mkdir(CMP_FOLDER)
-if not os.path.isdir(DATA_FOLDER):
-    os.mkdir(DATA_FOLDER)
+if not os.path.isdir(os.path.join(RUNNING_PATH, CMP_FOLDER)):
+    os.mkdir(os.path.join(RUNNING_PATH, CMP_FOLDER))
+if not os.path.isdir(os.path.join(RUNNING_PATH, DATA_FOLDER)):
+    os.mkdir(os.path.join(RUNNING_PATH, DATA_FOLDER))
+if not os.path.isdir(PACKAGE_CFG_PATH):
+    os.mkdir(PACKAGE_CFG_PATH)
 if not os.path.isfile(LOG_FILE):
     open(LOG_FILE, 'w', encoding='utf-8').close()
+if not os.path.isfile(TEXT_SAVE_FILE):
+    open(TEXT_SAVE_FILE, 'w', encoding='utf-8').close()
 
 
 def get_file(filename: str) -> str:
     """
-    配置文件选择器
-    :param filename: user | mapping | scheduler | version
+    文件选择器
+    :param filename: config | map
     :return: 配置文件路径
     """
-    return {'user': USER_FILE, 'mapping': MAPPING_FILE,
-            'scheduler': SCHEDULER_FILE, 'version': VERSION_FILE}[filename]
+    return {'config': CONFIGURATION_FILE, 'map': MAP_FILE}[filename]
 
 
 def get_cmp_file(file_path: str) -> str:
@@ -80,29 +90,15 @@ def copy_file(file_path=None) -> None:
         shutil.copyfile(file_path, get_cmp_file(file_path))
 
 
-def same(old_data: dict, new_data: dict) -> bool:
-    """
-    比较两配置数据是否相同
-    :param old_data: 旧配置数据
-    :param new_data: 新配置数据
-    :return: 是否相同
-    """
-    for key in old_data.keys():
-        data = new_data.get(key)
-        if isinstance(data, dict) and isinstance(old_data[key], dict) and not same(old_data[key], data):
-            return False
-        if old_data[key] != data:
-            return False
-    return True
-
-
 def msg_box(desc: str) -> None:
     """
     以弹出页面的形式提醒用户
     :param desc: 提醒内容
     :return: None
     """
-    webbrowser.open(MSG_BOX_PATH + desc)
+    webbrowser.open(R.api.MSG_BOX_PATH + desc.replace("+", "%2B").replace("/", "%2F").replace(" ", "%20")
+                    .replace("?", "%3F").replace("%", "%25").replace("#", "%23").replace("&", "%26")
+                    .replace("=", "%3D").replace("\n", "%0A").replace("\t", "%09"))
     exec_log.logger(desc)
 
 
@@ -139,20 +135,20 @@ def get_driver() -> None:
     :return: None
     """
     if sys.platform.startswith('linux'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip'
+        chromedriver_url = R.api.LINUX_CHROME_DRIVER.strip()
     elif sys.platform.startswith('win32'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_win32.zip'
+        chromedriver_url = R.api.WIN32_CHROME_DRIVER.strip()
     elif sys.platform.startswith('darwin'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_mac64.zip'
+        chromedriver_url = R.api.MACOS_CHROME_DRIVER.strip()
     else:
-        msg_box(resources.ERR_UNSUPPORTED_PLATFORM)
-        raise TypeError(resources.ERR_UNSUPPORTED_PLATFORM)
+        msg_box(R.string.ERR_UNSUPPORTED_PLATFORM)
+        raise TypeError(R.string.ERR_UNSUPPORTED_PLATFORM)
 
     with open(CHROMEDRIVER_ZIP_FILE, 'wb') as driver_zip:
         driver_zip.write(requests.get(chromedriver_url).content)
 
     with zipfile.ZipFile(CHROMEDRIVER_ZIP_FILE, 'r') as driver_zip:
-        driver_zip.extractall(DATA_FOLDER)
+        driver_zip.extractall(PACKAGE_CFG_PATH)
 
     os.remove(CHROMEDRIVER_ZIP_FILE)
     chmod(path=CHROMEDRIVER_FILE, mode=777)

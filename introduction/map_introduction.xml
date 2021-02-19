@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: map_introduction.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-External
+-->
+<map>
+    <version>3.0</version>
+    <MapList>
+        <!--
+        映射定义格式：
+        <Mapping name="唯一的映射名称">
+            <Url>目标网址</Url>
+            <ElementsList>
+                元素列表
+            </ElementsList>
+            <FunctionsList>
+                函数列表
+            </FunctionsList>
+            <Action>
+                调用函数流程
+                格式：按顺序排列调用流程，中间以空格或制表符分割，包含在<![CDATA[ ]]>中。
+                    <![CDATA[FunctionName1 FunctionName2 FunctionName3 ...]]>
+            </Action>
+
+        </Mapping>
+        -->
+        <Mapping name="demo">
+
+            <Url>about:blank</Url>
+
+            <ElementsList>
+                <!--
+                元素定义格式：
+                <Element name="元素名称" check="true | false">
+                    <target></target>
+                    <value></value>
+                    <text></text>
+                </Element>
+                说明：name 为唯一的元素名称，用于查找该元素；check 标识是否运行时检查实际显示与text是否相同；
+                     target：查找方法，id | class | name
+                     value：要查找的值
+                     text：预期显示内容
+                -->
+            </ElementsList>
+
+            <FunctionsList>
+                <!--
+                函数定义格式：
+                <Function name="函数名称" return="str | void" exception="escape | log | throw"><![CDATA[
+                    流程控制语句
+                ]]></Function>
+                说明：name 为唯一的函数名称，用于定位函数；
+                     return 为返回值类型：str 类型会返回一个字符串，void 类型无返回值（实际返回 None）；
+                     exception 为异常捕获声明，仅针对 NoSuchElementException，escape 不捕获；log 视为警告，仅记录不中断运行，
+                                                                           throw 视为错误，弹窗提示并中断运行。
+                     流程控制语句需包含在<![CDATA[ ]]>中。
+
+                流程控制语句 语法：
+                    0. 一行视作为一条语句，每条语句以预定义关键词开始；单条语句不可换行，多条语句不可合并为一行；
+                       每条语句有一至多个组成部分（详见以下说明），各部分用一个或多个空格或制表符分割；语句大小写敏感；
+                       10个预定义关键词为：
+                       CLICK FILL FIND-XPATH SEARCH SAVE-TEXT USE STRING-RETURN STRING-RETURN-CLEAR SLEEP AS
+                       预定义关键词全为大写；除 AS 外，每条语句必以其余9个关键词中的一个开始。
+                    1. 字符串常量 "text" （用一对双引号 "" 包裹），解释器会在预编译阶段调用 Python 解释器（eval 函数）将其转换为
+                       Python 的字符串对象，若不为 str 类型则抛出异常；注意：解释器未检查 eval 安全性问题，请甄别 "" 内实际内容。
+                    2. 可执行 Python 语句 `python_exec_stat()` （用一对反单引号 `` 包裹），解释器会在预编译阶段调用 Python 解释器
+                       （eval 函数）得到运行结果并转换为字符串；注意：解释器未检查 eval 安全性问题，请甄别 `` 内实际执行内容。
+                    3. 符号定义 $symbol （以美元符号 $ 开始，仅包含字母数字和下划线，且 $ 后不为数字），用于保存字符串以及查找到的元素；
+                       AS 后为符号的定义，其余为符号的使用；符号有字符串类型和元素类型两种类型；
+                       符号有两种作用生存期类型，一种是静态符号，在预编译阶段由字符串常量和可执行 Python 语句自动生成，均为字符串类型符号，
+                       保存于函数对象中，仅函数中，生存期直至运行结束，命名规则：前缀为 $_static_0x，后接静态符号的十六进制编号；
+                       另一种是动态符号，由用户在语句中创建，在函数执行过程中生成，字符串类型符号的生存期为定义位置开始直至函数结尾，
+                       元素类型符号的生存期为定义位置开始直至首次使用的语句结束。
+                       未定义和生存期结束的符号被使用解释器会抛出异常，动态符号多次定义会覆盖之前的类型和内容。
+                       若动态符号与静态符号重名，则静态符号会覆盖动态符号的可见性（即定义符号时不应以 $_static_0x 为前缀）。
+                       元素名称、用户属性名称、秒数无需其他标识，但要注意避开以上的标志字符。
+                    4. [need] 为字符串 "text"、符号 $symbol、可执行 Python 语句 `python_exec_stat()` 的一种；加 s 表示可以有多个。
+                    5. 双斜杠 // 后面为注释。
+                    6. 执行过程：源码载入（将源代码载入 Mapping 对象并去除注释） ->
+                               预编译阶段（数据准备，常量创建，可执行 Python 语句转换） ->
+                               解释阶段（逐条解释执行）
+                    7. 各语句使用方法说明：
+                    FIND-XPATH "xpath-statement" AS $symbol   // 查找并定义元素类型符号 $symbol
+                    // 无法写死在 ElementsList 中的元素可以使用 XPATH 动态查找（使用一次就失效，再次使用需重新定位）
+                    SEARCH [need] AS $symbol      // 使用 [need] 模糊查找元素并保存到元素类型符号 $symbol
+                    CLICK 元素名称                 // 点击指定元素，元素名称可以为符号 $symbol（元素类型）
+                    FILL 元素名称 [need]           // 使用 [need] 填充指定元素（文本框），元素名称可以为符号 $symbol（元素类型）
+                    SAVE-TEXT 元素名称 AS $symbol  // 使用指定元素中 HTML 文本定义字符串类型符号 $symbol
+                    USE 用户属性名称 AS $symbol     // 使用用户配置中指定的属性定义字符串类型符号 $symbol
+                    STRING-RETURN [need]s         // 当 return="str" 时合并各个字符串并附加到本函数调用返回值，但不会结束函数运行；
+                                                  // 其中符号需为字符串类型，而不是元素类型；
+                                                  // 当 return="void" 时不允许使用该语句。
+                    STRING-RETURN-CLEAR           // 当 return="str" 时清空本函数调用返回值，但不会结束函数运行；
+                                                  // 当 return="void" 时不允许使用该语句。
+                    SLEEP 秒数（整数）              // 线程休眠（在执行过程中） 注意 使用 `__import__('time').sleep(秒数)`
+                                                  // 无法达到真正休眠的目的，因为可执行 Python 语句的执行是在预编译阶段进行的,
+                                                  // 这样做只会导致程序在预编译期休眠并产生错误
+                -->
+            </FunctionsList>
+
+            <Action><![CDATA[]]></Action>
+
+        </Mapping>
+    </MapList>
+</map>

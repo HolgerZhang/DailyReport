@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+file: map.xml
+author: holger
+version: 3.0
+license: AGPL-3.0
+belongs: WebBot-DataFile
+-->
+<map>
+    <version>3.0</version>
+    <MapList>
+        <Mapping name="DemoMap">
+            <Url>about:blank</Url>
+            <ElementsList>
+                <Element name="DemoElement" check="false">
+                    <target>id</target>
+                    <value>demo-elem</value>
+                    <text>demo</text>
+                </Element>
+            </ElementsList>
+            <FunctionsList>
+                <Function name="DemoFunction1" return="void" exception="escape"><![CDATA[
+                    SLEEP 2
+                ]]></Function>
+                <Function name="DemoFunction2" return="str" exception="log"><![CDATA[
+                    STRING-RETURN `'%.1f' % __import__("random").randint(1, 100)`
+                    CLICK DemoElement
+                ]]></Function>
+            </FunctionsList>
+            <Action><![CDATA[DemoFunction1 DemoFunction2]]></Action>
+        </Mapping>
+    </MapList>
+</map>
