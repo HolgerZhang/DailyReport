@@ -171,7 +171,7 @@ map.xml 为基础配置，配置方法：（详见 introduction/map_introduction
 - name 为唯一的函数名称，用于定位函数；
 - return 为返回值类型：str 类型会返回一个字符串，void 类型无返回值（实际返回 None）；
 - exception 为异常捕获声明，仅针对 NoSuchElementException，escape 不捕获；log 视为警告，仅记录不中断运行，throw 视为错误，弹窗提示并中断运行。
-- 流程控制语句需包含在<![CDATA[ ]]>中。
+- 流程控制语句需包含在`<![CDATA[ ]]>`中。
 
 流程控制语句语法：
 
