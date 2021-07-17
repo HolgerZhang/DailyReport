@@ -1,4 +1,4 @@
-# DailyReport
+# DailyReport (stable)
 
 Daily health report automated program. 每日打卡自动化程序
 
@@ -6,13 +6,13 @@ v2.1 by holger
 
 coding: UTF-8
 
-有关实现细节（v1.x）详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
+有关实现细节详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
 
 ### 使用前注意
 
-> v2.x 不再向下兼容 [v1.x](https://github.com/HolgerZhang/DailyReport/tree/main) 的部分配置文件以及启动方法
+> v2.x 不再向下兼容 [v1.x](https://github.com/HolgerZhang/DailyReport/tree/v1-end-of-life) 的部分配置文件以及启动方法
 > 
 > v2.1 前所有版本的支持周期均已停止，请尽快升级至 v2.1 版本
 
@@ -63,7 +63,7 @@ coding: UTF-8
 - v1.4  (stable end-of-life) 新增定时检测json文件变化，变化后自动更新bot。
 - v1.41 (long-term end-of-life) 修复文件监测时I/O过于频繁和输出日志过长的问题。如不需要实时监测配置文件变化功能只需手动修改 version.json 屏蔽升级提醒：`"VERSION": 1.4  ->  1.41`
 - v2.0 (stable end-of-life) **全面重构**。将业务逻辑与代码分离，便于后续升级；支持为多人打卡，向 user 配置文件 information 中新增格式相同的 JSON 对象即可；全新日志模块，输出、异常信息一目了然；具备安装程序，一键安装依赖。
-- v2.1 (long-term preview) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。
+- v2.1 (long-term stable) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。
 
 ### 从 v1.x 升级
 
