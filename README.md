@@ -1,8 +1,10 @@
-# DailyReport
+# DailyReport END-OF-LIFE
 
 Daily health report automated program. 每日打卡自动化程序
 
 v1.41 by holger
+
+**该版本已经停止支持，请升级至 v2.1 版本**
 
 coding: UTF-8
 
