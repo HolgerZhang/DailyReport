@@ -1,7 +1,9 @@
-# DailyReport
+# DailyReport (preview)
 
 Daily health report automated program. 每日打卡自动化程序
 
+<strong>开发计划暂停，本分支缺少稳定性测试可能存在 BUG ，请移步 v2.1 版本</strong>
+  
 v3.0 (preview) by holger
 
 coding: UTF-8
@@ -61,7 +63,14 @@ coding: UTF-8
 - v1.4  (stable) 新增定时检测json文件变化，变化后自动更新bot。
 - v1.41 (long-term) 修复文件监测时I/O过于频繁和输出日志过长的问题。如不需要实时监测配置文件变化功能只需手动修改 version.json 屏蔽升级提醒：`"VERSION": 1.4  ->  1.41`
 - v2.0 (stable) **全面重构**。将业务逻辑与代码分离，便于后续升级；支持为多人打卡，向 user 配置文件 information 中新增格式相同的 JSON 对象即可；全新日志模块，输出、异常信息一目了然；具备安装程序，一键安装依赖。
-- v3.0 (preview) WebBot 全面升级，该版本为 WebBot 的演示项目，在预定义工作区 Workspaces/DailyReport 实现 v2.x 以及 v1.41 的大部分功能。
+- v3.0 (preview) WebBot 全面升级，该版本为 WebBot 的演示项目，在预定义工作区 Workspaces/DailyReport 实现 v2.0 以及 v1.41 的大部分功能。
+
+> v3.0 版本是基于 v2.0 升级的，对于 v2.0 存在的 bug 依旧存在。
+> 
+> 由于 v3 分支开发暂缓，bug 无法得到及时修复，请使用 v2 分支的最新版本作为日常使用环境。
+> 
+> 已知 BUGs：Windows 系统下命令行参数可能会解析为 Python 解释器的参数；与 v2.0 相同的 bug。
+
 
 ### 从 v1.x/v2.x 升级
 
