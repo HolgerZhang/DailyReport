@@ -4,15 +4,18 @@
 # belong: DailyReport-BotCore
 
 import json
+import sys
 import traceback
 from random import randint
 from time import sleep
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, SessionNotCreatedException
 
 from bot_core import exec_log, version, resources
 from bot_core.file import CHROMEDRIVER_FILE, msg_box, MAPPING_FILE, USER_FILE
+
+BOT_DEBUG = '--DEBUG' in sys.argv
 
 
 class WebBot:
@@ -54,7 +57,11 @@ class WebBot:
         :return: None
         """
         self.finish()
-        self.__browser = webdriver.Chrome(CHROMEDRIVER_FILE)
+        try:
+            self.__browser = webdriver.Chrome(CHROMEDRIVER_FILE)
+        except SessionNotCreatedException as e:
+            msg_box("请安装最新版Chrome，或将Chrome更新到最新版本。<br />" + e.msg)
+            exit(1)
 
     def get_url(self) -> None:
         """
@@ -82,13 +89,13 @@ class WebBot:
             msg_box(resources.ERR_NOT_START_BOT)
             raise RuntimeError(resources.ERR_NOT_START_BOT)
         return {
-            'id': lambda locator: self.__browser.find_element_by_id(locator),
-            'name': lambda locator: self.__browser.find_element_by_name(locator),
-            'class': lambda locator: self.__browser.find_element_by_class_name(locator),
-            'fuzzy': lambda locator: self.__browser.find_element_by_xpath('//*[contains(@id,\'{}\')]'.format(locator))
+            'id': lambda locator: self.__browser.find_elements_by_id(locator),
+            'name': lambda locator: self.__browser.find_elements_by_name(locator),
+            'class': lambda locator: self.__browser.find_elements_by_class_name(locator),
+            'fuzzy': lambda locator: self.__browser.find_elements_by_xpath('//*[contains(@id,\'{}\')]'.format(locator))
         }[key]
 
-    def click(self, find_by: str, value: str, check: str = None) -> None:
+    def click(self, find_by: str, value: str, check: str = None, index=0) -> None:
         """
         点击，find_by 属性索引 value
         :param find_by: 选择类型 id, name, class, fuzzy 中的一种
@@ -97,11 +104,20 @@ class WebBot:
         :return: None
         """
         elem = self.find(find_by)(value)
+        if len(elem) == 0:
+            return
+        if BOT_DEBUG:
+            for i, e in enumerate(elem):
+                print(i, e.get_attribute("innerHTML"))
+            print('==' * 10)
+        elem = elem[index]
         if check is not None:
             exec_log.logger(resources.CHECK_F2.format(check, elem.text))
             if check != elem.text:
                 msg_box(resources.ERR_WEBSITE_UPDATE)
                 raise RuntimeError(resources.ERR_WEBSITE_UPDATE)
+        if BOT_DEBUG:
+            exec_log.logger(elem.get_attribute("innerHTML"))
         elem.click()
         exec_log.logger(resources.CLICK_F2.format(find_by, value))
 
@@ -116,6 +132,13 @@ class WebBot:
         :return: None
         """
         elem = self.find(find_by)(value)
+        if len(elem) == 0:
+            return
+        if BOT_DEBUG:
+            for i, e in enumerate(elem):
+                print(i, e.get_attribute("innerHTML"))
+            print('==' * 10)
+        elem = elem[0]
         if check is not None:
             exec_log.logger(resources.CHECK_F2.format(check, elem.text))
             if check != elem.text:
@@ -260,7 +283,7 @@ class Execution:
                 value = web_bot.user(user_index)[user_need].strip()
                 if len(attribute) != 0:
                     value = get_mapping_desc(attribute)[value]
-                web_bot.click('fuzzy', value)
+                web_bot.click('fuzzy', value, index=-1)
 
         exec_log.logger(resources.CIRCUIT_FUNC_RUNNING_F2.format(self.__name, user_index))
         for operator in self.__operators:
@@ -294,8 +317,14 @@ def run_bot(web_bot: WebBot) -> None:
             except Exception as exception:
                 msg_box(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index))
                 exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc())
+                if BOT_DEBUG:
+                    input()
                 return
             if not complete:
                 msg_box(resources.CATCH_EXCEPT_SEE_LOG_F1.format(index))
+                if BOT_DEBUG:
+                    input()
                 return
+        msg_box("本次打卡成功，10秒后将进行下一任务")
+        sleep(10)
         web_bot.reboot()

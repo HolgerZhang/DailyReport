@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v2.0 by holger
+v2.1 by holger
 
 coding: UTF-8
 
@@ -12,11 +12,13 @@ coding: UTF-8
 
 ### 使用前注意
 
-> v2.x 不再向下兼容 [v1.x](https://github.com/HolgerZhang/DailyReport/tree/main) 的部分配置文件以及启动方法，但 [v1.41](https://github.com/HolgerZhang/DailyReport/releases/tag/v1.41) 为长期支持版本，依旧提供更新
+> v2.x 不再向下兼容 [v1.x](https://github.com/HolgerZhang/DailyReport/tree/main) 的部分配置文件以及启动方法
+> 
+> v2.1 前所有版本的支持周期均已停止，请尽快升级至 v2.1 版本
 
-- 环境依赖：带有 pip 的 Python3 环境；系统装有 [Chrome 浏览器](https://www.google.cn/intl/zh-CN/chrome/)
+- 环境依赖：带有 pip 的 Python3 环境；系统装有 **最新版** [Chrome 浏览器](https://www.google.cn/intl/zh-CN/chrome/)
 - 支持系统：Windows x64 | Linux x64 | macOS(理论上支持但未经测试，不包括M1版本)
-- 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
+- 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp) （该页面也会在打卡结束时停留10秒）
 
 #### 免责声明
 
@@ -36,8 +38,9 @@ coding: UTF-8
 - 添加参数 `--no-update` 关闭自动检查更新特性
 - 添加参数 `--no-monitor` 关闭文件变更自动加载特性
 - 添加参数 `--once` 以单次运行程序
+- （调试用）添加参数 `--DEBUG` 以在 bot 执行时输出调试信息
 
-> 来自 v1.x 版本的Tip： Windows 后台执行方法（无黑框）
+> Tip： Windows 后台执行方法（无黑框）
 > - 在项目根目录下新建bat文件，内容为： `python.exe run.py`
 > - 在任意目录下新建vbs文件，内容为：
 >   ~~~vbs
@@ -46,6 +49,8 @@ coding: UTF-8
 >   iReturn=objShell.Run("cmd.exe /C \path\to\bat_file.bat", 0, TRUE)
 >   ~~~
 > - 运行vbs文件即可。
+> 
+> 或者直接运行 `run.pyw` 文件。
 
 ### 更新说明
 
@@ -54,10 +59,11 @@ coding: UTF-8
 - v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
 - v1.21 由于网站更新，更新mapping（务必升级）
 - v1.3  新增json配置文件联网更新和软件版本检查（于每次打卡前检查；这一特性目前处于测试阶段，可以通过命令行添加 `--miss-feature` 参数来阻止每次打卡前的更新检查【v2.0版本已改为 `--no-update`】，但是首次运行时的更新检查不可取消），从这一版本起，不再在源码中附带配置json，首次运行时提示用户更新，**原有配置文件不受影响，无需删除**。
-- v1.35 (stable) 修复bug，新增接口。
-- v1.4  (stable) 新增定时检测json文件变化，变化后自动更新bot。
-- v1.41 (long-term) 修复文件监测时I/O过于频繁和输出日志过长的问题。如不需要实时监测配置文件变化功能只需手动修改 version.json 屏蔽升级提醒：`"VERSION": 1.4  ->  1.41`
-- v2.0 (stable) **全面重构**。将业务逻辑与代码分离，便于后续升级；支持为多人打卡，向 user 配置文件 information 中新增格式相同的 JSON 对象即可；全新日志模块，输出、异常信息一目了然；具备安装程序，一键安装依赖。
+- v1.35 (stable end-of-life) 修复bug，新增接口。
+- v1.4  (stable end-of-life) 新增定时检测json文件变化，变化后自动更新bot。
+- v1.41 (long-term end-of-life) 修复文件监测时I/O过于频繁和输出日志过长的问题。如不需要实时监测配置文件变化功能只需手动修改 version.json 屏蔽升级提醒：`"VERSION": 1.4  ->  1.41`
+- v2.0 (stable end-of-life) **全面重构**。将业务逻辑与代码分离，便于后续升级；支持为多人打卡，向 user 配置文件 information 中新增格式相同的 JSON 对象即可；全新日志模块，输出、异常信息一目了然；具备安装程序，一键安装依赖。
+- v2.1 (long-term preview) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。
 
 ### 从 v1.x 升级
 
@@ -70,20 +76,22 @@ coding: UTF-8
 
 - 运行 setup 报错：找不到库 requests
   - 解决办法：预先手动安装 requests：`pip install requests`
+- 运 行setup 后弹窗提示：请安装或更新Chrome
+  - 解决办法：请保证电脑中安装了最新版本的Chrome浏览器
 - 运行失败后弹窗：捕获异常，log 文件显示异常信息为：NoSuchElementException
   - 解决办法：检查 user 信息是否有误
 - 运行失败后弹窗：捕获未知异常；或捕获异常，log 文件显示异常信息不为 NoSuchElementException
-  - 解决办法：请带上提示异常时的日志文件（5分钟以内的部分）联系作者，注意在日志中抹去敏感信息（如学号、密码、家庭住址等）
+  - 解决办法：请删除日志文件后运行 run.py 添加 `--DEBUG` 参数复现该错误，并将日志文件和程序输出发送至作者[邮箱](mailto:holgerzhang@outlook.com) ，注意在日志中抹去敏感信息（如学号、密码、家庭住址等）
 - 我想要立刻执行一次打卡
   - 解决办法：运行 run.py 添加 `--once` 参数
-- 我想要手动填写体温数据
+- 我想要手动填写体温数据【不推荐】
   - 解决办法：打开 `data/mapping.json` ，定位到第 275 和 283 行，将 `random_float()` 分别改为用单引号包裹的上午体温和下午体温，注意保留前面的美元符号 `$` ，如 `"$'36.3'"`，如图：
     ![QAImg](https://i.loli.net/2021/02/11/zeBPacFSHqlQTjw.png)
     确保配置文件为最新，打开 run.py，注释第 28 行 `api.update()` 后，运行 run.py 并添加 `--once` 参数即可。
     不再希望手动填写体温数据，只需取消第 28 行 `api.update()` 的注释即可。
-  - 说明：在 bot_core 解析 json 的能力得到增强后，将提供更为简洁的方法。
+  - ~~说明：在 bot_core 解析 json 的能力得到增强后，将提供更为简洁的方法。~~
 
-### API v2.0
+### API v2
 
 - 根地址：[https://api.holgerbest.top/DailyReport/v2/](https://api.holgerbest.top/DailyReport/v2/)
 - `data/mapping.json`（配置文件，首次启动下载）：[mapping](https://api.holgerbest.top/DailyReport/v2/mapping/)
@@ -94,5 +102,5 @@ coding: UTF-8
 
 ### TODO List
 
-- [ ] 添加 GUI
-- [ ] 将 bot_core 分离为独立项目
+- [ ] ~~添加 GUI~~【暂无计划】
+- [ ] 将 bot_core 分离为独立项目【v3分支进行中】

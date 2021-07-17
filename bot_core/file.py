@@ -138,12 +138,13 @@ def get_driver() -> None:
     下载 Chrome 驱动程序
     :return: None
     """
+    chrome_version = str(requests.get('https://chromedriver.storage.googleapis.com/LATEST_RELEASE').text)
     if sys.platform.startswith('linux'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip'
+        chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_linux64.zip'
     elif sys.platform.startswith('win32'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_win32.zip'
+        chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_win32.zip'
     elif sys.platform.startswith('darwin'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_mac64.zip'
+        chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_mac64.zip'
     else:
         msg_box(resources.ERR_UNSUPPORTED_PLATFORM)
         raise TypeError(resources.ERR_UNSUPPORTED_PLATFORM)
