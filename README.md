@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v2.1 by holger
+v2.2 by holger
 
 coding: UTF-8
 
@@ -14,7 +14,7 @@ coding: UTF-8
 
 > v2.x 不再向下兼容 [v1.x](https://github.com/HolgerZhang/DailyReport/tree/v1-end-of-life) 的部分配置文件以及启动方法
 > 
-> v2.1 前所有版本的支持周期均已停止，请尽快升级至 v2.1 版本
+> v2.1 及以前所有版本的支持周期均已停止，请尽快升级至 v2.2 版本
 
 - 环境依赖：带有 pip 的 Python3 环境；系统装有 **最新版** [Chrome 浏览器](https://www.google.cn/intl/zh-CN/chrome/)
 - 支持系统：Windows x64 | Linux x64 | macOS(理论上支持但未经测试，不包括M1版本)
@@ -51,19 +51,15 @@ coding: UTF-8
 > - 运行vbs文件即可。
 > 
 > 或者直接运行 `run.pyw` 文件。
+> 
+> Linux 系统后台运行方法：使用 nohup `nohup python3 run.py >> /dev/null 2>&1 &`
+> 结束运行请自行kill：`ps -aux | grep 'python3 run.py'` 记录pid，`kill <pid>`
 
 ### 更新说明
 
-- v1.0  第一代，实现基本功能。
-- v1.1  具体页面中的属性使用json保存，与代码解耦，使后续升级和调整对代码的改动最小；使用json保存用户数据并添加注释；优化代码结构，减少代码冗余；增加输出执行过程，帮助用户运行出错时检查问题。
-- v1.2  添加json配置文件的版本控制；添加定时任务功能（非阻塞的后台调度器，cron触发，执行作业），添加 scheduler.json 配置定时信息。
-- v1.21 由于网站更新，更新mapping（务必升级）
-- v1.3  新增json配置文件联网更新和软件版本检查（于每次打卡前检查；这一特性目前处于测试阶段，可以通过命令行添加 `--miss-feature` 参数来阻止每次打卡前的更新检查【v2.0版本已改为 `--no-update`】，但是首次运行时的更新检查不可取消），从这一版本起，不再在源码中附带配置json，首次运行时提示用户更新，**原有配置文件不受影响，无需删除**。
-- v1.35 (stable end-of-life) 修复bug，新增接口。
-- v1.4  (stable end-of-life) 新增定时检测json文件变化，变化后自动更新bot。
-- v1.41 (long-term end-of-life) 修复文件监测时I/O过于频繁和输出日志过长的问题。如不需要实时监测配置文件变化功能只需手动修改 version.json 屏蔽升级提醒：`"VERSION": 1.4  ->  1.41`
 - v2.0 (stable end-of-life) **全面重构**。将业务逻辑与代码分离，便于后续升级；支持为多人打卡，向 user 配置文件 information 中新增格式相同的 JSON 对象即可；全新日志模块，输出、异常信息一目了然；具备安装程序，一键安装依赖。
-- v2.1 (long-term stable) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。
+- v2.1 (fatal-error end-of-life) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。【存在严重BUG：有一定概率定位元素发生偏移，导致打卡地点不受控制，强烈建议升级】
+- v2.2 (bug fix, further testing required) 修复 2.1 版本的 BUG；执行出错自动重复5次，防止网络问题导致的打卡失败；优化系统稳定性。【有待进一步测试】可能存在 mapping 文件的问题，建议删除原有 data/mapping.json 文件重新下载（下载链接： [mapping](https://api.holgerbest.top/DailyReport/v2/mapping/) ），并删除 .cmp_dat 文件夹。此问题将于下一稳定版测试并解决。
 
 ### 从 v1.x 升级
 
@@ -84,12 +80,7 @@ coding: UTF-8
   - 解决办法：请删除日志文件后运行 run.py 添加 `--DEBUG` 参数复现该错误，并将日志文件和程序输出发送至作者[邮箱](mailto:holgerzhang@outlook.com) ，注意在日志中抹去敏感信息（如学号、密码、家庭住址等）
 - 我想要立刻执行一次打卡
   - 解决办法：运行 run.py 添加 `--once` 参数
-- 我想要手动填写体温数据【不推荐】
-  - 解决办法：打开 `data/mapping.json` ，定位到第 275 和 283 行，将 `random_float()` 分别改为用单引号包裹的上午体温和下午体温，注意保留前面的美元符号 `$` ，如 `"$'36.3'"`，如图：
-    ![QAImg](https://i.loli.net/2021/02/11/zeBPacFSHqlQTjw.png)
-    确保配置文件为最新，打开 run.py，注释第 28 行 `api.update()` 后，运行 run.py 并添加 `--once` 参数即可。
-    不再希望手动填写体温数据，只需取消第 28 行 `api.update()` 的注释即可。
-  - ~~说明：在 bot_core 解析 json 的能力得到增强后，将提供更为简洁的方法。~~
+- 我想要手动填写体温数据【功能不再提供支持，请手动打卡】
 
 ### API v2
 

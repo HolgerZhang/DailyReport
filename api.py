@@ -34,7 +34,7 @@ def __get_config(api_root: str) -> dict:
     return config
 
 
-def __merge(old_data: dict, new_data: dict) -> (dict, bool):
+def __merge(old_data: dict, new_data: dict):
     """
     合并old_data，new_data两配置数据（dict类型）
     配置数据的键类型为str，值类型为str、dict、list、float中的一种。

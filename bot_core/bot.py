@@ -92,7 +92,8 @@ class WebBot:
             'id': lambda locator: self.__browser.find_elements_by_id(locator),
             'name': lambda locator: self.__browser.find_elements_by_name(locator),
             'class': lambda locator: self.__browser.find_elements_by_class_name(locator),
-            'fuzzy': lambda locator: self.__browser.find_elements_by_xpath('//*[contains(@id,\'{}\')]'.format(locator))
+            'fuzzy': lambda locator: self.__browser.find_elements_by_xpath('//*[contains(@id,\'{}\')]'.format(locator)),
+            'text': lambda locator: self.__browser.find_elements_by_xpath('//li[contains(string(),\'{}\')]'.format(locator))
         }[key]
 
     def click(self, find_by: str, value: str, check: str = None, index=0) -> None:
@@ -105,6 +106,9 @@ class WebBot:
         """
         elem = self.find(find_by)(value)
         if len(elem) == 0:
+            exec_log.logger("元素未找到")
+            if BOT_DEBUG:
+                print("元素未找到")
             return
         if BOT_DEBUG:
             for i, e in enumerate(elem):
@@ -284,6 +288,9 @@ class Execution:
                 if len(attribute) != 0:
                     value = get_mapping_desc(attribute)[value]
                 web_bot.click('fuzzy', value, index=-1)
+            elif opera['action'] == 'text':
+                value = web_bot.user(user_index)[user_need].strip()
+                web_bot.click('text', value, index=-1)
 
         exec_log.logger(resources.CIRCUIT_FUNC_RUNNING_F2.format(self.__name, user_index))
         for operator in self.__operators:
@@ -307,8 +314,8 @@ def run_bot(web_bot: WebBot) -> None:
     :param web_bot: WebBot 对象
     :return: None
     """
-    circuit = web_bot.mapping['circuit']
-    for index in range(web_bot.user_number):
+
+    def inner_runner(circuit, index):
         web_bot.get_url()
         for circuit_map in circuit:
             execution = Execution(circuit_map)
@@ -319,12 +326,22 @@ def run_bot(web_bot: WebBot) -> None:
                 exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc())
                 if BOT_DEBUG:
                     input()
-                return
+                return 1
             if not complete:
                 msg_box(resources.CATCH_EXCEPT_SEE_LOG_F1.format(index))
                 if BOT_DEBUG:
                     input()
-                return
+                return 1
+        return 0
+
+    circuit = web_bot.mapping['circuit']
+    for index in range(web_bot.user_number):
+        while True:
+            if inner_runner(circuit, index) == 0:
+                break
+            else:
+                sleep(5)
+                web_bot.reboot()
         msg_box("本次打卡成功，10秒后将进行下一任务")
         sleep(10)
         web_bot.reboot()
