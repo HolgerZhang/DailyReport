@@ -59,8 +59,8 @@ class WebBot:
         self.finish()
         try:
             self.__browser = webdriver.Chrome(CHROMEDRIVER_FILE)
-        except SessionNotCreatedException as e:
-            msg_box("请安装最新版Chrome，或将Chrome更新到最新版本。<br />" + e.msg)
+        except SessionNotCreatedException:
+            msg_box(resources.CHROME_NEED_UPDATE)
             exit(1)
 
     def get_url(self) -> None:
@@ -93,7 +93,8 @@ class WebBot:
             'name': lambda locator: self.__browser.find_elements_by_name(locator),
             'class': lambda locator: self.__browser.find_elements_by_class_name(locator),
             'fuzzy': lambda locator: self.__browser.find_elements_by_xpath('//*[contains(@id,\'{}\')]'.format(locator)),
-            'text': lambda locator: self.__browser.find_elements_by_xpath('//li[contains(string(),\'{}\')]'.format(locator))
+            'text': lambda locator: self.__browser.find_elements_by_xpath(
+                '//li[contains(string(),\'{}\')]'.format(locator))
         }[key]
 
     def click(self, find_by: str, value: str, check: str = None, index=0) -> None:
@@ -106,9 +107,7 @@ class WebBot:
         """
         elem = self.find(find_by)(value)
         if len(elem) == 0:
-            exec_log.logger("元素未找到")
-            if BOT_DEBUG:
-                print("元素未找到")
+            exec_log.logger(resources.ERR_ELEM_NOT_FOUND)
             return
         if BOT_DEBUG:
             for i, e in enumerate(elem):
@@ -120,8 +119,7 @@ class WebBot:
             if check != elem.text:
                 msg_box(resources.ERR_WEBSITE_UPDATE)
                 raise RuntimeError(resources.ERR_WEBSITE_UPDATE)
-        if BOT_DEBUG:
-            exec_log.logger(elem.get_attribute("innerHTML"))
+        exec_log.logger(elem.get_attribute("innerHTML"), 'debug')
         elem.click()
         exec_log.logger(resources.CLICK_F2.format(find_by, value))
 
@@ -298,7 +296,7 @@ class Execution:
                 try:
                     runnable(operator)
                 except NoSuchElementException as ex:
-                    exec_log.logger(resources.CATCH_EXCEPT_F2.format(ex, traceback.format_exc()))
+                    exec_log.logger(resources.CATCH_EXCEPT_F2.format(ex, traceback.format_exc()), 'warn')
                     if self.__need_return:
                         return False
             else:
@@ -323,7 +321,7 @@ def run_bot(web_bot: WebBot) -> None:
                 complete = execution.run(web_bot, index)
             except Exception as exception:
                 msg_box(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index))
-                exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc())
+                exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc(), 'warn')
                 if BOT_DEBUG:
                     input()
                 return 1
@@ -342,6 +340,6 @@ def run_bot(web_bot: WebBot) -> None:
             else:
                 sleep(5)
                 web_bot.reboot()
-        msg_box("本次打卡成功，10秒后将进行下一任务")
+        exec_log.logger(resources.FINISH_10)
         sleep(10)
         web_bot.reboot()

@@ -4,6 +4,7 @@
 # belong: DailyReport-BotCore
 
 import os
+import platform
 import re
 import shutil
 import stat
@@ -30,7 +31,6 @@ USER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'user.json')
 MAPPING_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mapping.json')
 SCHEDULER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'scheduler.json')
 VERSION_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'version.json')
-LOG_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'BotLog.log')
 
 # 配置文件路径列表
 FILE = [SCHEDULER_FILE, USER_FILE, MAPPING_FILE]
@@ -43,8 +43,6 @@ if not os.path.isdir(CMP_FOLDER):
     os.mkdir(CMP_FOLDER)
 if not os.path.isdir(DATA_FOLDER):
     os.mkdir(DATA_FOLDER)
-if not os.path.isfile(LOG_FILE):
-    open(LOG_FILE, 'w', encoding='utf-8').close()
 
 
 def get_file(filename: str) -> str:
@@ -96,14 +94,16 @@ def same(old_data: dict, new_data: dict) -> bool:
     return True
 
 
-def msg_box(desc: str) -> None:
+def msg_box(desc: str, error=True) -> None:
     """
     以弹出页面的形式提醒用户
     :param desc: 提醒内容
+    :param error: error
     :return: None
     """
     webbrowser.open(MSG_BOX_PATH + desc)
-    exec_log.logger(desc)
+    if not error:
+        exec_log.logger(desc, level='error')
 
 
 def chmod(path, mode) -> None:
@@ -144,7 +144,10 @@ def get_driver() -> None:
     elif sys.platform.startswith('win32'):
         chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_win32.zip'
     elif sys.platform.startswith('darwin'):
-        chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_mac64.zip'
+        if platform.machine() == 'arm64':
+            chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_mac64_m1.zip'
+        else:
+            chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_mac64.zip'
     else:
         msg_box(resources.ERR_UNSUPPORTED_PLATFORM)
         raise TypeError(resources.ERR_UNSUPPORTED_PLATFORM)

@@ -3,17 +3,32 @@
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
-from datetime import datetime
+import logging
 
-from bot_core import file
+_logger = logging.getLogger(__name__)
+_logger.setLevel(level=logging.DEBUG)
+handler = logging.FileHandler('BotLog.log')
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('[%(asctime)s] *%(levelname)s* %(message)s')
+handler.setFormatter(formatter)
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+_logger.addHandler(handler)
+_logger.addHandler(console)
 
 
-def logger(arg: str) -> None:
+def logger(arg: str, level='info') -> None:
     """
     写入日志
     :param arg: 写入字符串
+    :param level: 等级
     :return: None
     """
-    with open(file.LOG_FILE, 'a', encoding='utf-8') as log_file:
-        log_file.write('[{}] '.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')) + arg + '\n')
-        log_file.flush()
+    if level.lower() == 'info':
+        _logger.info(arg)
+    elif level.lower() == 'debug':
+        _logger.debug(arg)
+    elif level.lower() == 'warn':
+        _logger.warning(arg)
+    elif level.lower() == 'error':
+        _logger.error(arg)

@@ -11,8 +11,9 @@ from copy import deepcopy
 import requests
 
 import resources
-from bot_core import exec_log, version
+from bot_core import version
 from bot_core.file import msg_box, get_file
+from bot_core.exec_log import logger
 
 # APIs
 
@@ -98,7 +99,7 @@ def update_config(timeout: float):
         msg_box(resources.CONFIG_NEED_UPDATE_F2.format(', '.join(need_adjust), timeout))
         time.sleep(timeout)
     else:
-        exec_log.logger(resources.CONFIG_UP_TO_DATE)
+        logger(resources.CONFIG_UP_TO_DATE, level='debug')
 
 
 def check_update_src():
@@ -108,7 +109,7 @@ def check_update_src():
     if version.check_version(version.VERSION, float(r.text)) < 0:
         msg_box(resources.SRC_NEED_UPDATE)
     else:
-        exec_log.logger(resources.SRC_UP_TO_DATE)
+        logger(resources.SRC_UP_TO_DATE, level='debug')
 
 
 def update(timeout=None):
@@ -126,7 +127,7 @@ def check(need_check: bool, call_func):
     def check_update(func):
         def check_update_inner():
             if need_check:
-                exec_log.logger(resources.RUN_F1.format(call_func.__name__))
+                logger(resources.RUN_F1.format(call_func.__name__), 'debug')
                 call_func()
             return func()
 
