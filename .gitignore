@@ -1,0 +1,7 @@
+.cmp_dat
+.idea
+data/user.json
+data/mapping.json
+data/scheduler.json
+data/BotLog.log
+data/chromedriver.exe
