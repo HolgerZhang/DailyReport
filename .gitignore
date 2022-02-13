@@ -4,5 +4,6 @@
 data/user.json
 data/mapping.json
 data/scheduler.json
-BotLog.log
+data/mail/mail.json
+*.log
 data/chromedriver.exe

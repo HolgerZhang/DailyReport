@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.4
 # license: AGPL-3.0
 # belong: DailyReport-Predefined
 
@@ -15,6 +15,7 @@ START_INTRODUCTION = '<p><strong>程序初始化完成.</strong></p>' \
                      '<p>运行 `python3 run.py` 开始打卡</p>' \
                      '<p>运行 `python3 run.pyw` 以不显示CMD窗口 (仅在 Windows 系统有效)</p>' \
                      '<p></p>' \
+                     '<p> - 首次运行请预先配置邮件信息： data/mail/mail.json </p>' \
                      '<p> - 添加参数 `--no-update` 关闭自动检查更新特性</p>' \
                      '<p> - 添加参数 `--no-monitor` 关闭文件变更自动加载特性</p>' \
                      '<p> - 添加参数 `--once` 以单次运行程序</p>' \
@@ -31,3 +32,4 @@ START_INTRODUCTION = '<p><strong>程序初始化完成.</strong></p>' \
 # API V2.0
 API_V2 = "https://api.holgerbest.top/DailyReport/v2/"
 VERSION_API_V2 = "https://api.holgerbest.top/DailyReport/v2/version/"
+API_V2_MAIL_API = "https://api.holgerbest.top/DailyReport/v2/mail/"

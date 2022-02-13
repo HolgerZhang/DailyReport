@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.4
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -14,6 +14,7 @@ from selenium.common.exceptions import NoSuchElementException, SessionNotCreated
 
 from bot_core import exec_log, version, resources
 from bot_core.file import CHROMEDRIVER_FILE, msg_box, MAPPING_FILE, USER_FILE
+from bot_core.mail import success_mail, fail_mail
 
 BOT_DEBUG = '--DEBUG' in sys.argv
 
@@ -322,11 +323,19 @@ def run_bot(web_bot: WebBot) -> None:
             except Exception as exception:
                 msg_box(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index))
                 exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc(), 'warn')
+                fail_mail(to={web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'),
+                              web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'},
+                          stu_id=web_bot.user(index)['user_id'],
+                          detail={'message': resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index)})
                 if BOT_DEBUG:
                     input()
                 return 1
             if not complete:
                 msg_box(resources.CATCH_EXCEPT_SEE_LOG_F1.format(index))
+                fail_mail(to={web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'),
+                              web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'},
+                          stu_id=web_bot.user(index)['user_id'],
+                          detail=resources.CATCH_EXCEPT_SEE_LOG_F1.format(index))
                 if BOT_DEBUG:
                     input()
                 return 1
@@ -340,6 +349,10 @@ def run_bot(web_bot: WebBot) -> None:
             else:
                 sleep(5)
                 web_bot.reboot()
+        success_mail(to={web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'),
+                         web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'},
+                     stu_id=web_bot.user(index)['user_id'],
+                     detail=web_bot.user(index))
         exec_log.logger(resources.FINISH_10)
         sleep(10)
         web_bot.reboot()

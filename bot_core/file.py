@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.4
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -31,6 +31,9 @@ USER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'user.json')
 MAPPING_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mapping.json')
 SCHEDULER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'scheduler.json')
 VERSION_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'version.json')
+MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail', 'mail.json')
+SUCCESS_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail', 'success-template.html')
+FAIL_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail', 'fail-template.html')
 
 # 配置文件路径列表
 FILE = [SCHEDULER_FILE, USER_FILE, MAPPING_FILE]

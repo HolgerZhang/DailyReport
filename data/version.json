@@ -1,8 +1,8 @@
 {
   "_author": "holger",
   "_licence": "AGPL-3.0",
-  "VERSION": 2.3,
+  "VERSION": 2.4,
   "MAPPING_MIN_VERSION_REQUIRED": 2.2,
-  "USER_MIN_VERSION_REQUIRED": 2.0,
+  "USER_MIN_VERSION_REQUIRED": 2.4,
   "SCHEDULER_MIN_VERSION_REQUIRED": 1.2
 }

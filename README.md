@@ -2,7 +2,7 @@
 
 Daily health report automated program. 每日打卡自动化程序
 
-v2.3 by holger
+v2.4 by holger
 
 coding: UTF-8
 
@@ -39,6 +39,7 @@ coding: UTF-8
     结束运行请自行kill：`ps -aux | grep 'python3 run.py'` 记录pid，`kill <pid>`
 
 - 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
+- 首次运行请预先配置邮件信息： data/mail/mail.json
 - 添加参数 `--no-update` 关闭自动检查更新特性
 - 添加参数 `--no-monitor` 关闭文件变更自动加载特性
 - 添加参数 `--once` 以单次运行程序
@@ -50,6 +51,7 @@ coding: UTF-8
 - v2.1 (fatal-error end-of-life) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。【存在严重BUG：有一定概率定位元素发生偏移，导致打卡地点不受控制，强烈建议升级】
 - v2.2 (bug fix) 修复 2.1 版本的 BUG；执行出错自动重复5次，防止网络问题导致的打卡失败；优化系统稳定性。可能存在 mapping 文件的问题，建议删除原有 data/mapping.json 文件重新下载（下载链接： [mapping](https://api.holgerbest.top/DailyReport/v2/mapping/) ），并删除 .cmp_dat 文件夹。
 - v2.3 (stable) 新增对 Apple Silicon 的支持；日志分级，优化输出；优化系统稳定性。
+- v2.4 新增邮件提醒（ 源自：[SUMSC/email-sender](https://github.com/SUMSC/email-sender) ），打卡成功或失败会向指定邮箱发送邮件，需配置邮箱，参考原项目。
 
 ### 从 v1.x 升级
 
@@ -78,5 +80,6 @@ coding: UTF-8
 - `data/mapping.json`（配置文件，首次启动下载）：[mapping](https://api.holgerbest.top/DailyReport/v2/mapping/)
 - `data/user.json`（用户信息配置文件，首次启动下载，需填写信息）：[user](https://api.holgerbest.top/DailyReport/v2/user/)
 - `data/scheduler.json`（定时任务配置文件，首次启动下载，需填写信息）：[scheduler](https://api.holgerbest.top/DailyReport/v2/scheduler/)
+- `data/mail/mail.json`（邮件配置文件，首次启动下载，需填写信息）：[mail](https://api.holgerbest.top/DailyReport/v2/mail/)
 - 版本号API：[https://api.holgerbest.top/DailyReport/v2/version/](https://api.holgerbest.top/DailyReport/v2/version/)
 - 提示信息API：[https://api.holgerbest.top/msgbox.html?msg=在这里键入提示信息](https://api.holgerbest.top/msgbox.html?msg=在这里键入提示信息)
