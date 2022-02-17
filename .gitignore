@@ -7,3 +7,5 @@ data/scheduler.json
 data/mail/mail.json
 *.log
 data/chromedriver.exe
+data/chromedriver
+Pipfile
