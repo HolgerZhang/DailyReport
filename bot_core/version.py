@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -16,6 +16,7 @@ VERSION = __version['VERSION']
 MAPPING_MIN_VERSION_REQUIRED = __version['MAPPING_MIN_VERSION_REQUIRED']
 USER_MIN_VERSION_REQUIRED = __version['USER_MIN_VERSION_REQUIRED']
 SCHEDULER_MIN_VERSION_REQUIRED = __version['SCHEDULER_MIN_VERSION_REQUIRED']
+MAIL_MIN_VERSION_REQUIRED = __version['MAIL_MIN_VERSION_REQUIRED']
 
 
 def check_version(version1: float, version2: float) -> int:

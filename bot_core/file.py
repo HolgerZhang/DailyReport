@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.4
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -9,7 +9,6 @@ import re
 import shutil
 import stat
 import sys
-import webbrowser
 import zipfile
 
 import requests
@@ -21,6 +20,7 @@ PROJECT_PATH = os.getcwd()
 
 # 文件夹
 DATA_FOLDER = 'data'
+MAIL_FOLDER = 'mail'
 CMP_FOLDER = '.cmp_dat'
 
 # 文件路径
@@ -30,16 +30,18 @@ CHROMEDRIVER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER,
 USER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'user.json')
 MAPPING_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mapping.json')
 SCHEDULER_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'scheduler.json')
+MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail.json')
 VERSION_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'version.json')
-MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail', 'mail.json')
-SUCCESS_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail', 'success-template.html')
-FAIL_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mail', 'fail-template.html')
+SUCCESS_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, MAIL_FOLDER, 'success-template.html')
+FAIL_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, MAIL_FOLDER, 'fail-template.html')
 
 # 配置文件路径列表
-FILE = [SCHEDULER_FILE, USER_FILE, MAPPING_FILE]
+FILE = [SCHEDULER_FILE, USER_FILE, MAPPING_FILE, MAIL_FILE]
 
 # 消息框路径
 MSG_BOX_PATH = "https://api.holgerbest.top/msgbox.html?msg="
+
+NO_GUI = os.environ.get('BOT_CORE_NO_GUI', 'FALSE').upper() == 'TRUE'
 
 # 文件初始化
 if not os.path.isdir(CMP_FOLDER):
@@ -54,7 +56,7 @@ def get_file(filename: str) -> str:
     :param filename: user | mapping | scheduler | version
     :return: 配置文件路径
     """
-    return {'user': USER_FILE, 'mapping': MAPPING_FILE,
+    return {'user': USER_FILE, 'mapping': MAPPING_FILE, 'mail': MAIL_FILE,
             'scheduler': SCHEDULER_FILE, 'version': VERSION_FILE}[filename]
 
 
@@ -104,9 +106,15 @@ def msg_box(desc: str, error=True) -> None:
     :param error: error
     :return: None
     """
-    webbrowser.open(MSG_BOX_PATH + desc)
-    if not error:
+    if not NO_GUI:
+        try:
+            __import__('webbrowser').open(MSG_BOX_PATH + desc)
+        except Exception:
+            pass
+    if error:
         exec_log.logger(desc, level='error')
+    else:
+        exec_log.logger(desc)
 
 
 def chmod(path, mode) -> None:
@@ -148,9 +156,11 @@ def get_driver() -> None:
         chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_win32.zip'
     elif sys.platform.startswith('darwin'):
         if platform.machine() == 'arm64':
-            chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_mac64_m1.zip'
+            chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + \
+                               '/chromedriver_mac64_m1.zip'
         else:
-            chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + '/chromedriver_mac64.zip'
+            chromedriver_url = 'https://chromedriver.storage.googleapis.com/' + chrome_version + \
+                               '/chromedriver_mac64.zip'
     else:
         msg_box(resources.ERR_UNSUPPORTED_PLATFORM)
         raise TypeError(resources.ERR_UNSUPPORTED_PLATFORM)

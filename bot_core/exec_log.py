@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -9,7 +9,7 @@ _logger = logging.getLogger(__name__)
 _logger.setLevel(level=logging.DEBUG)
 handler = logging.FileHandler('BotLog.log')
 handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('[%(asctime)s] *%(levelname)s* %(message)s')
+formatter = logging.Formatter('%(asctime)s %(threadName)s - [%(levelname)s] %(message)s')
 handler.setFormatter(formatter)
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)

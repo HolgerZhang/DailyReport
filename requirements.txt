@@ -1,3 +1,8 @@
+# coding = utf-8
+# author: holger version: 2.5
+# license: AGPL-3.0
+# belong: DailyReport-Predefined
+
 APScheduler>=3.7.0
 selenium>=3.141.0
 requests>=2.21.0

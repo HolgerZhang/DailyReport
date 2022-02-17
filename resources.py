@@ -1,24 +1,21 @@
 # coding = utf-8
-# author: holger version: 2.4
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-Predefined
 
 CONFIG_NEED_UPDATE_F2 = "{}配置需要更新<br />请打开相应的json文件，按照_notes提示更新配置文件<br />" \
-                        "若启动参数为 '--no-monitor' 更新后需重启程序；若{}秒后没有修改则程序可能会异常退出。"
+                        "若启动参数为 '--disable-monitor' 更新后需重启程序；若{}秒后没有修改则程序可能会异常退出。"
 CONFIG_UP_TO_DATE = '配置已是最新'
 ERR_WRONG_VER_F2 = "Error: 版本号有误，请手动下载{}替换，详见： {}"
 PROGRAM_SETUP = '程序初始化'
 RUN_F1 = "执行 {}"
-SRC_NEED_UPDATE = "软件需要更新<br />请访问：https://github.com/HolgerZhang/DailyReport/tree/v2/ <br />更新后请重启程序。"
+SRC_NEED_UPDATE = "软件需要更新<br />请访问：https://github.com/HolgerZhang/DailyReport/releases/tag/v{} <br />更新后请重启程序。"
 SRC_UP_TO_DATE = '程序版本已是最新'
 START_INTRODUCTION = '<p><strong>程序初始化完成.</strong></p>' \
-                     '<p>运行 `python3 run.py` 开始打卡</p>' \
-                     '<p>运行 `python3 run.pyw` 以不显示CMD窗口 (仅在 Windows 系统有效)</p>' \
+                     '<p>运行 python3 main.py 开始打卡</p>' \
                      '<p></p>' \
-                     '<p> - 首次运行请预先配置邮件信息： data/mail/mail.json </p>' \
-                     '<p> - 添加参数 `--no-update` 关闭自动检查更新特性</p>' \
-                     '<p> - 添加参数 `--no-monitor` 关闭文件变更自动加载特性</p>' \
-                     '<p> - 添加参数 `--once` 以单次运行程序</p>' \
+                     '<p> - 首次运行请预先配置 data 目录下 json 文件 </p>' \
+                     '<p> - 具体用法请参考：https://github.com/HolgerZhang/DailyReport 或 README 文件</p>' \
                      '<p></p>' \
                      '<h1>免责声明</h1>' \
                      '<p> - 每日打卡自动化程序 DailyReport（下简称“此软件”）仅供自动化测试使用，' \
@@ -32,4 +29,3 @@ START_INTRODUCTION = '<p><strong>程序初始化完成.</strong></p>' \
 # API V2.0
 API_V2 = "https://api.holgerbest.top/DailyReport/v2/"
 VERSION_API_V2 = "https://api.holgerbest.top/DailyReport/v2/version/"
-API_V2_MAIL_API = "https://api.holgerbest.top/DailyReport/v2/mail/"

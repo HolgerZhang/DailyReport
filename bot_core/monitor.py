@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -31,6 +31,8 @@ class Scheduler(scheduler.Scheduler):
         :param web_bot: WebBot 对象
         """
         for file in FILE:
+            if file.endswith('mail.json'):
+                continue
             with open(get_cmp_file(file), 'r', encoding='utf-8') as old_file, \
                     open(file, 'r', encoding='utf-8') as new_file:
                 if same(json.load(old_file), json.load(new_file)):

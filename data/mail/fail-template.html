@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
     coding = utf-8
-    author: holger version: 2.4
+    author: holger version: 2.5
     license: AGPL-3.0
     belong: DailyReport-BasicDataFile
 -->
@@ -11,11 +11,11 @@
     <title>FAIL</title>
 </head>
 <body>
-<h1>每日健康打卡 - {% stu_id %} - 执行失败</h1>
-<p>原因：{% detail %}</p>
-<p>请手动打卡，<a href="http://dk.suda.edu.cn/default/work/suda/jkxxtb/jkxxcj.jsp">
+<h1>每日健康打卡 - {% stu_id %} - <span><strong style="color: red">执行失败</strong></span></h1>
+<p><strong style="color: red">请手动打卡，<a href="http://dk.suda.edu.cn/default/work/suda/jkxxtb/jkxxcj.jsp">
     链接：http://dk.suda.edu.cn/default/work/suda/jkxxtb/jkxxcj.jsp
-</a>
+</a></strong>
 </p>
+<p>原因：{% detail %}</p>
 </body>
 </html>

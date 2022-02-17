@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 2.0
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-Predefined
 
@@ -44,7 +44,7 @@ def __merge(old_data: dict, new_data: dict):
     - 若值为dict类型，合并方法相同（即递归合并）；
     - 若值为float类型，不相等则覆盖old_data中对应数据；
     - 若值为str类型，则new_data中不为空且不相等的数据覆盖原数据；
-    - 若值为list类型，则保持不变。
+    - 若值为list、int、bool类型，则保持不变。
     对于new_data中新增加的键，直接将键值对添加到合并结果。
     要求不改变old_data，new_data两配置数据，而是生成一个新的dict作为第一个返回值。
     如果发生了覆盖和新增，要求第二个返回值返回True，否则返回False。
@@ -63,7 +63,7 @@ def __merge(old_data: dict, new_data: dict):
                 if len(new_data[key]) != 0 and result[key] != new_data[key]:
                     need_adjust = True
                     result[key] = deepcopy(new_data[key])
-            elif isinstance(old_data[key], list):
+            elif isinstance(old_data[key], list) or isinstance(old_data[key], int) or isinstance(old_data[key], bool):
                 result[key] = deepcopy(old_data[key])
             else:
                 if result[key] != new_data[key]:
@@ -88,10 +88,10 @@ def update_config(timeout: float):
                 msg_box(resources.ERR_WRONG_VER_F2.format(file_name, resources.API_V2))
                 raise RuntimeError(resources.ERR_WRONG_VER_F2.format(file_name, resources.API_V2))
             data, adjust = __merge(old_data, data)
-            if adjust and name in ("user", "scheduler"):
+            if adjust and name in ("user", "scheduler", "email"):
                 need_adjust.append(name)
         else:
-            if name in ("user", "scheduler"):
+            if name in ("user", "scheduler", "email"):
                 need_adjust.append(name)
         with open(file_name, 'w', encoding='utf-8') as file:
             file.write(json.dumps(data, indent=2, ensure_ascii=False))
@@ -107,7 +107,7 @@ def check_update_src():
     r = requests.get(resources.VERSION_API_V2)
     assert r.status_code == 200
     if version.check_version(version.VERSION, float(r.text)) < 0:
-        msg_box(resources.SRC_NEED_UPDATE)
+        msg_box(resources.SRC_NEED_UPDATE.format(float(r.text)))
     else:
         logger(resources.SRC_UP_TO_DATE, level='debug')
 

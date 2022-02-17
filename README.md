@@ -1,8 +1,17 @@
+<!--
+    coding = utf-8
+    author: holger version: 2.5
+    license: AGPL-3.0
+    belong: DailyReport-BasicDataFile
+-->
+
 # DailyReport (stable)
 
 Daily health report automated program. 每日打卡自动化程序
 
-v2.4 by holger
+v2.5 by HolgerZhang
+
+with [SUMSC/email-sender](https://github.com/SUMSC/email-sender) v0.1.2
 
 coding: UTF-8
 
@@ -14,7 +23,9 @@ coding: UTF-8
 
 > v2.x 不再向下兼容 [v1.x](https://github.com/HolgerZhang/DailyReport/tree/v1-end-of-life) 的部分配置文件以及启动方法
 > 
-> v2.1 及以前所有版本的支持周期均已停止，请尽快升级至 v2.2 版本
+> v2.5 不再向下兼容 [v2](https://github.com/HolgerZhang/DailyReport/tree/v2) 分支较早版本的启动方法，建议全新安装
+> 
+> v2.4 及以前所有版本的支持周期均已停止，请尽快升级至 v2.5 版本
 
 - 环境依赖：带有 pip 的 Python 3 环境；系统装有 **最新版** [Chrome 浏览器](https://www.google.cn/intl/zh-CN/chrome/)
 - 支持系统：Windows (x86 64 bit) | Linux (x86 64 bit) | macOS (Intel / Apple Silicon)
@@ -29,36 +40,36 @@ coding: UTF-8
 - 其余未尽事宜，此软件以及作者保留解释权利；
 - 使用此软件，默认接受以上声明；如不接受，请删除本软件。
 
-### 使用
+### 使用【v2.5+使用必看】
 
 1. 阅读《免责声明》，接受方可继续。
-2. 运行 `python3 setup.py` 下载并安装依赖
-3. 运行 `python3 run.py` 开始使用；运行 `python3 run.pyw` 以不显示CMD窗口 (仅在 Windows 系统有效)
-  - Windows 后台执行方法（无黑框）：直接运行 `run.pyw` 文件。
-  - Linux 系统后台运行方法：使用 nohup `nohup python3 run.py >> /dev/null 2>&1 &`；
-    结束运行请自行kill：`ps -aux | grep 'python3 run.py'` 记录pid，`kill <pid>`
+2. 运行 `python3 -m pip install -r requirements.txt'` 安装依赖，（需要升级pip版本到22.0.3）
+
+   升级方法 `python3 -m pip install --upgrade pip`
+
+3. 运行 `python3 main.py --initialize` 初始化并下载配置文件，首次运行请预先配置 data 目录下 json 文件
+4. 运行 `python3 main.py` 开始使用； 
+
+    后台运行方法：使用 nohup `nohup python3 main.py >> /dev/null 2>&1 &`；
+    结束运行请自行kill：`ps -aux | grep 'python3 main.py'` 记录pid，`kill <pid>`
 
 - 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
-- 首次运行请预先配置邮件信息： data/mail/mail.json
-- 添加参数 `--no-update` 关闭自动检查更新特性
-- 添加参数 `--no-monitor` 关闭文件变更自动加载特性
-- 添加参数 `--once` 以单次运行程序
-- （调试用）添加参数 `--DEBUG` 以在 bot 执行时输出调试信息
+- 添加参数 `-u` 或 `--update-only` 手动更新配置文件
+- 添加参数 `-m` 或 `--disable-monitor` 关闭文件变更自动加载特性
+- 添加参数 `-o` 或 `--once` 以单次运行程序
+- 添加参数 `-l` 或 `--local` 彻底关闭自动检查更新特性，而是使用本地存在的文件
+- 添加参数 `-idx INDEX` 或 `--user-index INDEX` 使程序只为用户编号（从0开始）为 INDEX 的用户打卡（为负数则为所有人打卡）
+- 使用环境变量 `BOT_CORE_DEBUG=TRUE` 以在 bot 执行时输出调试信息
+- 使用环境变量 `BOT_CORE_NO_GUI=TRUE` 以关闭弹窗提醒
 
 ### 更新说明
 
 - v2.0 (end-of-life) **全面重构**。将业务逻辑与代码分离，便于后续升级；支持为多人打卡，向 user 配置文件 information 中新增格式相同的 JSON 对象即可；全新日志模块，输出、异常信息一目了然；具备安装程序，一键安装依赖。
 - v2.1 (fatal-error end-of-life) 修复自带的 Chrome 驱动过于老旧的问题；修复一定概率的网页元素定位失败的问题；打卡结束时将结果停留展示 10 秒；添加输出调试信息选项。【存在严重BUG：有一定概率定位元素发生偏移，导致打卡地点不受控制，强烈建议升级】
-- v2.2 (bug fix) 修复 2.1 版本的 BUG；执行出错自动重复5次，防止网络问题导致的打卡失败；优化系统稳定性。可能存在 mapping 文件的问题，建议删除原有 data/mapping.json 文件重新下载（下载链接： [mapping](https://api.holgerbest.top/DailyReport/v2/mapping/) ），并删除 .cmp_dat 文件夹。
-- v2.3 (stable) 新增对 Apple Silicon 的支持；日志分级，优化输出；优化系统稳定性。
-- v2.4 新增邮件提醒（ 源自：[SUMSC/email-sender](https://github.com/SUMSC/email-sender) ），打卡成功或失败会向指定邮箱发送邮件，需配置邮箱，参考原项目。
-
-### 从 v1.x 升级
-
-不建议与 v1.x 项目合并，而应该作为一个新的项目使用。
-
-- scheduler 配置不受影响，可直接替换；
-- user 配置建议仅保留information中的个人信息，替换到新版本 user 配置文件的相应位置。
+- v2.2 (bug fix end-of-life) 修复 2.1 版本的 BUG；执行出错自动重复5次，防止网络问题导致的打卡失败；优化系统稳定性。可能存在 mapping 文件的问题，建议删除原有 data/mapping.json 文件重新下载（下载链接： [mapping](https://api.holgerbest.top/DailyReport/v2/mapping/) ），并删除 .cmp_dat 文件夹。
+- v2.3 (end-of-life) 新增对 Apple Silicon 的支持；日志分级，优化输出；优化系统稳定性。
+- v2.4 (error-existed end-of-life) 新增邮件提醒（ 源自：[SUMSC/email-sender](https://github.com/SUMSC/email-sender) ），打卡成功或失败会向指定邮箱发送邮件，需配置邮箱，参考原项目。
+- v2.5 (stable) 修复 Bot 当元素未找到时模拟点击不抛出异常的问题；非核心脚本重构，缩减脚本数量，优化命令行参数体验；完美支持彻底关闭自动检查更新；新增支持手动更新配置文件；新增支持只为特定某个用户编号（从0开始）的用户打卡；将邮件配置作为系统配置项之一进行管理（监听更新，不监听变更）；其他优化。
 
 ### Q&A
 
@@ -71,8 +82,8 @@ coding: UTF-8
 - 运行失败后弹窗：捕获未知异常；或捕获异常，log 文件显示异常信息不为 NoSuchElementException
   - 解决办法：联系作者[邮箱](mailto:holgerzhang@outlook.com) 
 - 我想要立刻执行一次打卡
-  - 解决办法：运行 run.py 添加 `--once` 参数
-- 我想要手动填写体温数据【不再提供支持，请手动打卡 :) 】
+  - 解决办法：运行 main.py 添加 `--once` 参数
+- 我想要手动填写体温数据【请手动打卡 :) 】
 
 ### API v2
 
@@ -80,6 +91,6 @@ coding: UTF-8
 - `data/mapping.json`（配置文件，首次启动下载）：[mapping](https://api.holgerbest.top/DailyReport/v2/mapping/)
 - `data/user.json`（用户信息配置文件，首次启动下载，需填写信息）：[user](https://api.holgerbest.top/DailyReport/v2/user/)
 - `data/scheduler.json`（定时任务配置文件，首次启动下载，需填写信息）：[scheduler](https://api.holgerbest.top/DailyReport/v2/scheduler/)
-- `data/mail/mail.json`（邮件配置文件，首次启动下载，需填写信息）：[mail](https://api.holgerbest.top/DailyReport/v2/mail/)
+- `data/mail.json`（邮件配置文件，首次启动下载，需填写信息）：[mail](https://api.holgerbest.top/DailyReport/v2/mail/)
 - 版本号API：[https://api.holgerbest.top/DailyReport/v2/version/](https://api.holgerbest.top/DailyReport/v2/version/)
 - 提示信息API：[https://api.holgerbest.top/msgbox.html?msg=在这里键入提示信息](https://api.holgerbest.top/msgbox.html?msg=在这里键入提示信息)

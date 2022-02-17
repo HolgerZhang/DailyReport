@@ -1,11 +1,17 @@
+# coding = utf-8
+# author: holger version: 2.5
+# license: AGPL-3.0
+# belong: DailyReport-Predefined
+
 .cmp_dat/
 .cmp_dat/*
 .idea/
 data/user.json
 data/mapping.json
 data/scheduler.json
-data/mail/mail.json
+data/mail.json
 *.log
 data/chromedriver.exe
 data/chromedriver
 Pipfile
+*.old

@@ -1,10 +1,10 @@
 # coding = utf-8
-# author: holger version: 2.4
+# author: holger version: 2.5
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
 import json
-import sys
+import os
 import traceback
 from random import randint
 from time import sleep
@@ -14,9 +14,9 @@ from selenium.common.exceptions import NoSuchElementException, SessionNotCreated
 
 from bot_core import exec_log, version, resources
 from bot_core.file import CHROMEDRIVER_FILE, msg_box, MAPPING_FILE, USER_FILE
-from bot_core.mail import success_mail, fail_mail
+from bot_core.mail import Mail
 
-BOT_DEBUG = '--DEBUG' in sys.argv
+BOT_DEBUG = os.environ.get('BOT_CORE_DEBUG', 'FALSE').upper() == 'TRUE'
 
 
 class WebBot:
@@ -104,12 +104,13 @@ class WebBot:
         :param find_by: 选择类型 id, name, class, fuzzy 中的一种
         :param value: 要定位的值
         :param check: 预期 text
+        :param index
         :return: None
         """
         elem = self.find(find_by)(value)
         if len(elem) == 0:
             exec_log.logger(resources.ERR_ELEM_NOT_FOUND)
-            return
+            raise NoSuchElementException(resources.ERR_ELEM_NOT_FOUND)
         if BOT_DEBUG:
             for i, e in enumerate(elem):
                 print(i, e.get_attribute("innerHTML"))
@@ -242,7 +243,7 @@ class Execution:
         self.__operators: list = circuit_map['operating']
         exec_log.logger(resources.CIRCUIT_FUNC_SETUP_F3.format(self.__name, self.__need_return, self.__catch_exception))
 
-    def run(self, web_bot: WebBot, user_index: int) -> bool:
+    def run(self, web_bot: WebBot, user_index: int):
         """
         运行方法
         :param web_bot: 运行方法的bot
@@ -299,60 +300,80 @@ class Execution:
                 except NoSuchElementException as ex:
                     exec_log.logger(resources.CATCH_EXCEPT_F2.format(ex, traceback.format_exc()), 'warn')
                     if self.__need_return:
-                        return False
+                        return False, ex
             else:
                 runnable(operator)
             sleep(0.1)
         exec_log.logger(resources.CIRCUIT_FUNC_FINISHED_F2.format(self.__name, user_index))
-        return True
+        return True, None
 
 
-def run_bot(web_bot: WebBot) -> None:
+def run_bot(web_bot: WebBot, user_index=-1) -> None:
     """
     WebBot 执行器
     :param web_bot: WebBot 对象
+    :param user_index: 执行哪一个用户配置，复数为全执行
     :return: None
     """
+    mail = Mail()
+    mail.load()
 
     def inner_runner(circuit, index):
         web_bot.get_url()
         for circuit_map in circuit:
             execution = Execution(circuit_map)
             try:
-                complete = execution.run(web_bot, index)
+                complete, ex = execution.run(web_bot, index)
             except Exception as exception:
                 msg_box(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index))
                 exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc(), 'warn')
-                fail_mail(to={web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'),
-                              web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'},
-                          stu_id=web_bot.user(index)['user_id'],
-                          detail={'message': resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index)})
+                mail.fail_mail(
+                    to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
+                    stu_id=web_bot.user(index)['user_id'],
+                    detail={'message': Mail.html(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index)),
+                            '\nStack': Mail.html(traceback.format_exc())})
                 if BOT_DEBUG:
                     input()
                 return 1
             if not complete:
-                msg_box(resources.CATCH_EXCEPT_SEE_LOG_F1.format(index))
-                fail_mail(to={web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'),
-                              web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'},
-                          stu_id=web_bot.user(index)['user_id'],
-                          detail=resources.CATCH_EXCEPT_SEE_LOG_F1.format(index))
+                msg_box(resources.CATCH_EXCEPT_SEE_LOG_F1.format(ex, index))
+                mail.fail_mail(
+                    to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
+                    stu_id=web_bot.user(index)['user_id'],
+                    detail={'message': Mail.html(resources.CATCH_EXCEPT_SEE_LOG_F1.format(ex, index))})
                 if BOT_DEBUG:
                     input()
                 return 1
         return 0
 
     circuit = web_bot.mapping['circuit']
+    if user_index >= web_bot.user_number:
+        exec_log.logger(resources.WARN_USER_INDEX_OUT_OF_RANGE.format(user_index), 'warn')
     for index in range(web_bot.user_number):
+        if user_index >= 0 and user_index != index:
+            continue
+        retry = 0
         while True:
             if inner_runner(circuit, index) == 0:
                 break
             else:
+                retry += 1
+                if retry >= 5:
+                    break
                 sleep(5)
                 web_bot.reboot()
-        success_mail(to={web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'),
-                         web_bot.user(index)['user_id'] + '@stu.suda.edu.cn'},
-                     stu_id=web_bot.user(index)['user_id'],
-                     detail=web_bot.user(index))
-        exec_log.logger(resources.FINISH_10)
+        if retry >= 5:
+            msg = {'ERROR': resources.ERR_RETRY_5}
+            msg.update(web_bot.user(index))
+            mail.fail_mail(to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
+                           stu_id=web_bot.user(index)['user_id'],
+                           detail=msg)
+            exec_log.logger(resources.ERR_RETRY_5)
+        else:
+            mail.success_mail(
+                to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
+                stu_id=web_bot.user(index)['user_id'],
+                detail=web_bot.user(index))
+            exec_log.logger(resources.FINISH_10)
         sleep(10)
         web_bot.reboot()
