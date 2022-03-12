@@ -1,5 +1,6 @@
 # coding = utf-8
-# author: SUMSC (holger) version: 0.1.2 (Beta), DailyReport version: 2.4
+# author: SUMSC (holger)
+# version: 0.1.2 (Beta), DailyReport version: 4.0.0
 # license: LGPL-2.1
 # belong: MailSender for DailyReport-Foreign-Project
 

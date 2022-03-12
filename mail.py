@@ -1,13 +1,12 @@
 # coding = utf-8
-# author: holger version: 2.5
+# author: holger
+# version: 4.0.0
 # license: AGPL-3.0
-# belong: DailyReport-BotCore
+# belong: DailyReport-Mail
 
-import json
 
 from EmailSender.sender import send_email
-from bot_core import version, exec_log, resources
-from bot_core.file import MAIL_FILE, SUCCESS_MAIL_FILE, FAIL_MAIL_FILE
+from BotCore.file import SUCCESS_MAIL_FILE, FAIL_MAIL_FILE
 
 
 class Mail:
@@ -20,21 +19,10 @@ class Mail:
             .replace("'", '&#x27;') \
             .replace('\n', '<br />')
 
-    def __init__(self):
-        self.__mail = {}
-        self.__mail_config = {}
-
-    def load(self) -> None:
-        """
-        加载数据
-        :return: None
-        """
-        with open(MAIL_FILE, 'r', encoding='utf-8') as __file:
-            self.__mail_config = json.load(__file)
-            assert version.check_version(version.MAIL_MIN_VERSION_REQUIRED, self.__mail_config['_version']) <= 0
-            self.__mail = self.__mail_config['sender']
-            assert len(self.__mail['user']) != 0 and len(self.__mail['passwd']) != 0 and len(self.__mail['host']) != 0
-        exec_log.logger(resources.LOAD_MAIL_JSON)
+    def __init__(self, config):
+        self.__mail_config = config
+        self.__mail = self.__mail_config['sender']
+        assert len(self.__mail['user']) != 0 and len(self.__mail['passwd']) != 0 and len(self.__mail['host']) != 0
 
     _success_template = {
         'use_file': True,

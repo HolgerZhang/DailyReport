@@ -1,5 +1,6 @@
 # coding = utf-8
-# author: holger version: 2.5
+# author: holger
+# version: 4.0.0
 # license: AGPL-3.0
 # belong: DailyReport-BotCore
 
@@ -10,13 +11,13 @@ from random import randint
 from time import sleep
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, SessionNotCreatedException
+from selenium.common.exceptions import NoSuchElementException
 
-from bot_core import exec_log, version, resources
-from bot_core.file import CHROMEDRIVER_FILE, msg_box, MAPPING_FILE, USER_FILE
-from bot_core.mail import Mail
+from BotCore import version, logger
+from BotCore.file import MAPPING_FILE
+from mail import Mail
 
-BOT_DEBUG = os.environ.get('BOT_CORE_DEBUG', 'FALSE').upper() == 'TRUE'
+BOT_DEBUG = os.environ.get('BOT_CORE_DEBUG', 'FALSE').strip().upper() == 'TRUE'
 
 
 class WebBot:
@@ -24,45 +25,60 @@ class WebBot:
     （核心类）管理 配置数据 与 浏览器驱动程序
     """
 
-    def __init__(self):
-        """
-        构造函数
-        """
-        self.__mapping = {}
-        self.__user = []
+    def __init__(self, user_config_file, browser_type='Chrome', driver_path=None):
+        with open(MAPPING_FILE, 'r', encoding='utf-8') as __mapping_file:
+            self.__mapping = json.load(__mapping_file)
+            assert version.check_version(version.MAPPING_MIN_VERSION, self.__mapping['VERSION']), '版本号不匹配'
+        with open(user_config_file, 'r', encoding='utf-8') as __user_file:
+            self.__user = json.load(__user_file)
+            assert version.check_version(version.USER_MIN_VERSION, self.__user['VERSION']), '版本号不匹配'
+        logger.info('加载文件: "{}", "{}"'.format(MAPPING_FILE, user_config_file))
+        self._browser_type = browser_type.lower()
+        if driver_path is not None and len(driver_path.strip()) != 0:
+            self._driver_path = driver_path.strip()
+        else:
+            self._driver_path = None
         self.__browser = None
 
     def __del__(self):
-        """
-        析构函数
-        """
         self.finish()
-
-    def load(self) -> None:
-        """
-        加载数据
-        :return: None
-        """
-        with open(MAPPING_FILE, 'r', encoding='utf-8') as __mapping_file:
-            self.__mapping = json.load(__mapping_file)
-            assert version.check_version(version.MAPPING_MIN_VERSION_REQUIRED, self.__mapping['_version']) <= 0
-        with open(USER_FILE, 'r', encoding='utf-8') as __user_file:
-            __user = json.load(__user_file)
-            assert version.check_version(version.USER_MIN_VERSION_REQUIRED, __user['_version']) <= 0
-            self.__user = __user['information']
-        exec_log.logger(resources.LOAD_MAPPING_USER_JSON)
 
     def start(self) -> None:
         """
         启动浏览器
+        :raises SessionNotCreatedException
         :return: None
         """
         self.finish()
-        try:
-            self.__browser = webdriver.Chrome(CHROMEDRIVER_FILE)
-        except SessionNotCreatedException:
-            msg_box(resources.CHROME_NEED_UPDATE)
-            exit(1)
+        if self._browser_type == 'chrome':
+            if self._driver_path is not None:
+                self.__browser = webdriver.Chrome(self._driver_path)
+            else:
+                self.__browser = webdriver.Chrome()
+        elif self._browser_type == 'firefox':
+            if self._driver_path is not None:
+                self.__browser = webdriver.Firefox(self._driver_path)
+            else:
+                self.__browser = webdriver.Firefox()
+        elif self._browser_type == 'edge':
+            if self._driver_path is not None:
+                self.__browser = webdriver.Edge(self._driver_path)
+            else:
+                self.__browser = webdriver.Edge()
+        elif self._browser_type == 'safari':
+            self.__browser = webdriver.Safari()
+        elif self._browser_type == 'ie':
+            if self._driver_path is not None:
+                self.__browser = webdriver.Ie(self._driver_path)
+            else:
+                self.__browser = webdriver.Ie()
+        elif self._browser_type == 'opera':
+            if self._driver_path is not None:
+                self.__browser = webdriver.Opera(self._driver_path)
+            else:
+                self.__browser = webdriver.Opera()
+        else:
+            raise ValueError('不支持的浏览器')
 
     def get_url(self) -> None:
         """
@@ -87,8 +103,8 @@ class WebBot:
         :return: Function
         """
         if self.__browser is None:
-            msg_box(resources.ERR_NOT_START_BOT)
-            raise RuntimeError(resources.ERR_NOT_START_BOT)
+            logger.error('Error: 实例化(start)浏览器前使用 WebBot')
+            raise RuntimeError('Error: 实例化(start)浏览器前使用 WebBot')
         return {
             'id': lambda locator: self.__browser.find_elements_by_id(locator),
             'name': lambda locator: self.__browser.find_elements_by_name(locator),
@@ -109,21 +125,21 @@ class WebBot:
         """
         elem = self.find(find_by)(value)
         if len(elem) == 0:
-            exec_log.logger(resources.ERR_ELEM_NOT_FOUND)
-            raise NoSuchElementException(resources.ERR_ELEM_NOT_FOUND)
+            logger.info("元素未找到")
+            raise NoSuchElementException("元素未找到")
         if BOT_DEBUG:
             for i, e in enumerate(elem):
                 print(i, e.get_attribute("innerHTML"))
             print('==' * 10)
         elem = elem[index]
         if check is not None:
-            exec_log.logger(resources.CHECK_F2.format(check, elem.text))
+            logger.info('检查 "{}"(预期)=="{}"(实际)'.format(check, elem.text))
             if check != elem.text:
-                msg_box(resources.ERR_WEBSITE_UPDATE)
-                raise RuntimeError(resources.ERR_WEBSITE_UPDATE)
-        exec_log.logger(elem.get_attribute("innerHTML"), 'debug')
+                logger.error('Error: 网页发生更新，请联系mapping提供方更新数据')
+                raise RuntimeError('Error: 网页发生更新，请联系mapping提供方更新数据')
+        logger.debug(elem.get_attribute("innerHTML"))
         elem.click()
-        exec_log.logger(resources.CLICK_F2.format(find_by, value))
+        logger.info('点击 @{}={}.'.format(find_by, value))
 
     def fill(self, find_by: str, value: str, desc: str, check: str = None) -> None:
         """
@@ -144,53 +160,33 @@ class WebBot:
             print('==' * 10)
         elem = elem[0]
         if check is not None:
-            exec_log.logger(resources.CHECK_F2.format(check, elem.text))
+            logger.info('检查 "{}"(预期)=="{}"(实际)'.format(check, elem.text))
             if check != elem.text:
-                msg_box(resources.ERR_WEBSITE_UPDATE)
-                raise RuntimeError(resources.ERR_WEBSITE_UPDATE)
+                logger.error('Error: 网页发生更新，请联系mapping提供方更新数据')
+                raise RuntimeError('Error: 网页发生更新，请联系mapping提供方更新数据')
         elem.clear()
         elem.send_keys(desc.strip())
-        exec_log.logger(resources.FILL_F3.format(find_by, value, desc))
+        logger.info('填写 @{}={}，值为 "{}"'.format(find_by, value, desc))
 
     @property
     def mapping(self) -> dict:
         """
         :return: mapping 配置数据
         """
-        if len(self.__mapping) == 0:
-            msg_box(resources.ERR_NOT_LOAD_MAPPING)
-            raise ValueError(resources.ERR_NOT_LOAD_MAPPING)
         return self.__mapping
 
-    def user(self, index: int) -> dict:
+    @property
+    def user(self) -> dict:
         """
-        加载第 index 个 user 配置
-        :param index: user 编号
         :return: user 配置数据
         """
-        if len(self.__user) == 0:
-            msg_box(resources.ERR_NOT_LOAD_USER)
-            raise ValueError(resources.ERR_NOT_LOAD_USER)
-        if not 0 <= index <= len(self.__user) - 1:
-            msg_box(resources.ERR_USER_INDEX_OVER)
-            raise IndexError(resources.ERR_USER_INDEX_OVER)
-        return self.__user[index]
-
-    @property
-    def user_number(self) -> int:
-        """
-        :return: user 配置数据个数
-        """
-        return len(self.__user)
+        return self.__user
 
     @property
     def check_map(self) -> dict:
         """
         :return: mapping 配置中 check 部分
         """
-        if len(self.__mapping) == 0:
-            msg_box(resources.ERR_NOT_LOAD_MAPPING)
-            raise ValueError(resources.ERR_NOT_LOAD_MAPPING)
         return self.__mapping['check']
 
     def reboot(self) -> None:
@@ -241,13 +237,13 @@ class Execution:
         self.__need_return: bool = circuit_map['return']
         self.__catch_exception: bool = circuit_map['except']
         self.__operators: list = circuit_map['operating']
-        exec_log.logger(resources.CIRCUIT_FUNC_SETUP_F3.format(self.__name, self.__need_return, self.__catch_exception))
+        logger.info('自定义方法 "{}" 建立成功，需要返回值: {}, 捕获异常: {}'.format(self.__name,
+                                                                 self.__need_return, self.__catch_exception))
 
-    def run(self, web_bot: WebBot, user_index: int):
+    def run(self, web_bot: WebBot):
         """
         运行方法
         :param web_bot: 运行方法的bot
-        :param user_index: user 下标
         :return: 是否成功
         """
 
@@ -278,102 +274,97 @@ class Execution:
                 change_flag = True
             if opera['action'] == 'fill':
                 web_bot.fill(**get_mapping_desc(attribute),
-                             desc=user_need if change_flag else web_bot.user(user_index)[user_need].strip(),
+                             desc=user_need if change_flag else web_bot.user[user_need].strip(),
                              check=web_bot.check_map.get(attribute[-1] if len(attribute) != 0 else '', None))
             elif opera['action'] == 'click':
                 web_bot.click(**get_mapping_desc(attribute),
                               check=web_bot.check_map.get(attribute[-1] if len(attribute) != 0 else '', None))
             elif opera['action'] == 'fuzzy_click':
-                value = web_bot.user(user_index)[user_need].strip()
+                value = web_bot.user[user_need].strip()
                 if len(attribute) != 0:
                     value = get_mapping_desc(attribute)[value]
                 web_bot.click('fuzzy', value, index=-1)
             elif opera['action'] == 'text':
-                value = web_bot.user(user_index)[user_need].strip()
+                value = web_bot.user[user_need].strip()
                 web_bot.click('text', value, index=-1)
 
-        exec_log.logger(resources.CIRCUIT_FUNC_RUNNING_F2.format(self.__name, user_index))
+        logger.info('自定义方法 "{}" 正在运行'.format(self.__name))
         for operator in self.__operators:
             if self.__catch_exception:
                 try:
                     runnable(operator)
                 except NoSuchElementException as ex:
-                    exec_log.logger(resources.CATCH_EXCEPT_F2.format(ex, traceback.format_exc()), 'warn')
+                    logger.warning('捕获异常: {}\n{}'.format(ex, traceback.format_exc()))
                     if self.__need_return:
                         return False, ex
             else:
                 runnable(operator)
             sleep(0.1)
-        exec_log.logger(resources.CIRCUIT_FUNC_FINISHED_F2.format(self.__name, user_index))
+        logger.info('自定义方法 "{}" 结束'.format(self.__name))
         return True, None
 
 
-def run_bot(web_bot: WebBot, user_index=-1) -> None:
+def run_bot(web_bot: WebBot, mail: Mail) -> None:
     """
     WebBot 执行器
     :param web_bot: WebBot 对象
-    :param user_index: 执行哪一个用户配置，复数为全执行
+    :param mail: Mail 对象
     :return: None
     """
-    mail = Mail()
-    mail.load()
 
-    def inner_runner(circuit, index):
+    def inner_runner(circuit):
         web_bot.get_url()
         for circuit_map in circuit:
             execution = Execution(circuit_map)
             try:
-                complete, ex = execution.run(web_bot, index)
+                complete, ex = execution.run(web_bot)
             except Exception as exception:
-                msg_box(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index))
-                exec_log.logger(resources.EXCEPT_TRACEBACK + traceback.format_exc(), 'warn')
+                msg = '捕获未知异常: {}'.format(exception)
+                logger.info(msg)
+                logger.warning('异常堆栈信息：\n' + traceback.format_exc())
                 mail.fail_mail(
-                    to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
-                    stu_id=web_bot.user(index)['user_id'],
-                    detail={'message': Mail.html(resources.CATCH_UNKNOWN_EXCEPT_F2.format(exception, index)),
+                    to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
+                    stu_id=web_bot.user['user_id'],
+                    detail={'message': Mail.html(msg),
                             '\nStack': Mail.html(traceback.format_exc())})
                 if BOT_DEBUG:
                     input()
                 return 1
             if not complete:
-                msg_box(resources.CATCH_EXCEPT_SEE_LOG_F1.format(ex, index))
+                msg = '捕获异常 {}, 详见data文件夹下BotLog.log文件'.format(ex)
+                logger.info(msg)
                 mail.fail_mail(
-                    to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
-                    stu_id=web_bot.user(index)['user_id'],
-                    detail={'message': Mail.html(resources.CATCH_EXCEPT_SEE_LOG_F1.format(ex, index))})
+                    to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
+                    stu_id=web_bot.user['user_id'],
+                    detail={'message': Mail.html(msg)})
                 if BOT_DEBUG:
                     input()
                 return 1
         return 0
 
     circuit = web_bot.mapping['circuit']
-    if user_index >= web_bot.user_number:
-        exec_log.logger(resources.WARN_USER_INDEX_OUT_OF_RANGE.format(user_index), 'warn')
-    for index in range(web_bot.user_number):
-        if user_index >= 0 and user_index != index:
-            continue
-        retry = 0
-        while True:
-            if inner_runner(circuit, index) == 0:
-                break
-            else:
-                retry += 1
-                if retry >= 5:
-                    break
-                sleep(5)
-                web_bot.reboot()
-        if retry >= 5:
-            msg = {'ERROR': resources.ERR_RETRY_5}
-            msg.update(web_bot.user(index))
-            mail.fail_mail(to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
-                           stu_id=web_bot.user(index)['user_id'],
-                           detail=msg)
-            exec_log.logger(resources.ERR_RETRY_5)
+    retry = 0
+    while True:
+        if inner_runner(circuit) == 0:
+            break
         else:
-            mail.success_mail(
-                to=[web_bot.user(index).get('email', web_bot.user(index)['user_id'] + '@stu.suda.edu.cn')],
-                stu_id=web_bot.user(index)['user_id'],
-                detail=web_bot.user(index))
-            exec_log.logger(resources.FINISH_10)
-        sleep(10)
-        web_bot.reboot()
+            retry += 1
+            if retry >= 5:
+                break
+            sleep(5)
+            web_bot.reboot()
+    if retry >= 5:
+        msg = {'ERROR': '5次尝试均打卡失败！'}
+        msg.update(web_bot.user)
+        mail.fail_mail(to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
+                       stu_id=web_bot.user['user_id'],
+                       detail=msg)
+        logger.error('5次尝试均打卡失败！')
+    else:
+        mail.success_mail(
+            to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
+            stu_id=web_bot.user['user_id'],
+            detail=web_bot.user)
+        logger.info("本次打卡成功，10秒后将进行下一任务")
+    sleep(10)
+    web_bot.reboot()

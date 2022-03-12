@@ -1,5 +1,6 @@
 # coding = utf-8
-# author: holger version: 2.5
+# author: holger
+# version: 4.0.0
 # license: AGPL-3.0
 # belong: DailyReport-Predefined
 
@@ -15,3 +16,7 @@ data/chromedriver.exe
 data/chromedriver
 Pipfile
 *.old
+configurations/general.json
+configurations/user.*.json
+old_file/
+old_file/*

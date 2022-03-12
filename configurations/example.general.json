@@ -1,0 +1,30 @@
+{
+  "VERSION": "4.0.0",
+  "__notes": "文件名：general.json，请根据模版创建自己的配置文件",
+  "webdriver": {
+    "browser": "Chrome|Firefox|Edge|Safari",
+    "driver_path": "驱动程序的路径，初始化后为 data/driver (相对于项目根目录，Windows后有exe后缀)"
+  },
+  "user_list": ["用户配置文件的用户名列表"],
+  "user_config_folder": "用户配置文件的目录，一般为 configurations",
+  "scheduler": {
+    "__notes": "时间：字符串(范围：0-23)，单个或多个时间，逗号隔开或用'-'表示区间，如下",
+    "hour": "7",
+    "minute": "30"
+  },
+  "mail": {
+    "sender": {
+      "user": "用于发送邮件的邮箱",
+      "passwd": "邮箱密码或授权码",
+      "host": "发送邮件邮箱的smtp服务器地址",
+      "port": 465,
+      "starttls": false,
+      "__notes": "port为smtp服务器地址端口；starttls为true表示开启starttls加密"
+    },
+    "receivers": [
+      "用于接受所有人的结果信息的邮箱，可以写多个"
+    ]
+  },
+  "virtual_display": false,
+  "__notes_on_virtual_display": "是否启用虚拟显示器以在无显示设备的服务器上运行"
+}
