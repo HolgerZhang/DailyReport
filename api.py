@@ -11,6 +11,7 @@ from BotCore import version, logger
 
 # APIs
 MAPPING_API_V4 = "https://api.holgerbest.top/DailyReport/v4/mapping/"
+USER_API_V4 = "https://api.holgerbest.top/DailyReport/v4/user/"
 VERSION_API_V4 = "https://api.holgerbest.top/DailyReport/v4/version/"
 
 

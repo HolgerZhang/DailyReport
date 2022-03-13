@@ -28,6 +28,8 @@ MAPPING_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'mapping.json')
 VERSION_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, 'version.json')
 SUCCESS_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, MAIL_FOLDER, 'success-template.html')
 FAIL_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, MAIL_FOLDER, 'fail-template.html')
+DEFAULT_DRIVER_PATH = os.path.join(PROJECT_PATH, DATA_FOLDER,
+                                   'driver.exe' if sys.platform.lower().startswith('win32') else 'driver')
 
 # NO_GUI = os.environ.get('BOT_CORE_NO_GUI', 'FALSE').upper() == 'TRUE'
 
@@ -97,6 +99,7 @@ def get_chrome_driver(path) -> None:
     else:
         logger.error('Error: 不支持的平台环境')
         raise TypeError('Error: 不支持的平台环境')
+    logger.info('从"{}"下载Chrome驱动程序（版本：{}）'.format(chromedriver_url, chrome_version))
     with open(CHROMEDRIVER_ZIP_FILE, 'wb') as driver_zip:
         driver_zip.write(requests.get(chromedriver_url).content)
     with zipfile.ZipFile(CHROMEDRIVER_ZIP_FILE, 'r') as driver_zip:
@@ -127,8 +130,7 @@ def get_driver(browser_type: str, path):
     if path is not None and len(path.strip()) != 0:
         path = os.path.join(PROJECT_PATH, path) if not os.path.isabs(path) else path
     else:
-        path = os.path.join(PROJECT_PATH, DATA_FOLDER,
-                            'driver.exe' if sys.platform.lower().startswith('win32') else 'driver')
+        path = DEFAULT_DRIVER_PATH
     logger.info('请确认已经安装最新版的{}浏览器，驱动程序将保存在：{}'.format(browser_type, path))
     browser_type = browser_type.lower()
     if browser_type == 'chrome':

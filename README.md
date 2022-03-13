@@ -1,7 +1,7 @@
 <!--
     coding = utf-8
     author: holger
-    version: 4。0。0
+    version: 4.0.0
     license: AGPL-3.0
     belong: DailyReport-BasicDataFile
 -->
@@ -47,8 +47,8 @@ coding: UTF-8
 
    升级方法 `python3 -m pip install --upgrade pip`
 
-3. 首次运行请预先根据 configurations/example.general.json 配置 configurations 目录下 general.json 文件；
-   根据 configurations/example.user.json 配置 configurations 目录下 user.用户名.json 文件；
+3. 首次运行请预先根据 configurations/introduction.general.json 配置 configurations 目录下 general.json 文件 （可参考 example.general.json ）；
+   根据 configurations/introduction.user.json 配置 configurations 目录下 user.用户名.json 文件；
 4. 运行 `python3 main.py --initialize` 初始化并下载配置文件；
 5. 运行 `python3 main.py` 开始使用； 
 
@@ -59,6 +59,7 @@ coding: UTF-8
 - 添加参数 `-o` 或 `--once` 以单次运行程序
 - 添加参数 `-l` 或 `--local` 以关闭自动检查更新特性，而是使用本地存在的文件
 - 添加参数 `-c CONFIG` 或 `--config CONFIG` 使程序只为用户编号（从0开始）为 INDEX 的用户打卡（为负数则为所有人打卡）
+- 添加参数 `-u USER` 或 `--user USER` 来在用户配置文件的目录生成 "user.${USER}.json" 文件
 - 使用环境变量 `BOT_CORE_DEBUG=TRUE` 以在 bot 执行时输出调试信息
 
 ### 更新说明
@@ -71,9 +72,13 @@ coding: UTF-8
 - 实现多人多线程打卡；
 - 完善了版本号的计算；
 - 移除文件变更检测特性，延迟至每次执行时读取系统配置及用户信息文件；
-- 增加虚拟屏幕的支持，用以支持在无显示设备的服务器端运行；
+- 增加虚拟屏幕的支持，用以支持在无显示设备的服务器端运行（仅支持Linux）；
 - 基本支持目前主流的浏览器，最大限度契合 selenium 的适配情况。
 
+已知问题：
+
+- **Chrome**的支持最完整【推荐使用】；其余浏览器未经测试；
+- Safari浏览器只适用于Mac平台；Mac下使用Safari运行存在异常 selenium.common.exceptions.WebDriverException 。
 
 ### Q&A
 
@@ -91,4 +96,5 @@ coding: UTF-8
 
 - 根地址：[https://api.holgerbest.top/DailyReport/v4/](https://api.holgerbest.top/DailyReport/v4/)
 - `data/mapping.json`（配置文件，首次启动下载）：[mapping](https://api.holgerbest.top/DailyReport/v4/mapping/)
+- `user.用户名.json`（用户配置文件，使用 -u 选项下载）：[mapping](https://api.holgerbest.top/DailyReport/v4/user/)
 - 版本号API：[https://api.holgerbest.top/DailyReport/v4/version/](https://api.holgerbest.top/DailyReport/v2/version/)

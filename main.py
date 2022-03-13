@@ -20,9 +20,9 @@ parser = argparse.ArgumentParser(description="Daily health report automated prog
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-v", "--version", action="version",
                     version='Daily health report automated program. 每日打卡自动化程序\n'
-                            'v{}  By @HolgerZhang, thanks @ygLance, @TTL2000.\n'
+                            'v{}.{}.{}  By @HolgerZhang, thanks @ygLance, @TTL2000.\n'
                             '    Together with SUMSC/email-sender v0.1.2\n'
-                            'GitHub: https://github.com/HolgerZhang/DailyReport\n'.format(VERSION))
+                            'GitHub: https://github.com/HolgerZhang/DailyReport/v4/\n'.format(*VERSION))
 parser.add_argument('-i', '--initialize', action='store_true',
                     help="initialize program")
 parser.add_argument('-o', '--once', action='store_true',
@@ -31,6 +31,8 @@ parser.add_argument('-l', '--local', action='store_true',
                     help="enable 'local run'(turn off automatic update), default disabled(automatic update)")
 parser.add_argument('-c', '--config', type=str, default="configurations/general.json",
                     help="path to the general configuration file, default is 'configurations/general.json'")
+parser.add_argument('-u', '--user', type=str,
+                    help="create an user configuration named `user.${USER}.json` in 'configurations/'")
 args = parser.parse_args()
 
 with open(args.config, 'r', encoding='utf-8') as _file:
@@ -59,7 +61,9 @@ def main():
 
 if __name__ == '__main__':
     try:
-        if args.initialize:
+        if args.user is not None:
+            daemon.new_user(config.user_config_folder, args.user)
+        elif args.initialize:
             init()
         else:
             main()

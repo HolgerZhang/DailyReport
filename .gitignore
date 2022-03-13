@@ -12,8 +12,8 @@ data/mapping.json
 data/scheduler.json
 data/mail.json
 *.log
-data/chromedriver.exe
-data/chromedriver
+data/*driver.exe
+data/*driver
 Pipfile
 *.old
 configurations/general.json

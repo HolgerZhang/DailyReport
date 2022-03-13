@@ -33,12 +33,16 @@ GENERAL_MIN_VERSION = get_version_tuple(__version['GENERAL_CONFIG_MIN_VERSION'])
 USER_MIN_VERSION = get_version_tuple(__version['USER_CONFIG_MIN_VERSION'])
 
 
-def check_version(version1: tuple, version2: tuple) -> bool:
+def check_version(version1, version2) -> bool:
     """
     比较两版本号差异
     :param version1: 3位版本号
     :param version2: 3位版本号
     :return: version1小于等于version2返回True
     """
+    if isinstance(version1, str):
+        version1 = get_version_tuple(version1)
+    if isinstance(version2, str):
+        version2 = get_version_tuple(version2)
     assert len(version1) == len(version2) == 3, '版本号格式不符合要求！'
     return version1 <= version2
