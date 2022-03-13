@@ -237,8 +237,8 @@ class Execution:
         self.__need_return: bool = circuit_map['return']
         self.__catch_exception: bool = circuit_map['except']
         self.__operators: list = circuit_map['operating']
-        logger.info('自定义方法 "{}" 建立成功，需要返回值: {}, 捕获异常: {}'.format(self.__name,
-                                                                 self.__need_return, self.__catch_exception))
+        logger.info('自定义方法 "{}" 建立成功，需要返回值: {}, 捕获异常: {}'.format(self.__name, self.__need_return,
+                                                                 self.__catch_exception))
 
     def run(self, web_bot: WebBot):
         """
@@ -288,7 +288,7 @@ class Execution:
                 value = web_bot.user[user_need].strip()
                 web_bot.click('text', value, index=-1)
 
-        logger.info('自定义方法 "{}" 正在运行'.format(self.__name))
+        logger.info('自定义方法 "{}" 正在运行, {}'.format(self.__name, web_bot.user['user_id']))
         for operator in self.__operators:
             if self.__catch_exception:
                 try:
@@ -300,7 +300,7 @@ class Execution:
             else:
                 runnable(operator)
             sleep(0.1)
-        logger.info('自定义方法 "{}" 结束'.format(self.__name))
+        logger.info('自定义方法 "{}" 结束, {}'.format(self.__name, web_bot.user['user_id']))
         return True, None
 
 
@@ -365,6 +365,6 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
             to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
             stu_id=web_bot.user['user_id'],
             detail=web_bot.user)
-        logger.info("本次打卡成功，10秒后将进行下一任务")
-    sleep(10)
+        logger.info("{}打卡成功，5秒后将进行下一任务".format(web_bot.user['user_id']))
+    sleep(5)
     web_bot.reboot()

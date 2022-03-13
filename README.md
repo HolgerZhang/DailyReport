@@ -96,5 +96,5 @@ coding: UTF-8
 
 - 根地址：[https://api.holgerbest.top/DailyReport/v4/](https://api.holgerbest.top/DailyReport/v4/)
 - `data/mapping.json`（配置文件，首次启动下载）：[mapping](https://api.holgerbest.top/DailyReport/v4/mapping/)
-- `user.用户名.json`（用户配置文件，使用 -u 选项下载）：[mapping](https://api.holgerbest.top/DailyReport/v4/user/)
+- `user.用户名.json`（用户配置文件，使用 -u 选项下载）：[user](https://api.holgerbest.top/DailyReport/v4/user/)
 - 版本号API：[https://api.holgerbest.top/DailyReport/v4/version/](https://api.holgerbest.top/DailyReport/v2/version/)
