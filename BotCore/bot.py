@@ -294,7 +294,7 @@ class Execution:
                 try:
                     runnable(operator)
                 except NoSuchElementException as ex:
-                    logger.warning('捕获异常: {}\n{}'.format(ex, traceback.format_exc()))
+                    logger.warning('捕获异常: {}'.format(ex), exc_info=True)
                     if self.__need_return:
                         return False, ex
             else:
@@ -320,8 +320,7 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
                 complete, ex = execution.run(web_bot)
             except Exception as exception:
                 msg = '捕获未知异常: {}'.format(exception)
-                logger.info(msg)
-                logger.warning('异常堆栈信息：\n' + traceback.format_exc())
+                logger.warning(msg, exc_info=True)
                 mail.fail_mail(
                     to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
                     stu_id=web_bot.user['user_id'],

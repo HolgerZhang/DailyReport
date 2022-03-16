@@ -5,7 +5,6 @@
 # belong: DailyReport-Main
 import argparse
 import json
-import sys
 import traceback
 
 from easydict import EasyDict
@@ -60,6 +59,7 @@ def main():
 
 
 if __name__ == '__main__':
+    logger.debug('执行配置："{}"\n'.format(args.config) + json.dumps(config, indent=2, ensure_ascii=False))
     try:
         if args.user is not None:
             daemon.new_user(config.user_config_folder, args.user)
@@ -71,4 +71,4 @@ if __name__ == '__main__':
         mail.fail_mail(to=[], stu_id='ALL',
                        detail={'<strong>未知错误</strong>': Mail.html('{} - {}'.format(e.__class__, e)),
                                'Stack': Mail.html(traceback.format_exc())})
-        print(traceback.format_exc(), file=sys.stderr)
+        logger.error('主线程异常 {} {}'.format(e.__class__, e.args), exc_info=True)

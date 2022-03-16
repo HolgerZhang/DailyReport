@@ -67,7 +67,7 @@ def new_user(user_config_path: str , name: str):
         logger.error('文件"{}"已经存在！'.format(file_path))
         return
     user = api.get_new_api(api.USER_API_V4)
-    logger.info('从"{}"下载文件"{}"'.format(api.MAPPING_API_V4, file_path))
+    logger.info('从"{}"下载文件"{}"'.format(api.USER_API_V4, file_path))
     with open(file_path, 'w', encoding='utf-8') as _file:
         _file.write(json.dumps(user, indent=2, ensure_ascii=False))
 
