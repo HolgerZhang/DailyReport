@@ -7,7 +7,7 @@
 
 # DailyReport (stable)
 
-Daily health report automated program. 每日打卡自动化程序
+Daily health report automated program. 每日打卡自动化程序【苏大】
 
 v2.5 by HolgerZhang
 
@@ -18,6 +18,25 @@ coding: UTF-8
 有关实现细节详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
+
+### 内测招募
+
+我们在进行新版本的测试！重构的 [v4](https://github.com/HolgerZhang/DailyReport/tree/v4) 版本需要进一步测试，现面向SUDA在校生招募内测体验人员～
+
+我们希望你：
+
+- 能够流畅访问GitHub！
+- 电脑装有Python3.8+（如果熟悉Python更好！）
+- 爱折腾，善于发现问题（因为是内测，bug出现频率和更新频次会比较高）
+
+加入内测你可以获得：
+
+- 高效的每日自动打卡体验；
+- 更快的bug修复频率；
+- 一对一的7*24h帮助服务；
+- 或许可以成为本项目的contributor。
+
+如果您感兴趣，欢迎联系我的QQ：**453744187**！
 
 ### 使用前注意
 
@@ -35,6 +54,7 @@ coding: UTF-8
 #### 免责声明
 
 - 每日打卡自动化程序 DailyReport（下简称“此软件”）仅供自动化测试使用，使用时不应该带有扰乱正常秩序的目的，不得作为商业目的使用；
+- 此软件只适用于自动化测试等有关技术等用途。<strong>如果你出现身体不适、身处疫情地区等等情况，请及时反映情况，不得瞒报！！</strong>
 - 此软件基于 AGPL-3.0 开源协议，引用此项目请保留开源协议并开放源代码，不得恶意修改（包括但不限于源代码、配置文件等）；
 - 此软件使用时需要保持开机并联网，且需保证网络通畅，能够访问目标网站。使用此软件时需留意日志文件信息以及自行 [查询](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp) 是否打卡成功。由于网络问题、目标页面更新等导致的打卡失败、不能连续打卡等问题，此软件以及作者不承担任何责任；
 - 其余未尽事宜，此软件以及作者保留解释权利；
