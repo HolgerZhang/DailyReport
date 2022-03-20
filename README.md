@@ -8,17 +8,36 @@
 
 # DailyReport (Beta)
 
-Daily health report automated program. 每日打卡自动化程序
+Daily health report automated program. 每日打卡自动化程序（适用于苏大）
 
 v4.0.0(Beta) by HolgerZhang
 
-with [SUMSC/email-sender](https://github.com/SUMSC/email-sender) v0.1.2
+with [SUMSC/email-sender](https://github.com/SUMSC/email-sender)
 
 coding: UTF-8
 
-有关实现细节详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
+> 有关实现细节详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
+
+### 内测招募
+
+重构的v4版本需要进一步测试，现面向SUDA在校生招募内测体验人员～
+
+我们希望你：
+
+- 能够流畅访问GitHub！
+- 电脑装有Python3.8+（如果熟悉Python更好！）
+- 爱折腾，善于发现问题（因为是内测，bug出现频率和更新频次会比较高）
+
+加入内测你可以获得：
+
+- 高效的每日自动打卡体验；
+- 更快的bug修复频率；
+- 一对一的7*24h帮助服务；
+- 或许可以成为本项目的contributor。
+
+如果您感兴趣，欢迎联系我的QQ：**453744187**！
 
 ### 使用前注意
 
@@ -35,12 +54,13 @@ coding: UTF-8
 #### 免责声明
 
 - 每日打卡自动化程序 DailyReport（下简称“此软件”）仅供自动化测试使用，使用时不应该带有扰乱正常秩序的目的，不得作为商业目的使用；
+- 此软件只适用于自动化测试等有关技术等用途。<strong>如果你出现身体不适、身处疫情地区等等情况，请及时反映情况，不得瞒报！！</strong>
 - 此软件基于 AGPL-3.0 开源协议，引用此项目请保留开源协议并开放源代码，不得恶意修改（包括但不限于源代码、配置文件等）；
 - 此软件使用时需要保持开机并联网，且需保证网络通畅，能够访问目标网站。使用此软件时需留意日志文件信息以及自行 [查询](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp) 是否打卡成功。由于网络问题、目标页面更新等导致的打卡失败、不能连续打卡等问题，此软件以及作者不承担任何责任；
 - 其余未尽事宜，此软件以及作者保留解释权利；
 - 使用此软件，默认接受以上声明；如不接受，请删除本软件。
 
-### 使用【v4使用必看】
+### 使用方法
 
 1. 阅读《免责声明》，接受方可继续。
 2. 运行 `python3 -m pip install -r requirements.txt'` 安装依赖，（需要升级pip版本到22.0.3）
@@ -60,13 +80,13 @@ coding: UTF-8
 - 添加参数 `-l` 或 `--local` 以关闭自动检查更新特性，而是使用本地存在的文件
 - 添加参数 `-c CONFIG` 或 `--config CONFIG` 使程序只为用户编号（从0开始）为 INDEX 的用户打卡（为负数则为所有人打卡）
 - 添加参数 `-u USER` 或 `--user USER` 来在用户配置文件的目录生成 "user.${USER}.json" 文件
-- 使用环境变量 `BOT_CORE_DEBUG=TRUE` 以在 bot 执行时输出调试信息
+- 使用环境变量 `BOT_CORE_DEBUG=TRUE` 以在 bot 执行时输出调试信息，并添加必要断点
 
 ### 更新说明
 
 #### v4.0.0 (Beta)
 
-需要进一步测试！
+##### BUILD.A002-HLO0313
 
 - 新版本重构，优化代码结构；
 - 实现多人多线程打卡；
@@ -79,6 +99,11 @@ coding: UTF-8
 
 - **Chrome**的支持最完整【推荐使用】；其余浏览器未经测试；
 - Safari浏览器只适用于Mac平台；Mac下使用Safari运行存在异常 selenium.common.exceptions.WebDriverException 。
+
+##### BUILD.A002-HOL0320
+
+- 修复并发链接数过大导致的邮件发送失败的问题；
+- 优化日志输出，方便定位问题；
 
 ### Q&A
 

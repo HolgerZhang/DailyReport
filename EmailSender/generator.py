@@ -54,6 +54,9 @@ class Email:
     def content(self, c):
         self._content = c
 
+    def __repr__(self):
+        return f'Email_{hex(id(self))}(To:`{self._receiver}`,Subject:"{self._subject}")'
+
 
 class EmailTemplate:
     def __init__(self, template, use_file=False):

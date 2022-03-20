@@ -5,7 +5,9 @@
 # belong: MailSender for DailyReport-Foreign-Project
 
 import os
+import random
 import smtplib
+import time
 import traceback
 import threadpool
 
@@ -22,13 +24,14 @@ from EmailSender.generator import Email, EmailTemplate
 
 class Sender:
     def __init__(self, smtp_host: str, mail_user: str, mail_passwd: str, ssl_port: int,
-                 sender_name=None, starttls=False):
+                 sender_name=None, starttls=False, wait=False):
         self._smtp_host: str = smtp_host  # 设置服务器
         self._mail_user: str = mail_user  # 用户名
         self._mail_passwd: str = mail_passwd  # 口令
         self._ssl_port: int = ssl_port
         self.__sender_header = formataddr((sender_name if sender_name is not None else mail_user, mail_user), 'utf-8')
         self._starttls = starttls
+        self._wait = wait
 
     def send(self, email: Email):
         if email.attachments is None:
@@ -46,6 +49,8 @@ class Sender:
                 att["Content-Disposition"] = f'attachment; filename="{os.path.basename(attachment)}"'
                 message.attach(att)
                 logger.info(f'attachment "{os.path.basename(attachment)}" added. (email_id={hex(id(email))})')
+        if self._wait:  # 随机休眠
+            time.sleep(random.randrange(5))
         ret = True
         try:
             logger.info(f'Sending email from `{self._mail_user}` to `{email.receiver}`... (email_id={hex(id(email))})')
@@ -60,14 +65,14 @@ class Sender:
             logger.info(f'Email<`{self._mail_user}` -> `{email.receiver}`> sent successfully! '
                         f'(email_id={hex(id(email))})')
         except (smtplib.SMTPException, TimeoutError) as e:
-            logger.error(f'Sent email<`{self._mail_user}` -> `{email.receiver}`> failed! (email_id={hex(id(email))})'
+            logger.error(f'Sent email<`{self._mail_user}` -> `{email.receiver}`> failed! (email_id={hex(id(email))}) '
                          f'Encountered an error named {e.__class__.__name__}: {e}.')
-            logger.debug(f'Exception Stack information: \n{traceback.format_exc()}')
+            logger.debug(f'Exception Stack information (email_id={hex(id(email))}) : \n{traceback.format_exc()}')
             ret = False
         return ret
 
 
-def send_email(config, thread_pool_size=32):
+def send_email(config, wait=False, thread_pool_size=32):
     if not isinstance(config, EasyDict):
         config = EasyDict(config)
     assert config.get('mail') is not None, 'config file is incomplete!'
@@ -78,7 +83,8 @@ def send_email(config, thread_pool_size=32):
                         mail_passwd=config.mail.passwd,
                         ssl_port=config.mail.port,
                         starttls=config.mail.get('starttls', False),
-                        sender_name=config.mail.get('name', None))
+                        sender_name=config.mail.get('name', None),
+                        wait=wait)
     except AttributeError:
         logger.error('config.mail configuration is incomplete!')
         return False
@@ -99,10 +105,21 @@ def send_email(config, thread_pool_size=32):
     global_config = config.template.get('global', EasyDict())
     assert config.get('receivers') is not None, 'config file is incomplete!'
     # config.receivers
-    count = len(config.receivers)
-    failed = []
+    failed = __email_sender(config.receivers, global_config, sender, template, thread_pool_size)
+    if len(failed) != 0:
+        logger.warning(f'Retry once for {failed}...')
+        failed = __email_sender(failed, global_config, sender, template, thread_pool_size)
+        if len(failed) != 0:
+            logger.error(f'Still failed to send: {failed}, these will be ignored!')
+            return False
+    return True
+
+
+def __email_sender(receivers, global_config, sender, template, thread_pool_size):
+    count = len(receivers)
     email_list = []
-    for receiver in config.receivers:
+    result_mask = []
+    for receiver in receivers:
         email = receiver.email
         name = receiver.get('name', None)
         subject = receiver.get('subject', global_config.subject)
@@ -113,19 +130,25 @@ def send_email(config, thread_pool_size=32):
         email_list.append(email_obj)
 
     def callback(req, ret):
-        if not ret:
-            failed.append((email, name))
+        result_mask.append(ret)
 
     pool = threadpool.ThreadPool(max(thread_pool_size, count))
     for request in threadpool.makeRequests(sender.send, email_list, callback=callback):
         pool.putRequest(request)
     pool.wait()
+    succeed = []
+    failed = []
+    for i in range(count):
+        if result_mask[i]:
+            succeed.append(email_list[i])
+        else:
+            failed.append(email_list[i])
     if len(failed) == count:
-        logger.error('All emails failed to be sent!')
-        return False
-    if 0 < len(failed) < count:
-        logger.warning(f'Some emails failed to be sent! '
-                       f'they are: {failed}')
-        return True
-    logger.info('All emails were sent successfully!')
-    return True
+        logger.error(f'All emails failed to be sent, they are: {failed}.')
+    elif 0 < len(failed) < count:
+        logger.warning(f'Some emails failed to be sent, '
+                       f'they are: {failed}. '
+                       f'Some succeed, they are: {succeed}.')
+    else:
+        logger.info(f'All emails were sent successfully, they are {succeed}.')
+    return failed

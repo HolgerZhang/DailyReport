@@ -125,8 +125,8 @@ class WebBot:
         """
         elem = self.find(find_by)(value)
         if len(elem) == 0:
-            logger.info("元素未找到")
-            raise NoSuchElementException("元素未找到")
+            logger.info("元素 @{}={} 未找到".format(find_by, value))
+            raise NoSuchElementException("元素 @{}={} 未找到".format(find_by, value))
         if BOT_DEBUG:
             for i, e in enumerate(elem):
                 print(i, e.get_attribute("innerHTML"))
@@ -153,6 +153,7 @@ class WebBot:
         """
         elem = self.find(find_by)(value)
         if len(elem) == 0:
+            logger.info("元素 @{}={} 未找到".format(find_by, value))
             return
         if BOT_DEBUG:
             for i, e in enumerate(elem):
@@ -319,7 +320,7 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
             try:
                 complete, ex = execution.run(web_bot)
             except Exception as exception:
-                msg = '捕获未知异常: {}'.format(exception)
+                msg = '捕获未知异常: {} (user_id={})'.format(exception, web_bot.user['user_id'])
                 logger.warning(msg, exc_info=True)
                 mail.fail_mail(
                     to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
@@ -330,7 +331,7 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
                     input()
                 return 1
             if not complete:
-                msg = '捕获异常 {}, 详见data文件夹下BotLog.log文件'.format(ex)
+                msg = '捕获异常 {}, 详见data文件夹下BotLog.log文件 (user_id={})'.format(ex, web_bot.user['user_id'])
                 logger.info(msg)
                 mail.fail_mail(
                     to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
@@ -353,17 +354,16 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
             sleep(5)
             web_bot.reboot()
     if retry >= 5:
-        msg = {'ERROR': '5次尝试均打卡失败！'}
+        msg = {'ERROR': '5次尝试均打卡失败！ (user_id={})'.format(web_bot.user['user_id'])}
         msg.update(web_bot.user)
         mail.fail_mail(to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
                        stu_id=web_bot.user['user_id'],
                        detail=msg)
-        logger.error('5次尝试均打卡失败！')
+        logger.error(msg['ERROR'])
     else:
-        mail.success_mail(
-            to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
-            stu_id=web_bot.user['user_id'],
-            detail=web_bot.user)
+        mail.success_mail(to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
+                          stu_id=web_bot.user['user_id'],
+                          detail=web_bot.user)
         logger.info("{}打卡成功，5秒后将进行下一任务".format(web_bot.user['user_id']))
     sleep(5)
     web_bot.reboot()

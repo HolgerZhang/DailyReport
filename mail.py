@@ -3,8 +3,7 @@
 # version: 4.0.0
 # license: AGPL-3.0
 # belong: DailyReport-Mail
-
-
+from BotCore import logger
 from EmailSender.sender import send_email
 from BotCore.file import SUCCESS_MAIL_FILE, FAIL_MAIL_FILE
 
@@ -53,7 +52,7 @@ class Mail:
         }
         config['template']['global']['replace'] = {
             'stu_id': stu_id,
-            'detail': ', '.join(map(lambda x: ': '.join(map(str, x)), detail.items())).replace('\n', '<br />')
+            'detail': Mail.html(', '.join(map(lambda x: ': '.join(map(str, x)), detail.items())))
         }
         receivers = list(to)
         receivers.extend(self.__mail_config['receivers'])
@@ -62,4 +61,7 @@ class Mail:
             return True
         for receiver in receivers:
             config['receivers'].append({'email': receiver})
-        return send_email(config)
+        ret = send_email(config, wait=True)
+        if not ret:
+            logger.warning('邮件未能成功发送，详情请查看EmailSender.log！')
+        return ret

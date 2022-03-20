@@ -12,16 +12,18 @@ from easydict import EasyDict
 import daemon
 from BotCore import logger, version
 from BotCore.file import get_driver
-from BotCore.version import VERSION
+from BotCore.version import VERSION, INSIDER_VERSION
 from mail import Mail
 
 parser = argparse.ArgumentParser(description="Daily health report automated program. 每日打卡自动化程序",
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-v", "--version", action="version",
                     version='Daily health report automated program. 每日打卡自动化程序\n'
-                            'v{}.{}.{}  By @HolgerZhang, thanks @ygLance, @TTL2000.\n'
-                            '    Together with SUMSC/email-sender v0.1.2\n'
-                            'GitHub: https://github.com/HolgerZhang/DailyReport/v4/\n'.format(*VERSION))
+                            'v{}.{}.{} (BUILD.{ins})\n'
+                            '  By @HolgerZhang, thanks @ygLance, @TTL2000.\n'
+                            '  Together with SUMSC/email-sender.\n'
+                            '  GitHub: https://github.com/HolgerZhang/DailyReport/v4/\n'.format(*VERSION,
+                                                                                                ins=INSIDER_VERSION))
 parser.add_argument('-i', '--initialize', action='store_true',
                     help="initialize program")
 parser.add_argument('-o', '--once', action='store_true',

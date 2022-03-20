@@ -31,6 +31,7 @@ VERSION = get_version_tuple(__version['VERSION'])
 MAPPING_MIN_VERSION = get_version_tuple(__version['MAPPING_MIN_VERSION'])
 GENERAL_MIN_VERSION = get_version_tuple(__version['GENERAL_CONFIG_MIN_VERSION'])
 USER_MIN_VERSION = get_version_tuple(__version['USER_CONFIG_MIN_VERSION'])
+INSIDER_VERSION = __version['_insider']
 
 
 def check_version(version1, version2) -> bool:
