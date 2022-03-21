@@ -9,17 +9,21 @@ import random
 import smtplib
 import time
 import traceback
-import threadpool
-
 from email.header import Header
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formataddr
 
+import threadpool
 from easydict import EasyDict
 
 from EmailSender import logger
 from EmailSender.generator import Email, EmailTemplate
+
+try:
+    EMAIL_SENDER_SLEEP_MAX_INT = int(os.environ.get('EMAIL_SENDER_SLEEP_MAX_INT', '10').strip())
+except Exception:
+    EMAIL_SENDER_SLEEP_MAX_INT = 10
 
 
 class Sender:
@@ -50,7 +54,9 @@ class Sender:
                 message.attach(att)
                 logger.info(f'attachment "{os.path.basename(attachment)}" added. (email_id={hex(id(email))})')
         if self._wait:  # 随机休眠
-            time.sleep(random.randrange(5))
+            interval = random.randrange(EMAIL_SENDER_SLEEP_MAX_INT)
+            logger.debug(f'randomly sleep {interval} second(s). (email_id={hex(id(email))})')
+            time.sleep(interval)
         ret = True
         try:
             logger.info(f'Sending email from `{self._mail_user}` to `{email.receiver}`... (email_id={hex(id(email))})')
@@ -138,11 +144,12 @@ def __email_sender(receivers, global_config, sender, template, thread_pool_size)
     pool.wait()
     succeed = []
     failed = []
-    for i in range(count):
+    for i in range(min(count, len(result_mask))):
         if result_mask[i]:
             succeed.append(email_list[i])
         else:
             failed.append(email_list[i])
+    failed.extend(email_list[len(result_mask):])
     if len(failed) == count:
         logger.error(f'All emails failed to be sent, they are: {failed}.')
     elif 0 < len(failed) < count:

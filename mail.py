@@ -3,9 +3,11 @@
 # version: 4.0.0
 # license: AGPL-3.0
 # belong: DailyReport-Mail
+from copy import deepcopy
+
 from BotCore import logger
-from EmailSender.sender import send_email
 from BotCore.file import SUCCESS_MAIL_FILE, FAIL_MAIL_FILE
+from EmailSender.sender import send_email
 
 
 class Mail:
@@ -45,6 +47,9 @@ class Mail:
         return self.__email(self._fail_template, to, stu_id, detail)
 
     def __email(self, template, to, stu_id, detail):
+        detail = deepcopy(detail)
+        del detail['__notes']
+        detail['password'] = '*' * 8
         config = {
             'mail': self.__mail,
             'template': template,
@@ -52,7 +57,8 @@ class Mail:
         }
         config['template']['global']['replace'] = {
             'stu_id': stu_id,
-            'detail': Mail.html(', '.join(map(lambda x: ': '.join(map(str, x)), detail.items())))
+            'detail': '<ul>' + ''.join(map(lambda x: '<li>' + Mail.html(': '.join(map(str, x))) + '</li>',
+                                           detail.items())) + '</ul>'
         }
         receivers = list(to)
         receivers.extend(self.__mail_config['receivers'])
