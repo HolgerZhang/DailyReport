@@ -110,22 +110,8 @@ def send_email(config, wait=False, thread_pool_size=32):
             return False
     global_config = config.template.get('global', EasyDict())
     assert config.get('receivers') is not None, 'config file is incomplete!'
-    # config.receivers
-    failed = __email_sender(config.receivers, global_config, sender, template, thread_pool_size)
-    if len(failed) != 0:
-        logger.warning(f'Retry once for {failed}...')
-        failed = __email_sender(failed, global_config, sender, template, thread_pool_size)
-        if len(failed) != 0:
-            logger.error(f'Still failed to send: {failed}, these will be ignored!')
-            return False
-    return True
-
-
-def __email_sender(receivers, global_config, sender, template, thread_pool_size):
-    count = len(receivers)
     email_list = []
-    result_mask = []
-    for receiver in receivers:
+    for receiver in config.receivers:
         email = receiver.email
         name = receiver.get('name', None)
         subject = receiver.get('subject', global_config.subject)
@@ -134,24 +120,35 @@ def __email_sender(receivers, global_config, sender, template, thread_pool_size)
         replace.update(receiver.get('replace', dict()))
         email_obj = template.generator(email, subject, name, attachments, **replace)
         email_list.append(email_obj)
+    # config.receivers
+    failed = __email_sender(email_list, sender, thread_pool_size)
+    if len(failed) != 0:
+        logger.warning(f'Retry once for {failed}...')
+        failed = __email_sender(failed, sender, thread_pool_size)
+        if len(failed) != 0:
+            logger.error(f'*** Still failed to send: {failed}, these will be ignored!')
+            return False
+    return True
+
+
+def __email_sender(email_list, sender, thread_pool_size):
+    count = len(email_list)
+    succeed = []
+    failed = []
 
     def callback(req, ret):
-        result_mask.append(ret)
+        logger.debug(f'{req.args[0]} finished, result: {ret}')
+        if ret:
+            succeed.append(req.args[0])
+        else:
+            failed.append(req.args[0])
 
     pool = threadpool.ThreadPool(max(thread_pool_size, count))
     for request in threadpool.makeRequests(sender.send, email_list, callback=callback):
         pool.putRequest(request)
     pool.wait()
-    succeed = []
-    failed = []
-    for i in range(min(count, len(result_mask))):
-        if result_mask[i]:
-            succeed.append(email_list[i])
-        else:
-            failed.append(email_list[i])
-    failed.extend(email_list[len(result_mask):])
     if len(failed) == count:
-        logger.error(f'All emails failed to be sent, they are: {failed}.')
+        logger.error(f'*** All emails failed to be sent, they are: {failed}.')
     elif 0 < len(failed) < count:
         logger.warning(f'Some emails failed to be sent, '
                        f'they are: {failed}. '

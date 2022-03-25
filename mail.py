@@ -48,8 +48,10 @@ class Mail:
 
     def __email(self, template, to, stu_id, detail):
         detail = deepcopy(detail)
-        del detail['__notes']
-        detail['password'] = '*' * 8
+        if detail.get('__notes') is not None:
+            del detail['__notes']
+        if detail.get('password') is not None:
+            detail['password'] = '*' * 8
         config = {
             'mail': self.__mail,
             'template': template,
