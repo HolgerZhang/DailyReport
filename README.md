@@ -121,7 +121,7 @@ coding: UTF-8
 
 - 修复邮件文本替换的多次转义；
 - 成功发送时不再向发件人发送邮件；
-- 开始提供编译的文件。
+- 开始提供编译的文件(build.sh使用pyinstaller构建，支持Linux/UNIX，需要pip、zip支持)。
 
 ### Q&A
 
