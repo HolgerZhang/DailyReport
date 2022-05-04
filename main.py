@@ -21,7 +21,6 @@ parser.add_argument("-v", "--version", action="version",
                     version='Daily health report automated program. 每日打卡自动化程序\n'
                             'v{}.{}.{} (BUILD.{ins})\n'
                             '  By @HolgerZhang, thanks @ygLance, @TTL2000.\n'
-                            '  Together with SUMSC/email-sender.\n'
                             '  GitHub: https://github.com/HolgerZhang/DailyReport/v4/\n'.format(*VERSION,
                                                                                                 ins=INSIDER_VERSION))
 parser.add_argument('-i', '--initialize', action='store_true',
@@ -47,7 +46,7 @@ def init():
     logger.info("程序初始化")
     daemon.update()
     get_driver(config.webdriver.browser, config.webdriver.driver_path)
-    logger.info("程序初始化完成.")
+    logger.info("程序初始化完成, 请根据configurations/example.general.json创建自己的配置文件。")
 
 
 @daemon.virtual_display(turn_on=config.virtual_display)
@@ -71,6 +70,6 @@ if __name__ == '__main__':
             main()
     except Exception as e:
         mail.fail_mail(to=[], stu_id='ALL',
-                       detail={'<strong>未知错误</strong>': Mail.html('{} - {}'.format(e.__class__, e)),
-                               'Stack': Mail.html(traceback.format_exc())})
+                       detail={'未知错误': '{} - {}'.format(e.__class__, e),
+                               'Stack': traceback.format_exc()})
         logger.error('主线程异常 {} {}'.format(e.__class__, e.args), exc_info=True)

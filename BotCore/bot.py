@@ -325,8 +325,8 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
                 mail.fail_mail(
                     to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
                     stu_id=web_bot.user['user_id'],
-                    detail={'message': Mail.html(msg),
-                            '\nStack': Mail.html(traceback.format_exc())})
+                    detail={'message': msg,
+                            '\nStack': traceback.format_exc()})
                 if BOT_DEBUG:
                     input()
                 return 1
@@ -336,7 +336,7 @@ def run_bot(web_bot: WebBot, mail: Mail) -> None:
                 mail.fail_mail(
                     to=[web_bot.user.get('email', web_bot.user['user_id'] + '@stu.suda.edu.cn')],
                     stu_id=web_bot.user['user_id'],
-                    detail={'message': Mail.html(msg)})
+                    detail={'message': msg})
                 if BOT_DEBUG:
                     input()
                 return 1

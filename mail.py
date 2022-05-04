@@ -44,6 +44,8 @@ class Mail:
         return self.__email(self._success_template, to, stu_id, detail)
 
     def fail_mail(self, to, stu_id, detail):
+        to = list(to)
+        to.extend(self.__mail_config['receivers'])
         return self.__email(self._fail_template, to, stu_id, detail)
 
     def __email(self, template, to, stu_id, detail):
@@ -59,12 +61,10 @@ class Mail:
         }
         config['template']['global']['replace'] = {
             'stu_id': stu_id,
-            'detail': '<ul>' + ''.join(map(lambda x: '<li>' + Mail.html(': '.join(map(str, x))) + '</li>',
-                                           detail.items())) + '</ul>'
+            'detail': '<ul>' + '\n'.join(map(lambda x: '<li>' + Mail.html(': '.join(map(str, x))) + '</li>',
+                                             detail.items())) + '</ul>'
         }
-        receivers = list(to)
-        receivers.extend(self.__mail_config['receivers'])
-        receivers = set(filter(lambda x: len(x) > 0, receivers))
+        receivers = set(filter(lambda x: len(x) > 0, to))
         if len(receivers) == 0:
             return True
         for receiver in receivers:
