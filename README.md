@@ -6,50 +6,34 @@
     belong: DailyReport-BasicDataFile
 -->
 
-# DailyReport (Beta)
+# DailyReport (RC)
 
 Daily health report automated program. 每日打卡自动化程序（适用于苏大）
 
-v4.0.0(Beta) by HolgerZhang
+**推荐** 👉 [下载编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest)
+
+v4.0.0 by HolgerZhang
 
 with [SUMSC/email-sender](https://github.com/SUMSC/email-sender)
 
 coding: UTF-8
 
-> 有关实现细节详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
+> 有关实现细节(v1)详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
-
-### 内测招募
-
-重构的v4版本需要进一步测试，现面向SUDA在校生招募内测体验人员～
-
-我们希望你：
-
-- 能够流畅访问GitHub！
-- 电脑装有Python3.8+（如果熟悉Python更好！）
-- 爱折腾，善于发现问题（因为是内测，bug出现频率和更新频次会比较高）
-
-加入内测你可以获得：
-
-- 高效的每日自动打卡体验；
-- 更快的bug修复频率；
-- 一对一的7*24h帮助服务；
-- 或许可以成为本项目的contributor。
-
-如果您感兴趣，欢迎联系我的QQ：**453744187**！
 
 ### 使用前注意
 
 > v4 不再向下兼容 [v2](https://github.com/HolgerZhang/DailyReport/tree/v2) 的配置文件以及启动方法；
 > 
-> [v3](https://github.com/HolgerZhang/DailyReport/tree/v3) 分支已弃用；
+> v4.0.0 正式版本全量推送时间：预计2022-05下旬；
 > 
-> v2.5 为 [v2](https://github.com/HolgerZhang/DailyReport/tree/v2) 分支最后一个大版本更新，将继续支持至 v4 分支结束测试。
+> 其余分支已弃用；
 
-- 环境依赖：带有 pip 的 Python 3 环境；安装有浏览器（应为最新版，支持情况请查阅 [文档](https://www.selenium.dev/downloads/) ）
-- 支持系统：Windows | Linux | macOS
-- 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp) （该页面也会在打卡结束时停留10秒）
+- 源码版本环境依赖：带有 pip 的 Python 3 环境；安装有浏览器（应为最新版，支持情况请查阅 [文档](https://www.selenium.dev/downloads/) ）
+- [编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest) 支持平台：Windows (x86_64/arm64)，Linux (x86_64)，macOS (Intel/Apple Silicon)
+- 支持浏览器：Chrome，Edge，Firefox （仅Chrome支持自动驱动下载）
+- 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
 
 #### 免责声明
 
@@ -72,7 +56,7 @@ coding: UTF-8
 ### 使用方法（编译发行版本，DailyReport主程序）
 
 1. 阅读《免责声明》，接受方可继续。
-2. 下载压缩包并解压。
+2. [下载](https://github.com/HolgerZhang/DailyReport/releases/latest) 压缩包并解压。
 3. 在命令行运行DailyReport程序：
    1. 运行 `./DailyReport --initialize` 初始化并下载配置文件;
    2. 首次运行请预先根据 configurations/introduction.general.json 配置 configurations 目录下 general.json 文件 （可参考 example.general.json ）；
@@ -107,70 +91,54 @@ coding: UTF-8
 
 ### 更新说明
 
-#### v4.0.0 (Beta)
+#### v4.0.0
 
-##### BUILD.A002-HLO0313
+内部版本号：BUILD.3981-2.5.13
 
-- 新版本重构，优化代码结构；
-- 实现多人多线程打卡；
-- 完善了版本号的计算；
-- ~~移除文件变更检测特性，延迟至~~每次执行时读取系统配置及用户信息文件；
-- ~~增加虚拟屏幕的支持，用以支持在无显示设备的服务器端运行（仅支持Linux）；~~
-- ~~基本支持目前主流的浏览器，最大限度契合 selenium 的适配情况。~~
+- 【重构】新版本重构，优化代码结构；
+- 【新增】实现多人多线程打卡；
+- 【新增】邮件中隐藏密码；
+- 【新增】浏览器无界面模式，默认启用；
+- 【新增】进程守护实用工具DailyReport.Watcher（watcher.py），可以对编译版本的进程进行简单的管理，独占支持general文件变更自动重载功能；
+- 【新增】提供编译的文件(build.sh，需要pip、zip命令的支持)。
+- 【优化】完善了版本号的计算；
+- 【优化】每次执行时读取系统配置及用户信息文件；
+- 【优化】调整日志输出，方便定位问题；
+- 【优化】修复并发链接数过大导致的邮件发送失败的问题；
+- 【优化】优化邮件内容；
+- 【优化】修复邮件重发时不能正确发送的问题；
+- 【优化】修复邮件文本替换时可能造成的异常。
+- 【优化】修复邮件文本替换的多次转义；
+- 【优化】成功发送时不再向发件人发送邮件；
+- 【优化】完整支持全平台的Chrome、Edge以及FireFox浏览器（不包括驱动初始化），移除对其余浏览器的支持。
+- 【优化】修复DailyReport.Watcher工具在Windows平台上存在的bug。
 
-已知问题：
-
-- **Chrome**的支持最完整【推荐使用】；~~其余浏览器未经测试；~~
-- ~~Safari浏览器只适用于Mac平台；Mac下使用Safari运行存在异常 selenium.common.exceptions.WebDriverException 。~~
-
-##### BUILD.A002-HOL0320
-
-- 修复并发链接数过大导致的邮件发送失败的问题；
-- 优化日志输出，方便定位问题；
-
-##### BUILD.A002-HOL0321
-
-- 邮件中隐藏密码；
-- 优化｜修复并发链接数过大导致的邮件发送失败的问题；
-- 优化邮件内容。
-
-##### BUILD.A003-HOL0325
-
-- 修复邮件重发时不能正确发送的问题；
-- 修复邮件文本替换时可能造成的异常。
-
-##### BUILD.3910-2.5.4-alpha
-
-- 修复邮件文本替换的多次转义；
-- 成功发送时不再向发件人发送邮件；
-- 开始提供编译的文件(build.sh使用pyinstaller构建，支持Linux/UNIX，需要pip、zip支持)。
-
-##### BUILD.3980-2.5.13-alpha
-
-- 新增浏览器无界面模式，默认启用；同步移除Linux服务器下虚拟屏幕的支持;
-- 新增进程守护实用工具DailyReport.Watcher（watcher.py），可以对编译版本的进程进行简单的管理，独占支持general文件变更自动重载功能；（本次合并源代码，目前仅完成测试macOS版本，待其余平台测试稳定后发行相应编译版本）
-- 完整支持全平台的Chrome、Edge以及FireFox浏览器（不包括驱动初始化），移除对其余浏览器的支持。
-
-##### BUILD.3981-2.5.13 (RC-1)
-
-- 修复DailyReport.Watcher工具在Windows平台上存在的bug。
+整合的历史版本：v4.0.0(BUILD.A001)，BUILD.A002-HLO0313，BUILD.A002-HOL0320，BUILD.A002-HOL0321，BUILD.A003-HOL0325，BUILD.3910-2.5.4-alpha，BUILD.3980-2.5.13-alpha，BUILD.3981-2.5.13。
 
 ### Q&A
 
-- 运行 setup 报错：找不到库 requests
-  - 解决办法：预先手动安装 requests：`pip install requests`
-- 运行失败后弹窗：捕获异常，log 文件显示异常信息为：NoSuchElementException
+- 运行失败，日志显示异常信息为：NoSuchElementException
   - 解决办法：检查 user 信息是否有误
-- 更新浏览器后请及时更新驱动程序（Chrome可以使用-i选项初始化）
-- 运行失败后弹窗：捕获未知异常；或捕获异常，log 文件显示异常信息不为 NoSuchElementException
-  - 解决办法：联系作者[邮箱](mailto:holgerzhang@outlook.com) 
+- 浏览器有关的错误
+  - 解决办法：更新浏览器后请及时更新驱动程序（Chrome可以使用-i选项初始化）
 - 我想要立刻执行一次打卡
-  - 解决办法：运行 main.py 添加 `--once` 参数
-- 我想要手动填写体温数据【请手动打卡 :) 】
+  - 解决办法：运行时添加 `--once` 参数
 
 ### 本项目使用到的外部API网址（v4版本）
 
 - 根地址：[https://api.holgerbest.top/DailyReport/v4/](https://api.holgerbest.top/DailyReport/v4/)
-- `data/mapping.json`（配置文件，首次启动下载）：[https://api.holgerbest.top/DailyReport/v4/mapping/](https://api.holgerbest.top/DailyReport/v4/mapping/)
+- `data/mapping.json`（配置文件，初始化以及检查更新时下载）：[https://api.holgerbest.top/DailyReport/v4/mapping/](https://api.holgerbest.top/DailyReport/v4/mapping/)
 - `user.用户名.json`（用户配置文件，使用 -u 选项下载）：[https://api.holgerbest.top/DailyReport/v4/user/](https://api.holgerbest.top/DailyReport/v4/user/)
-- 版本号API：[https://api.holgerbest.top/DailyReport/v4/version/](https://api.holgerbest.top/DailyReport/v2/version/)
+- 版本号API：[https://api.holgerbest.top/DailyReport/v4/version/](https://api.holgerbest.top/DailyReport/v4/version/)
+
+
+### 历史版本
+
+- [v4(RC-pre-3980)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3980-2.5.13-alpha) | 结束支持时间：2022-05-20；
+- [v4(Beta-3910)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3910-2.5.4-alpha) | 结束支持时间：2022-05-20；
+- [v2.5](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.5) | 结束支持时间：2022-06-01；
+- [v2.4](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.4) | 已经结束支持；
+- [v2.3](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.3) | 已经结束支持；
+- [v2.1](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.1) | 已经结束支持；
+- [v3.0](https://github.com/HolgerZhang/DailyReport/releases/tag/v3.0) | 已经结束支持；
+- [v2.0](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.0) | 已经结束支持。
