@@ -52,7 +52,7 @@ def kill_all():
 def startup():
     cmd = f'./{exec_file} -c {config_file}'
     if sys.platform.startswith('win32'):
-        os.system(f'powershell -c "Start-Process -WindowStyle hidden -FilePath \"{cmd}\""')
+        os.system(f'start /b {cmd} > NUL 2>&1')
     else:
         os.system(f'nohup {cmd} > /dev/null 2>&1 &')
     logger.info('DailyReport Started')

@@ -151,6 +151,10 @@ coding: UTF-8
 - 新增进程守护实用工具DailyReport.Watcher（watcher.py），可以对编译版本的进程进行简单的管理，独占支持general文件变更自动重载功能；（本次合并源代码，目前仅完成测试macOS版本，待其余平台测试稳定后发行相应编译版本）
 - 完整支持全平台的Chrome、Edge以及FireFox浏览器（不包括驱动初始化），移除对其余浏览器的支持。
 
+##### BUILD.3981-2.5.13 (RC-1)
+
+- 修复DailyReport.Watcher工具在Windows平台上存在的bug。
+
 ### Q&A
 
 - 运行 setup 报错：找不到库 requests

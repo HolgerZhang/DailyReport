@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="3980-2.5.13-alpha"
+version="3981-2.5.13"
 
 pip install pyinstaller
 
