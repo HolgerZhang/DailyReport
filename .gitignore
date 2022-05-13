@@ -19,6 +19,7 @@ Pipfile
 configurations/general.json
 configurations/user.*.json
 configurations/temp.*.json
+configurations/test*
 old_file/
 old_file/*
 

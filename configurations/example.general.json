@@ -24,7 +24,5 @@
     "receivers": [
       "username@stu.suda.edu.cn"
     ]
-  },
-  "virtual_display": false,
-  "__notes_on_virtual_display": "是否启用虚拟显示器以在无显示设备的服务器上运行，仅支持Linux"
+  }
 }

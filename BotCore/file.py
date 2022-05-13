@@ -117,15 +117,6 @@ def get_edge_driver(path):
     logger.warn('请访问：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/ 下载符合您操作系统版本的驱动。')
 
 
-def get_safari_driver(path):
-    if not sys.platform.startswith('darwin'):
-        logger.error('Error: 不支持的平台环境')
-        raise TypeError('Error: 不支持的平台环境')
-    logger.info("Safari浏览器包含了safaridriver。请打开Safari的‘偏好设置’-‘高级’，勾选'在菜单栏中显示‘开发’菜单'；"
-                "‘开发’菜单，勾选‘允许远程自动化’。\n"
-                "在终端中执行 safaridriver --enable 即可启用。")
-
-
 def get_driver(browser_type: str, path):
     if path is not None and len(path.strip()) != 0:
         path = os.path.join(PROJECT_PATH, path) if not os.path.isabs(path) else path
@@ -139,8 +130,6 @@ def get_driver(browser_type: str, path):
         get_firefox_driver(path)
     elif browser_type == 'edge':
         get_edge_driver(path)
-    elif browser_type == 'safari':
-        get_safari_driver(path)
     else:
         logger.error('不支持自动初始化的浏览器，请手动初始化')
         raise ValueError('不支持自动初始化的浏览器，请手动初始化')

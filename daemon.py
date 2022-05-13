@@ -5,12 +5,10 @@
 # belong: DailyReport-DaemonProcess
 import json
 import os.path
-import sys
 
 import threadpool
 from apscheduler.schedulers.blocking import BlockingScheduler
 from easydict import EasyDict
-from pyvirtualdisplay import Display
 
 import api
 from BotCore import logger
@@ -84,27 +82,6 @@ def schedule(hour, minute, enable=True):
                                   hour=str(hour), minute=str(minute))
                 logger.info('计划任务: ' + '; '.join((str(x).replace('.<locals>', '') for x in scheduler.get_jobs())))
                 scheduler.start()
-            else:
-                func(*args, **kwargs)
-
-        return with_args
-
-    return function
-
-
-def virtual_display(turn_on):
-    def function(func):
-        def with_args(*args, **kwargs):
-            if turn_on:
-                if sys.platform.startswith('linux'):
-                    logger.info('使用虚拟桌面Xvfb运行')
-                    display = Display(visible=False, size=(900, 800))
-                    display.start()
-                    func(*args, **kwargs)
-                    display.stop()
-                else:
-                    logger.warn('Xvfb仅支持Linux平台，将以默认模式运行')
-                    func(*args, **kwargs)
             else:
                 func(*args, **kwargs)
 

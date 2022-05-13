@@ -6,24 +6,36 @@
 
 import json
 import os
+import sys
 import traceback
 from random import randint
 from time import sleep
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 from BotCore import version, logger
 from BotCore.file import MAPPING_FILE
 from mail import Mail
 
 BOT_DEBUG = os.environ.get('BOT_CORE_DEBUG', 'FALSE').strip().upper() == 'TRUE'
+BOT_DISPLAY = os.environ.get('BOT_CORE_DISPLAY', 'FALSE').strip().upper() == 'FALSE'
 
 
 class WebBot:
     """
     （核心类）管理 配置数据 与 浏览器驱动程序
     """
+    edge_options = EdgeOptions()
+    chrome_options = ChromeOptions()
+    firefox_options = FirefoxOptions()
+    if BOT_DISPLAY:  # 设置无界面模式
+        chrome_options.add_argument("--headless")
+        edge_options.add_argument('headless')
+        firefox_options.headless = True
 
     def __init__(self, user_config_file, browser_type='Chrome', driver_path=None):
         with open(MAPPING_FILE, 'r', encoding='utf-8') as __mapping_file:
@@ -52,31 +64,25 @@ class WebBot:
         self.finish()
         if self._browser_type == 'chrome':
             if self._driver_path is not None:
-                self.__browser = webdriver.Chrome(self._driver_path)
+                self.__browser = webdriver.Chrome(self._driver_path, options=WebBot.chrome_options)
             else:
-                self.__browser = webdriver.Chrome()
+                self.__browser = webdriver.Chrome(options=WebBot.chrome_options)
         elif self._browser_type == 'firefox':
             if self._driver_path is not None:
-                self.__browser = webdriver.Firefox(self._driver_path)
+                path, file = os.path.split(self._driver_path)
+                if sys.platform.startswith('win32'):
+                    os.environ["PATH"] = os.environ.get("PATH") + path + ";"
+                else:
+                    os.environ["PATH"] = os.environ.get("PATH") + ":" + path
+                sys.path.append(path)
+                self.__browser = webdriver.Firefox(self._driver_path, options=WebBot.firefox_options)
             else:
-                self.__browser = webdriver.Firefox()
+                self.__browser = webdriver.Firefox(options=WebBot.firefox_options)
         elif self._browser_type == 'edge':
             if self._driver_path is not None:
-                self.__browser = webdriver.Edge(self._driver_path)
+                self.__browser = webdriver.Edge(self._driver_path, options=WebBot.edge_options)
             else:
-                self.__browser = webdriver.Edge()
-        elif self._browser_type == 'safari':
-            self.__browser = webdriver.Safari()
-        elif self._browser_type == 'ie':
-            if self._driver_path is not None:
-                self.__browser = webdriver.Ie(self._driver_path)
-            else:
-                self.__browser = webdriver.Ie()
-        elif self._browser_type == 'opera':
-            if self._driver_path is not None:
-                self.__browser = webdriver.Opera(self._driver_path)
-            else:
-                self.__browser = webdriver.Opera()
+                self.__browser = webdriver.Edge(options=WebBot.edge_options)
         else:
             raise ValueError('不支持的浏览器')
 

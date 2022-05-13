@@ -5,6 +5,7 @@
 # belong: DailyReport-Main
 import argparse
 import json
+import os
 import traceback
 
 from easydict import EasyDict
@@ -45,11 +46,12 @@ mail = Mail(config.mail)
 def init():
     logger.info("程序初始化")
     daemon.update()
-    get_driver(config.webdriver.browser, config.webdriver.driver_path)
-    logger.info("程序初始化完成, 请根据configurations/example.general.json创建自己的配置文件。")
+    if os.environ.get('_BOT_BUILD_NOT_DOWNLOAD', None) is None:  # 未定义该环境变量则下载驱动程序
+        get_driver(config.webdriver.browser, config.webdriver.driver_path)
+    logger.info("程序初始化完成, 请根据configurations/introduction.general.json和configurations/introduction.user.json，"
+                "并参考configurations/example.general.json创建自己的配置文件。")
 
 
-@daemon.virtual_display(turn_on=config.virtual_display)
 @daemon.schedule(hour=config.scheduler.hour, minute=config.scheduler.minute, enable=not args.once)
 def main():
     daemon.wakeup(user_config_path=config.user_config_folder,

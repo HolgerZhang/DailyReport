@@ -24,7 +24,5 @@
     "receivers": [
       "用于接受所有人的结果信息的邮箱，可以写多个"
     ]
-  },
-  "virtual_display": false,
-  "__notes_on_virtual_display": "是否启用虚拟显示器以在无显示设备的服务器上运行，仅支持Linux"
+  }
 }
