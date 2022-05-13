@@ -20,6 +20,7 @@ cd dist/main
 mv main DailyReport
 export _BOT_BUILD_NOT_DOWNLOAD=1
 ./DailyReport --initialize --config configurations/example.general.json
+rm BotLog.log EmailSender.log
 
 cd ..
 mv main DailyReport
