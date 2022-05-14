@@ -26,8 +26,15 @@ def get_version_tuple(version_str: str):
     return tuple(ver)
 
 
+def get_full_version(version_str: str):
+    version_str_list = version_str.strip().split('-', maxsplit=1)
+    version_str = version_str_list[0]
+    extend_version = version_str_list[1] if len(version_str_list) > 1 else None
+    return get_version_tuple(version_str), extend_version
+
+
 # 版本号
-VERSION = get_version_tuple(__version['VERSION'])
+VERSION, EXTEND_VERSION = get_full_version(__version['VERSION'])
 MAPPING_MIN_VERSION = get_version_tuple(__version['MAPPING_MIN_VERSION'])
 GENERAL_MIN_VERSION = get_version_tuple(__version['GENERAL_CONFIG_MIN_VERSION'])
 USER_MIN_VERSION = get_version_tuple(__version['USER_CONFIG_MIN_VERSION'])
@@ -42,8 +49,8 @@ def check_version(version1, version2) -> bool:
     :return: version1小于等于version2返回True
     """
     if isinstance(version1, str):
-        version1 = get_version_tuple(version1)
+        version1, _ = get_full_version(version1)
     if isinstance(version2, str):
-        version2 = get_version_tuple(version2)
+        version2, _ = get_full_version(version2)
     assert len(version1) == len(version2) == 3, '版本号格式不符合要求！'
     return version1 <= version2

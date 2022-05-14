@@ -13,17 +13,18 @@ from easydict import EasyDict
 import daemon
 from BotCore import logger, version
 from BotCore.file import get_driver
-from BotCore.version import VERSION, INSIDER_VERSION
+from BotCore.version import VERSION, INSIDER_VERSION, EXTEND_VERSION
 from mail import Mail
 
 parser = argparse.ArgumentParser(description="Daily health report automated program. 每日打卡自动化程序",
                                  formatter_class=argparse.RawTextHelpFormatter)
 parser.add_argument("-v", "--version", action="version",
                     version='Daily health report automated program. 每日打卡自动化程序\n'
-                            'v{}.{}.{} (BUILD.{ins})\n'
+                            'v{}.{}.{} (BUILD.{ins}) Extend-{ext}\n'
                             '  By @HolgerZhang, thanks @ygLance, @TTL2000.\n'
-                            '  GitHub: https://github.com/HolgerZhang/DailyReport/v4/\n'.format(*VERSION,
-                                                                                                ins=INSIDER_VERSION))
+                            '  GitHub: https://github.com/HolgerZhang/DailyReport/v4/\n'
+                    .format(*VERSION, ins=INSIDER_VERSION,
+                            ext=EXTEND_VERSION if EXTEND_VERSION is not None else 'normal'))
 parser.add_argument('-i', '--initialize', action='store_true',
                     help="initialize program")
 parser.add_argument('-o', '--once', action='store_true',

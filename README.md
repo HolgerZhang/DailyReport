@@ -93,27 +93,29 @@ coding: UTF-8
 
 #### v4.0.0
 
-内部版本号：BUILD.3981-2.5.13
+内部版本号：BUILD.3984-2.5.14
+正式版本号：4.0.0-RC2-m3984w3983
 
 - 【重构】新版本重构，优化代码结构；
 - 【新增】实现多人多线程打卡；
 - 【新增】邮件中隐藏密码；
 - 【新增】浏览器无界面模式，默认启用；
 - 【新增】进程守护实用工具DailyReport.Watcher（watcher.py），可以对编译版本的进程进行简单的管理，独占支持general文件变更自动重载功能；
-- 【新增】提供编译的文件(build.sh，需要pip、zip命令的支持)。
-- 【优化】完善了版本号的计算；
+- 【新增】提供编译的文件(build.sh，需要pip、zip命令的支持)；
+- 【优化】完善了版本号的计算，加入扩展版本号；
 - 【优化】每次执行时读取系统配置及用户信息文件；
 - 【优化】调整日志输出，方便定位问题；
 - 【优化】修复并发链接数过大导致的邮件发送失败的问题；
 - 【优化】优化邮件内容；
 - 【优化】修复邮件重发时不能正确发送的问题；
-- 【优化】修复邮件文本替换时可能造成的异常。
+- 【优化】修复邮件文本替换时可能造成的异常；
 - 【优化】修复邮件文本替换的多次转义；
 - 【优化】成功发送时不再向发件人发送邮件；
-- 【优化】完整支持全平台的Chrome、Edge以及FireFox浏览器（不包括驱动初始化），移除对其余浏览器的支持。
-- 【优化】修复DailyReport.Watcher工具在Windows平台上存在的bug。
+- 【优化】完整支持全平台的Chrome、Edge以及FireFox浏览器（不包括驱动初始化），移除对其余浏览器的支持；
+- 【优化】修复DailyReport.Watcher工具在Windows平台上存在的bug；
+- 【优化】优化DailyReport.Watcher工具的细节与稳定性。
 
-整合的历史版本：v4.0.0(BUILD.A001)，BUILD.A002-HLO0313，BUILD.A002-HOL0320，BUILD.A002-HOL0321，BUILD.A003-HOL0325，BUILD.3910-2.5.4-alpha，BUILD.3980-2.5.13-alpha，BUILD.3981-2.5.13。
+整合的历史版本：v4.0.0(BUILD.A001)，BUILD.A002-HLO0313，BUILD.A002-HOL0320，BUILD.A002-HOL0321，BUILD.A003-HOL0325，BUILD.3910-2.5.4-alpha，BUILD.3980-2.5.13-alpha，BUILD.3981-2.5.13，BUILD.3983-2.5.14(for watcher)，BUILD.3984-2.5.14。
 
 ### Q&A
 
@@ -134,6 +136,7 @@ coding: UTF-8
 
 ### 历史版本
 
+- [v4(RC1)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC1) | 结束支持时间：2022-05-20；
 - [v4(RC-pre-3980)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3980-2.5.13-alpha) | 结束支持时间：2022-05-20；
 - [v4(Beta-3910)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3910-2.5.4-alpha) | 结束支持时间：2022-05-20；
 - [v2.5](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.5) | 结束支持时间：2022-06-01；
