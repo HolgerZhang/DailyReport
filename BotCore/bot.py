@@ -34,6 +34,10 @@ class WebBot:
     firefox_options = FirefoxOptions()
     if BOT_DISPLAY:  # 设置无界面模式
         chrome_options.add_argument("--headless")
+        if sys.platform.startswith('linux'):
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument("window-size=1024,768")
+            chrome_options.add_argument("--no-sandbox")
         edge_options.add_argument('headless')
         firefox_options.headless = True
 
