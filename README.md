@@ -93,8 +93,8 @@ coding: UTF-8
 
 #### v4.0.0
 
-内部版本号：BUILD.3984-2.5.14
-正式版本号：4.0.0-RC2-m3984w3983
+内部版本号：BUILD.3985-2.5.15
+正式版本号：4.0.0-RC2p-m3985w3983
 
 - 【重构】新版本重构，优化代码结构；
 - 【新增】实现多人多线程打卡；
@@ -115,7 +115,7 @@ coding: UTF-8
 - 【优化】修复DailyReport.Watcher工具在Windows平台上存在的bug；
 - 【优化】优化DailyReport.Watcher工具的细节与稳定性。
 
-整合的历史版本：v4.0.0(BUILD.A001)，BUILD.A002-HLO0313，BUILD.A002-HOL0320，BUILD.A002-HOL0321，BUILD.A003-HOL0325，BUILD.3910-2.5.4-alpha，BUILD.3980-2.5.13-alpha，BUILD.3981-2.5.13，BUILD.3983-2.5.14(for watcher)，BUILD.3984-2.5.14。
+整合的历史版本：v4.0.0(BUILD.A001)，BUILD.A002-HLO0313，BUILD.A002-HOL0320，BUILD.A002-HOL0321，BUILD.A003-HOL0325，BUILD.3910-2.5.4-alpha，BUILD.3980-2.5.13-alpha，BUILD.3981-2.5.13，BUILD.3983-2.5.14(for watcher)，BUILD.3984-2.5.14，BUILD.3985-2.5.15。
 
 ### Q&A
 

@@ -1,7 +1,7 @@
 {
-  "VERSION": "4.0.0-RC2-m3984w3983",
+  "VERSION": "4.0.0-RC2p-m3985w3983",
   "MAPPING_MIN_VERSION": "4.0.0",
   "GENERAL_CONFIG_MIN_VERSION": "4.0.0",
   "USER_CONFIG_MIN_VERSION": "4.0.0",
-  "_insider": "3984-2.5.14"
+  "_insider": "3985-2.5.15"
 }

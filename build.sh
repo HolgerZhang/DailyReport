@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="4.0.0-RC2-m3984w3983"
+version="4.0.0-RC2p-m3985w3983"
 
 pip install pyinstaller
 
