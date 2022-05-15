@@ -3,6 +3,7 @@
 # version: 4.0.0
 # license: AGPL-3.0
 # belong: DailyReport-Watcher
+
 import argparse
 import os
 import sys
@@ -55,7 +56,7 @@ def kill_all():
 def startup():
     cmd = f'./{exec_file} -c {config_file}'
     if sys.platform.startswith('win32'):
-        cmd = f'cd {pwd} && start /b {cmd} > NUL 2>&1'
+        cmd = f'cd /D {pwd} && start /b {cmd} > NUL 2>&1'
         os.system(cmd)
     else:
         cmd = f'cd {pwd} && nohup {cmd} > /dev/null 2>&1 &'

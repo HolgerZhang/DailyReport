@@ -31,8 +31,6 @@ FAIL_MAIL_FILE = os.path.join(PROJECT_PATH, DATA_FOLDER, MAIL_FOLDER, 'fail-temp
 DEFAULT_DRIVER_PATH = os.path.join(PROJECT_PATH, DATA_FOLDER,
                                    'driver.exe' if sys.platform.lower().startswith('win32') else 'driver')
 
-# NO_GUI = os.environ.get('BOT_CORE_NO_GUI', 'FALSE').upper() == 'TRUE'
-
 # 文件初始化
 if not os.path.isdir(DATA_FOLDER):
     os.mkdir(DATA_FOLDER)

@@ -6,7 +6,7 @@
     belong: DailyReport-BasicDataFile
 -->
 
-# DailyReport (RC)
+# DailyReport (RTM)
 
 Daily health report automated program. 每日打卡自动化程序（适用于苏大）
 
@@ -14,24 +14,18 @@ Daily health report automated program. 每日打卡自动化程序（适用于�
 
 v4.0.0 by HolgerZhang
 
-with [SUMSC/email-sender](https://github.com/SUMSC/email-sender)
-
-coding: UTF-8
-
-> 有关实现细节(v1)详见[链接](https://holgerbest.top/2021/01/19/python-selenium/)
-
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
 
 ### 使用前注意
 
 > v4 不再向下兼容 [v2](https://github.com/HolgerZhang/DailyReport/tree/v2) 的配置文件以及启动方法；
 > 
+> 此版本为v4版本更新前的最后一个测试版本。 
 > v4.0.0 正式版本全量推送时间：预计2022-05下旬；
 > 
-> 其余分支已弃用；
 
-- 源码版本环境依赖：带有 pip 的 Python 3 环境；安装有浏览器（应为最新版，支持情况请查阅 [文档](https://www.selenium.dev/downloads/) ）
-- [编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest) 支持平台：Windows (x86_64/arm64)，Linux (x86_64)，macOS (Intel/Apple Silicon)
+- 源码版本环境依赖：带有 pip 的 Python 3.8+ 环境；安装有浏览器（应为最新版，支持情况请查阅 [文档](https://www.selenium.dev/downloads/) ）
+- [编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest) 支持平台：Windows (x86_64/arm64)，Linux (x86_64，实验性)，macOS (Intel/Apple Silicon)
 - 支持浏览器：Chrome，Edge，Firefox （仅Chrome支持自动驱动下载）
 - 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
 
@@ -70,31 +64,39 @@ coding: UTF-8
 - 添加参数 `-l` 或 `--local` 以关闭自动检查更新特性，而是使用本地存在的文件
 - 添加参数 `-c CONFIG` 或 `--config CONFIG` 从指定的配置文件运行，默认为 "configurations/general.json" （主程序不监听配置文件的变化）
 - 添加参数 `-u USER` 或 `--user USER` 来在用户配置文件的目录生成 "user.${USER}.json" 文件
-- 使用环境变量 `BOT_CORE_DEBUG=TRUE` 以在 bot 执行时输出调试信息，并添加必要断点
-- 使用环境变量 `BOT_CORE_DISPLAY=TRUE` 来使用浏览器的图形化界面（默认使用无界面模式）
-- 使用环境变量 `EMAIL_SENDER_SLEEP_MAX_INT` 来修改邮件发送的最大休眠间隙（默认10秒）
 
 ### 进程守护实用工具DailyReport.Watcher的使用方法
 
 本程序（未编译的watch.py/已编译的DailyReport.Watcher）仅适用于编译发行版本的DailyReport主程序。
 
-目前支持以默认的方式启动并管理计算机上的所有DailyReport进程；
+主要功能：以默认的方式启动并管理计算机上的所有DailyReport进程；
 监听配置文件的修改、移动和删除变化，并自动重载DailyReport进程；
 可以指定DailyReport程序位置以及用户自定义配置文件general.json的位置。
 
-在命令行运行DailyReport.Watcher程序即可。
+在命令行运行DailyReport.Watcher程序即可，运行该程序不需要手动运行DailyReport主程序。
 
 参数说明：
 
 - 参数 `-c CONFIG` 或 `--config CONFIG` 从指定的配置文件运行，默认为运行目录下的 "configurations/general.json"
 - 参数 `-e EXE` 或 `--exe EXE` 来指定DailyReport程序位置，默认为为运行目录下的 "DailyReport"（Windows） 或 "DailyReport"（其他）
 
+### 实验性功能列表
+
+以下功能因测试覆盖率不足、专为开发人员设计等原因，尚处于实验性阶段，不保证功能的可用性。
+
+- 【Linux服务器版】 程序对Linux服务器等无显示设备的硬件平台的支持处于实验性阶段。
+- 【自动初始化Edge/Firefox驱动程序】 因尚未解决固定API的问题，暂不支持自动下载驱动程序，需要根据提示手动下载。
+- 【调试模式】 （开发人员选项）使用环境变量 `BOT_CORE_DEBUG=TRUE` 以在 bot 执行时输出调试信息，并添加必要断点。
+- 【图形化模式】 （开发人员选项）使用环境变量 `BOT_CORE_DISPLAY=TRUE` 来使用浏览器的图形化界面（默认使用无界面模式）。
+- 【可变邮件休眠时间】 （开发人员选项）使用环境变量 `EMAIL_SENDER_SLEEP_MAX_INT` 来修改邮件发送的最大休眠间隙（默认10秒）。
+- 【阻止驱动程序初始化】 （开发人员选项）定义环境变量 `_BOT_BUILD_NOT_DOWNLOAD` 来阻止初始化时下载驱动程序。
+
 ### 更新说明
 
 #### v4.0.0
 
-内部版本号：BUILD.3985-2.5.15
-正式版本号：4.0.0-RC2p-m3985w3983
+内部版本号：BUILD.3990-2.5.15
+正式版本号：4.0.0-RTM-a3990
 
 - 【重构】新版本重构，优化代码结构；
 - 【新增】实现多人多线程打卡；
@@ -136,6 +138,7 @@ coding: UTF-8
 
 ### 历史版本
 
+- [v4(RC2/RC2p)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC2) | 结束支持时间：2022-05-20；
 - [v4(RC1)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC1) | 结束支持时间：2022-05-20；
 - [v4(RC-pre-3980)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3980-2.5.13-alpha) | 结束支持时间：2022-05-20；
 - [v4(Beta-3910)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3910-2.5.4-alpha) | 结束支持时间：2022-05-20；
@@ -145,3 +148,20 @@ coding: UTF-8
 - [v2.1](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.1) | 已经结束支持；
 - [v3.0](https://github.com/HolgerZhang/DailyReport/releases/tag/v3.0) | 已经结束支持；
 - [v2.0](https://github.com/HolgerZhang/DailyReport/releases/tag/v2.0) | 已经结束支持。
+
+### 版本说明与计划
+
+第一位版本号为主要版本，包含大量功能更新与问题修复，版本不向下兼容，启用新的分支；
+第二位版本号为迭代版本，包含在下一主要版本开发计划前的新功能更新与及时的问题修复，在同一主要版本内向下兼容；
+第三位版本号为更新版本，只包含问题修复，不含新的功能更新。
+
+v4.1主要计划：
+
+- 进程守护实用工具DailyReport.Watcher新增对源码运行的进程进行管理；
+- 进程守护实用工具DailyReport.Watcher新增对系统内多个进程并行运行的支持；
+- 主程序 `--local` 模式增强计划，支持在无外网的校园网内完整运行。
+
+v4.2主要计划：
+
+- 进程守护实用工具DailyReport.Watcher的图形化支持；
+- ……

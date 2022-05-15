@@ -1,7 +1,7 @@
 {
-  "VERSION": "4.0.0-RC2p-m3985w3983",
+  "VERSION": "4.0.0-RTM-a3990",
   "MAPPING_MIN_VERSION": "4.0.0",
   "GENERAL_CONFIG_MIN_VERSION": "4.0.0",
   "USER_CONFIG_MIN_VERSION": "4.0.0",
-  "_insider": "3985-2.5.15"
+  "_insider": "3990-2.5.15"
 }
