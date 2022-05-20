@@ -1,6 +1,6 @@
 #!/bin/bash
 
-version="4.0.0-RTM-a3990"
+version="4.0-stable"
 
 pip install pyinstaller
 
