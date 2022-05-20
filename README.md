@@ -19,24 +19,19 @@ coding: UTF-8
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
 
-### 内测招募
+### Version 4 正式发布！
 
-我们在进行新版本的测试！重构的 [v4](https://github.com/HolgerZhang/DailyReport/tree/v4) 版本需要进一步测试，现面向SUDA在校生招募内测体验人员～
+经过前期测试， [Version 4](https://github.com/HolgerZhang/DailyReport/tree/v4) 版本的 [正式版](https://github.com/HolgerZhang/DailyReport/releases/latest) 已经发布并全面推送。新版本包含大量新功能更新、性能优化与错误修复，并提供了编译版本，强烈建议升级！
 
-我们希望你：
+新版本特性：
 
-- 能够流畅访问GitHub！
-- 电脑装有Python3.8+（如果熟悉Python更好！）
-- 爱折腾，善于发现问题（因为是内测，bug出现频率和更新频次会比较高）
+- 新版本重构，优化代码结构；
+- 支持多人多线程打卡；
+- 邮件中隐藏密码；
+- 新增浏览器无界面模式；
+- 新增进程守护实用工具DailyReport.Watcher对进程管理，支持文件变更自动重载。
 
-加入内测你可以获得：
-
-- 高效的每日自动打卡体验；
-- 更快的bug修复频率；
-- 一对一的7*24h帮助服务；
-- 或许可以成为本项目的contributor。
-
-如果您感兴趣，欢迎联系我的QQ：**453744187**！
+> v2.5 的支持截至2022年6月；结束支持后，该分支将随时被标记为 End of Life。
 
 ### 使用前注意
 
