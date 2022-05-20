@@ -6,7 +6,7 @@
     belong: DailyReport-BasicDataFile
 -->
 
-# DailyReport (RTM)
+# DailyReport (stable)
 
 Daily health report automated program. 每日打卡自动化程序（适用于苏大）
 
@@ -19,10 +19,6 @@ v4.0.0 by HolgerZhang
 ### 使用前注意
 
 > v4 不再向下兼容 [v2](https://github.com/HolgerZhang/DailyReport/tree/v2) 的配置文件以及启动方法；
-> 
-> 此版本为v4版本更新前的最后一个测试版本。 
-> v4.0.0 正式版本全量推送时间：预计2022-05下旬；
-> 
 
 - 源码版本环境依赖：带有 pip 的 Python 3.8+ 环境；安装有浏览器（应为最新版，支持情况请查阅 [文档](https://www.selenium.dev/downloads/) ）
 - [编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest) 支持平台：Windows (x86_64/arm64)，Linux (x86_64，实验性)，macOS (Intel/Apple Silicon)
@@ -138,6 +134,7 @@ v4.0.0 by HolgerZhang
 
 ### 历史版本
 
+- [v4(RTM)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RTM) | 结束支持时间：与v4.0稳定版相同；
 - [v4(RC2/RC2p)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC2) | 结束支持时间：2022-05-20；
 - [v4(RC1)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC1) | 结束支持时间：2022-05-20；
 - [v4(RC-pre-3980)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-3980-2.5.13-alpha) | 结束支持时间：2022-05-20；
