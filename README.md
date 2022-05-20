@@ -8,7 +8,7 @@
 
 # DailyReport (stable)
 
-Daily health report automated program. 每日打卡自动化程序（适用于苏大）
+Daily health report automated program. 每日打卡自动化程序（适用于苏州大学）
 
 **推荐** 👉 [下载编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest)
 
@@ -16,7 +16,24 @@ v4.0.0 by HolgerZhang
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
 
-### 使用前注意
+
+## 特性一览
+
+- 基于模拟点击（selenium）的自动化健康打卡；
+- 定时任务功能：可指定时间进行打卡；
+- 支持为多人打卡；
+- 执行出错自动重复5次，防止网络问题导致的打卡失败；
+- 邮件提醒：打卡成功或失败会向指定邮箱发送邮件，需配置邮箱；
+- 自动更新打卡配置，配置文件长期维护；
+- 自动初始化系统；
+- 保存系统执行日志；
+- 【新增】实现多人多线程打卡；
+- 【新增】邮件中隐藏密码；
+- 【新增】浏览器无界面模式，后台静默执行；
+- 【新增】检测配置文件变化并自动重载。
+
+
+## 使用前注意
 
 > v4 不再向下兼容 [v2](https://github.com/HolgerZhang/DailyReport/tree/v2) 的配置文件以及启动方法；
 
@@ -25,7 +42,7 @@ v4.0.0 by HolgerZhang
 - 支持浏览器：Chrome，Edge，Firefox （仅Chrome支持自动驱动下载）
 - 每日请自行检查是否打卡成功： [检查连接](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp)
 
-#### 免责声明
+### 免责声明
 
 - 每日打卡自动化程序 DailyReport（下简称“此软件”）仅供自动化测试使用，使用时不应该带有扰乱正常秩序的目的，不得作为商业目的使用；
 - 此软件只适用于自动化测试等有关技术等用途。<strong>如果你出现身体不适、身处疫情地区等等情况，请及时反映情况，不得瞒报！！</strong>
@@ -33,6 +50,8 @@ v4.0.0 by HolgerZhang
 - 此软件使用时需要保持开机并联网，且需保证网络通畅，能够访问目标网站。使用此软件时需留意日志文件信息以及自行 [查询](http://dk.suda.edu.cn/default/work/suda/jkxxtb/dkjl.jsp) 是否打卡成功。由于网络问题、目标页面更新等导致的打卡失败、不能连续打卡等问题，此软件以及作者不承担任何责任；
 - 其余未尽事宜，此软件以及作者保留解释权利；
 - 使用此软件，默认接受以上声明；如不接受，请删除本软件。
+
+## 使用方法
 
 ### 使用方法（从源码运行）
 
@@ -87,12 +106,12 @@ v4.0.0 by HolgerZhang
 - 【可变邮件休眠时间】 （开发人员选项）使用环境变量 `EMAIL_SENDER_SLEEP_MAX_INT` 来修改邮件发送的最大休眠间隙（默认10秒）。
 - 【阻止驱动程序初始化】 （开发人员选项）定义环境变量 `_BOT_BUILD_NOT_DOWNLOAD` 来阻止初始化时下载驱动程序。
 
-### 更新说明
+## 更新说明
 
 #### v4.0.0
 
 内部版本号：BUILD.3990-2.5.15
-正式版本号：4.0.0-RTM-a3990
+正式版本号：4.0-stable
 
 - 【重构】新版本重构，优化代码结构；
 - 【新增】实现多人多线程打卡；
@@ -114,6 +133,8 @@ v4.0.0 by HolgerZhang
 - 【优化】优化DailyReport.Watcher工具的细节与稳定性。
 
 整合的历史版本：v4.0.0(BUILD.A001)，BUILD.A002-HLO0313，BUILD.A002-HOL0320，BUILD.A002-HOL0321，BUILD.A003-HOL0325，BUILD.3910-2.5.4-alpha，BUILD.3980-2.5.13-alpha，BUILD.3981-2.5.13，BUILD.3983-2.5.14(for watcher)，BUILD.3984-2.5.14，BUILD.3985-2.5.15。
+
+## 其他
 
 ### Q&A
 
