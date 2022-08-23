@@ -32,12 +32,19 @@ parser.add_argument('-o', '--once', action='store_true',
 parser.add_argument('-l', '--local', action='store_true',
                     help="enable 'local run'(turn off automatic update), default disabled(automatic update)")
 parser.add_argument('-c', '--config', type=str, default="configurations/general.json",
-                    help="path to the general configuration file, default is 'configurations/general.json'")
+                    help="path to the general configuration file, "
+                         "default is 'configurations/general.json' or 'configurations/example.general.json'")
 parser.add_argument('-u', '--user', type=str,
                     help="create an user configuration named `user.${USER}.json` in 'configurations/'")
 args = parser.parse_args()
 
-with open(args.config, 'r', encoding='utf-8') as _file:
+if not os.path.exists(args.config):
+    config_file = 'configurations/example.general.json'
+    logger.warn(f"配置文件 {args.config} 不存在，将使用：{config_file}")
+else:
+    config_file = args.config
+
+with open(config_file, 'r', encoding='utf-8') as _file:
     config = EasyDict(json.loads(_file.read()))
     assert version.check_version(version.GENERAL_MIN_VERSION, config['VERSION']), '版本号不匹配'
 

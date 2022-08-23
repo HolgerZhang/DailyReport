@@ -1,5 +1,5 @@
 # coding = utf-8
-# author: holger version: 4.0.0
+# author: holger version: 4.0.1
 # license: AGPL-3.0
 # belong: DailyReport-API
 
@@ -28,6 +28,6 @@ def check_update_src():
     assert r.status_code == 200
     if not version.check_version(version.VERSION, version.get_version_tuple(r.text)):
         logger.warn("软件需要更新! 请访问：https://github.com/HolgerZhang/DailyReport/releases/tag/v{}\n"
-                    "更新后请重启程序。".format(float(r.text)))
+                    "更新后请重启程序。".format(r.text))
     else:
         logger.debug("程序版本已是最新")

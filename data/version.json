@@ -1,7 +1,7 @@
 {
-  "VERSION": "4.0.0-stable",
-  "MAPPING_MIN_VERSION": "4.0.0",
+  "VERSION": "4.0.1-beta-FIX01",
+  "MAPPING_MIN_VERSION": "4.0.1",
   "GENERAL_CONFIG_MIN_VERSION": "4.0.0",
   "USER_CONFIG_MIN_VERSION": "4.0.0",
-  "_insider": "3990-2.5.15"
+  "_insider": "4010-2.8.21"
 }

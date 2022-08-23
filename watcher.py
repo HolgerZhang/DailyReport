@@ -1,6 +1,6 @@
 # coding = utf-8
 # author: holger
-# version: 4.0.0
+# version: 4.0.1
 # license: AGPL-3.0
 # belong: DailyReport-Watcher
 
@@ -14,6 +14,8 @@ from sys import exit
 import psutil
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
+
+os.chdir(os.path.dirname(__file__))
 
 from BotCore import logger
 from BotCore.version import VERSION, INSIDER_VERSION, EXTEND_VERSION
@@ -31,15 +33,24 @@ parser.add_argument('-c', '--config', type=str, default="configurations/general.
 parser.add_argument('-e', '--exe', type=str,
                     default=r".\DailyReport.exe" if sys.platform.startswith('win32') else "./DailyReport",
                     help="path to the executable file, default is './DailyReport' in the current directory")
+parser.add_argument('-o', '--output', type=str, default="true",
+                    help="the main program stdout output, default `true`")
 args = parser.parse_args()
 
 config_file = os.path.abspath(args.config)
 watch_path, _ = os.path.split(config_file)
-pwd, exec_file = os.path.split(os.path.abspath(args.exe))
+exec_path = os.path.abspath(args.exe)
+pwd, exec_file = os.path.split(exec_path)
 os.chdir(pwd)
 logger.info(f"[[Watcher]] 使用配置文件：{config_file}")
 logger.info(f"[[Watcher]] 监控目录：{watch_path}")
+logger.info(f"[[Watcher]] 主程序路径：{exec_path}")
 logger.info(f"[[Watcher]] 工作目录：{pwd}")
+
+if args.output.lower() == 'false':
+    non_output_cmd = "> NUL 2>&1" if sys.platform.startswith('win32') else "> /dev/null 2>&1"
+else:
+    non_output_cmd = ''
 
 
 def kill_all():
@@ -56,10 +67,10 @@ def kill_all():
 def startup():
     cmd = f'./{exec_file} -c {config_file}'
     if sys.platform.startswith('win32'):
-        cmd = f'cd /D {pwd} && start /b {cmd} > NUL 2>&1'
+        cmd = f'cd /D {pwd} && start /b {cmd} {non_output_cmd}'
         os.system(cmd)
     else:
-        cmd = f'cd {pwd} && nohup {cmd} > /dev/null 2>&1 &'
+        cmd = f'cd {pwd} && nohup {cmd} {non_output_cmd} &'
         os.system(cmd)
     logger.info(f'[[Watcher]] ==> 执行："{cmd}"')
     logger.info('[[Watcher]] DailyReport Start')

@@ -1,7 +1,7 @@
 <!--
     coding = utf-8
     author: holger
-    version: 4.0.0
+    version: 4.0.1
     license: AGPL-3.0
     belong: DailyReport-BasicDataFile
 -->
@@ -12,7 +12,7 @@ Daily health report automated program. 每日打卡自动化程序（适用于�
 
 **推荐** 👉 [下载编译发行版本](https://github.com/HolgerZhang/DailyReport/releases/latest)
 
-v4.0.0 by HolgerZhang
+v4.0.1 by HolgerZhang
 
 > 感谢 [@ygLance](https://github.com/ygLance) 和 [@TTL2000](https://github.com/TTL2000) 的测试。
 
@@ -66,7 +66,7 @@ v4.0.0 by HolgerZhang
 
 1. 阅读《免责声明》，接受方可继续。
 2. [下载](https://github.com/HolgerZhang/DailyReport/releases/latest) 压缩包并解压。
-3. 在命令行运行DailyReport程序：
+3. 在命令行（PowerShell/CMD/bash/zsh等）运行DailyReport程序：
    1. 运行 `./DailyReport --initialize` 初始化并下载配置文件;
    2. 首次运行请预先根据 configurations/introduction.general.json 配置 configurations 目录下 general.json 文件 （可参考 example.general.json ）；
    根据 configurations/introduction.user.json 配置 configurations 目录下 user.用户名.json 文件；
@@ -94,6 +94,7 @@ v4.0.0 by HolgerZhang
 
 - 参数 `-c CONFIG` 或 `--config CONFIG` 从指定的配置文件运行，默认为运行目录下的 "configurations/general.json"
 - 参数 `-e EXE` 或 `--exe EXE` 来指定DailyReport程序位置，默认为为运行目录下的 "DailyReport"（Windows） 或 "DailyReport"（其他）
+- 参数 `-o true|false` 或 `--output true|false` 来指定DailyReport是否输出运行信息（默认为输出）。
 
 ### 实验性功能列表
 
@@ -107,6 +108,17 @@ v4.0.0 by HolgerZhang
 - 【阻止驱动程序初始化】 （开发人员选项）定义环境变量 `_BOT_BUILD_NOT_DOWNLOAD` 来阻止初始化时下载驱动程序。
 
 ## 更新说明
+
+#### v4.0.1
+
+内部版本号：BUILD.4010-2.8.21
+正式版本号：4.0.1-beta-FIX01
+
+- 【优化】Mapping更新
+- 【优化】修复了若干影响使用体验的bug
+- 【优化】更新编译脚本
+
+对于不使用进程守护实用工具DailyReport.Watcher的 v4 正式版（stable/RTM）的用户，仅需替换 `data/version.json` 文件，并再次初始化即可。
 
 #### v4.0.0
 
@@ -155,6 +167,7 @@ v4.0.0 by HolgerZhang
 
 ### 历史版本
 
+- [v4-FIX01]
 - [v4(RTM)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RTM) | 结束支持时间：与v4.0稳定版相同；
 - [v4(RC2/RC2p)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC2) | 结束支持时间：2022-05-20；
 - [v4(RC1)](https://github.com/HolgerZhang/DailyReport/releases/tag/v4.0.0-RC1) | 结束支持时间：2022-05-20；
